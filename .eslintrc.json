@@ -5,6 +5,16 @@
     },
     "extends": "eslint:recommended",
     "rules": {
+        "comma-dangle": [
+            "error", 
+            "always-multiline"
+        ],
+        "brace-style": [
+            "error"
+        ],
+        "no-var": [
+            "error"
+        ],
         "indent": [
             "error",
             2
