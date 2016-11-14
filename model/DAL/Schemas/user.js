@@ -1,5 +1,5 @@
 'use strict';
-//database
+
 const db = require('../helper');
 const mongoose = require('mongoose');
 
