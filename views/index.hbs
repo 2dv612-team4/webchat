@@ -2,18 +2,24 @@
 <html>
   <head>
     <title>Webchat</title>
-    <link rel='stylesheet' href='/public/stylesheets/style.css' />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
-  <body>
-    <h1>Login</h1>
-    <form action="/" name="login" method="post">
-        <label for="username">Username</label>
-        <input type="text" name="username" placeholder=""  required="true">
-        <label for="password">Password</label>
-        <input type="password" name="password" required="true">
-        <input type="submit" value="Login">
-    </form>
-
-    <a href="/register">Register new</a>
+  <body class="blue lighten-5">
+  <div id="maincontent" class="center">
+    <h3>Login</h3>
+    <div class="row">
+      <div class="col s3" id="formplacement">
+        <form action="/" name="login" method="post">
+            <label for="username">Username</label>
+            <input type="text" name="username" placeholder=""  required="true">
+            <label for="password">Password</label>
+            <input type="password" name="password" required="true">
+            <input type="submit" value="Login" class="waves-effect waves-light btn">
+        </form>
+      </div>
+    </div>
+      <a href="/register" class="waves-effect waves-light btn">Register new</a>
+  </div>
   </body>
 </html>
