@@ -2,7 +2,7 @@
 
 const mongoose = require('mongoose');
 
-const initilize = () => {
+const initialize = () => {
     const db = mongoose.connection;
 
     db.on('error', function(){
@@ -23,4 +23,4 @@ const initilize = () => {
     mongoose.connect('mongodb://localhost/WebChat');
 };
 
-module.exports = initilize();
+module.exports = initialize();
