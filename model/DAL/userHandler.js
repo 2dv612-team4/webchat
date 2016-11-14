@@ -1,11 +1,8 @@
 'use strict';
 
-let User = require(__dirname + '/Schemas/user.js');
+const User = require(__dirname + '/Schemas/user.js');
 
-function userHandler(){
-
-}
-let add = function(uname, pass){
+const add = function(uname, pass){
     var newUser = new User({
         username: uname,
         password: pass
@@ -17,11 +14,16 @@ let add = function(uname, pass){
     });
 }
 
-let findWithUsername = function(name){
-    User.findOne({'username': name}, function(err, user){
-        if(err) throw err;
-        return user;
-    });
+const findWithUsername = function(name){
+    return new Promise((resolve, reject) => {
+        var test = User.findOne({'username': name}, function(err, user){
+            if(err)
+            {
+                return reject(err);
+            }
+            return resolve(user);
+        });
+    })
 }
 
 module.exports = {
