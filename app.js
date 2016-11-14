@@ -8,13 +8,6 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
-const test = require('./model/DAL/messageHandler.js');
-test.findMessagesByRoom("room2").then(function(messages){
-  console.log(messages);
-})
-/*test.findRoomWithId("5829bfec7fbd424a1ce89393").then(function(room){
-  console.log(room.timestamp);
-});*/
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
