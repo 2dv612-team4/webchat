@@ -6,6 +6,8 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
+const db = require('./model/DAL/helper');
+
 const app = express();
 
 // view engine setup
