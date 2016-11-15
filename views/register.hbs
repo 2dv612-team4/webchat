@@ -3,25 +3,28 @@
   <head>
     <title>Webchat</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body class="blue lighten-5">
+    <div class="body-wrapper">
     <div id="maincontent" class="center">
-    <h3>Register</h3>
-    <div class="row">
-      <div class="col s3" id="formplacement">
+    <h3 id="title">Register</h3>
+    <div class="row valign-wrapper">
+      <div class="col s12 m8 l3" id="formplacement">
     <form action="/" name="register" method="post">
-        <label for="username">Username</label>
-        <input type="text" name="username" placeholder=""  required="true">
-        <label for="password">Password</label>
-        <input type="password" name="password" required="true">
-        <label for="repeatPassword">Password</label>
-        <input type="password" name="repeatPassword" required="true">
+        <i class="material-icons prefix">account_circle</i>
+        <input type="text" name="username" placeholder="Username"  required="true" class="center">
+        <i class="material-icons prefix">https</i>
+        <input type="password" name="password" placeholder="Password"required="true" class="center">
+        <i class="material-icons prefix">https</i>
+        <input type="password" name="repeatPassword" placeholder="Repeat Password"required="true" class="center">
         <input type="submit" value="Register" class="waves-effect waves-light btn">
     </form>
   </div>
 </div>
-    <a href="/" class="waves-effect waves-light btn">Back</a>
+    <a href="/" class="waves-effect waves-light btn ">Back</a>
     </div>
+  </div>
   </body>
 </html>
