@@ -30,4 +30,3 @@ module.exports = {
     add: add,
     findWithUsername: findWithUsername
 };
-
