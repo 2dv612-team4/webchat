@@ -20,7 +20,6 @@ router.post('/', function(req, res) {
   if(password !== repeatPassword){
     return res.redirect('/register', { message: 'Place holder massage'}); // TODO: enter massage
   }
-   
   co(function*(){
     const user = yield userHandler.findWithUsername(username); // SHOULD HASH AND SALT!!
     if(user){
