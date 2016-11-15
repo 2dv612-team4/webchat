@@ -6,6 +6,7 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const sessions = require('express-session');
+require('./model/DAL/helper.js');
 
 const app = express();
 

@@ -4,8 +4,8 @@ const mongoose = require('mongoose');
 
 let Schema = mongoose.Schema;
 let messageSchema = new Schema({
-  userID: {type: String, required: true}, //need to use ref (foreign keys) instead of strings
-  roomID: {type: String, required: true},
+  userID: {type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true},
+  roomID: {type: mongoose.Schema.Types.ObjectId, ref: 'room', required: true},
   message: {type: String, required: true},
   timestamp: {type: Date},
 });
