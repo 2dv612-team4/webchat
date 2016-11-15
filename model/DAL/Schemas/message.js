@@ -1,16 +1,15 @@
 'use strict';
 
-const db = require('../helper');
 const mongoose = require('mongoose');
 
-var Schema = mongoose.Schema;
-var messageSchema = new Schema({
-  userID: {type: String, required: true}, //need to use ref (foreign keys) instead of strings
-  roomID: {type: String, required: true},
+let Schema = mongoose.Schema;
+let messageSchema = new Schema({
+  userID: {type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true},
+  roomID: {type: mongoose.Schema.Types.ObjectId, ref: 'room', required: true},
   message: {type: String, required: true},
-  timestamp: {type: Date}
+  timestamp: {type: Date},
 });
 
-var Model = mongoose.model('message', messageSchema);
+let Model = mongoose.model('message', messageSchema);
 
 module.exports = Model;

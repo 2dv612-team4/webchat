@@ -1,16 +1,19 @@
 'use strict';
 
-const db = require('../helper');
 const mongoose = require('mongoose');
 
-var Schema = mongoose.Schema;
-var userSchema = new Schema({
+let Schema = mongoose.Schema;
+let userSchema = new Schema({
   username: {type: String, required: true, unique: true},
   password: {type: String, required: true},
-  friends: {type: Array},
-  rooms: {type: Array}
+  friends: [
+    { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
+  ],
+  rooms: [
+    { type: mongoose.Schema.Types.ObjectId, ref: 'room' },
+  ],
 });
 
-var Model = mongoose.model('user', userSchema);
+let Model = mongoose.model('user', userSchema);
 
 module.exports = Model;
