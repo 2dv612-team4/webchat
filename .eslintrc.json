@@ -6,7 +6,7 @@
     "extends": "eslint:recommended",
     "rules": {
         "comma-dangle": [
-            "error", 
+            "error",
             "always-multiline"
         ],
         "brace-style": [
@@ -26,6 +26,8 @@
         "semi": [
             "error",
             "always"
-        ]
+        ],
+        "no-console":
+            0
     }
 }
