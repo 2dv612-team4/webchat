@@ -18,17 +18,19 @@ router.post('/', function (req, res) {
     res.send('You are logged in');
   } else {
     user.findWithUsername(req.body.username).then(function(user){
-      if (req.body.username == user.username &&
+      if(user == null) {
+        res.redirect('/');
+      } else if (req.body.username == user.username &&
           req.body.password == user.password) {
-        console.log('Rätt User');
         req.session.loggedIn = user.username;
         res.send('You are logged in');
         //res.redirect('/redirect');
       } else {
-        console.log('Fel User');
-        //req.flash('info', 'Wrong username or password!');
-        //res.redirect('/redirect');
+        res.redirect('/');
       }
+    }, function(err){
+      console.log(err);
+      res.redirect('/');
     });
   }
 });

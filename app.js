@@ -14,7 +14,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
 app.use(sessions({
-  secret: 'secretC0De!£#',
+  secret: 'secretC0De!£#',//This secret code needs to be hidden somewhere
   resave: false,
   saveUninitialized: false,
 }));
@@ -39,7 +39,7 @@ app.use(function(req, res, next) {
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
