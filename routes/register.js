@@ -14,7 +14,13 @@ router.get('/', function(req, res) {
  */
 router.post('/', function(req, res) {
   const username = req.body.username;
-  const password = req.body.password; 
+  const password = req.body.password;
+  const repeatPassword = req.body.repeatPassword;
+
+  if(password !== repeatPassword){
+    return res.redirect('/register', { message: 'Place holder massage'}); // TODO: enter massage
+  }
+   
   co(function*(){
     const user = yield userHandler.findWithUsername(username); // SHOULD HASH AND SALT!!
     if(user){
