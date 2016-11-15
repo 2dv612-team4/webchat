@@ -7,6 +7,11 @@ om inte eslint är installerat kör
 ```
 npm install --only=dev
 ```
+To run via command line:
+```
+npm run eslint
+```
+
 ## Linter för ESlint
 
 ### Atom
