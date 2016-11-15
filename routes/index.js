@@ -7,22 +7,21 @@ const user = require('../model/DAL/userHandler.js');
 router.get('/', function (req, res) {
   //TODO: Need redirect/sessions
   res.render('index', { layout: 'index.hbs' });
-  console.log(user);
 });
 
 router.post('/', function (req) {
-  let userFromDb = user.findWithUsername(req.body.username);
-  console.log(userFromDb);
-  if (req.body.username == userFromDb.username &&
-      req.body.password == userFromDb.password) {
-    console.log('Rätt User');
-    //req.session.username = username;
-    //res.redirect('/redirect');
-  } else {
-    console.log('Fel User');
-    //req.flash('info', 'Wrong username or password!');
-    //res.redirect('/redirect');
-  }
+  user.findWithUsername(req.body.username).then(function(user){
+    if (req.body.username == user.username &&
+        req.body.password == user.password) {
+      console.log('Rätt User');
+      //req.session.username = username;
+      //res.redirect('/redirect');
+    } else {
+      console.log('Fel User');
+      //req.flash('info', 'Wrong username or password!');
+      //res.redirect('/redirect');
+    }
+  });
 });
 
 module.exports = router;
