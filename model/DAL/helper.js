@@ -21,8 +21,7 @@ const initialize = () => {
     });
   });
 
-  //mongoose.connect('mongodb://localhost/WebChat');
-  mongoose.connect(process.env.MONGODB_URI);
+  mongoose.connect('mongodb://localhost/WebChat');
 };
 
 module.exports = initialize();
