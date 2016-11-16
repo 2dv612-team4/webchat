@@ -18,15 +18,15 @@ router.post('/', function(req, res) {
   const repeatPassword = req.body.repeatPassword;
 
   if(password !== repeatPassword){
-    return res.redirect('/register', { message: 'passwords don\'t match'});
+    return res.redirect('/register');
   }
   co(function*(){
     const user = yield userHandler.findWithUsername(username); // SHOULD HASH AND SALT!!
     if(user){
-      return res.redirect('/register', { message: 'Username already exists'});
+      return res.redirect('/redirect');
     }
     yield userHandler.add(username, password); // SHOULD HASH AND SALT!!
-    res.redirect('/', {message: 'User successfully created'});
+    res.redirect('/');
   })
   .catch(() => res.redirect('/register'));  
 });
