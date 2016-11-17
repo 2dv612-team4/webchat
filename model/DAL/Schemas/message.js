@@ -7,7 +7,7 @@ let messageSchema = new Schema({
   userID: {type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true},
   roomID: {type: mongoose.Schema.Types.ObjectId, ref: 'room', required: true},
   message: {type: String, required: true},
-  timestamp: {type: Date},
+  timestamp: {type: Date, default: Date.now, required: true},
 });
 
 let Model = mongoose.model('message', messageSchema);
