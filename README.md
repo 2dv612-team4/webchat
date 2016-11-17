@@ -16,6 +16,6 @@ this is the main repo
 
 #Heroku
 Commits on master is deployed automatically and the app will be available here:
-`https://webchat-team4.herokuapp.com/`
+(https://webchat-team4.herokuapp.com/)
 
 When testing with local mongodb start with `npm run start-local`
