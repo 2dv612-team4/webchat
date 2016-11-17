@@ -23,8 +23,7 @@ router.post('/', function (req, res) {
       } else if (req.body.username == user.username &&
           req.body.password == user.password) {
         req.session.loggedIn = user.username;
-        res.send('You are logged in');
-        //res.redirect('/redirect');
+        res.redirect('/chatroom');
       } else {
         res.redirect('/');
       }
@@ -34,5 +33,17 @@ router.post('/', function (req, res) {
     });
   }
 });
+
+router.get('/logout',function(req,res) {
+  req.session.destroy(function (err) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log('User successfully logged out');
+      res.redirect('/');
+    }
+  });
+});
+
 
 module.exports = router;
