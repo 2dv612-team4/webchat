@@ -22,7 +22,7 @@ const initialize = () => {
   });
 
   //mongoose.connect('mongodb://localhost/WebChat');
-  mongoose.connect(MONGODB_URI);
+  mongoose.connect(process.env.MONGODB_URI);
 };
 
 module.exports = initialize();
