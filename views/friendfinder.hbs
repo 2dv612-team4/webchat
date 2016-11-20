@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Webchat</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body class="blue lighten-5">
+  <div class="body-wrapper">
+    <div id="maincontent" class="center">
+      <h3 id="title">Friend finder</h3>
+        <div class="row valign-wrapper">
+            <div class="col s12 m8 l3 " id="formplacement">
+              <ul>
+                {{#each users}}
+                  <li>{{this}}</li>
+                {{/each}}
+              </ul>
+              <p> You are logged in as <b>{{> user}}</b> <br> </p> <br>
+              <p> Current chat members: <b>{{> usernames}}</b> add one of the names in the following field to send a friend request</p>
+              <form action="/friendfinder" name="friendfinder" method="post">
+                  <input type="text" name="usertofriend" placeholder="User to friend"  required="true" class="center">
+                  <input type="submit" value="Send friend request" class="waves-effect waves-light btn">
+              </form>
+              <br>
+              <form action="/chatroom" name="chatroom" method="get">
+                  <input type="submit" value="Cancel" class="waves-effect waves-light btn">
+              </form>
+            </div>
+        </div>
+    </div>
+  </div>
+  </body>
+</html>
