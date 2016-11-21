@@ -52,7 +52,17 @@ router.post('/', function(req, res) {
   console.log('username: ' + username);
   console.log('usertofriend: ' + usertofriend);
 
-  // Add functionality to send a friend request here
+/** 
+ * Get all user friends
+*/
+router.get('/', function(req, res){
+  if(!req.session.loggedIn){
+    return res.sendStatus(401);
+  }
+  const username = req.session.loggedIn;
+  userHandler.findFriendsWithUsername(username)
+    .then((user) => res.json(user.friends))
+    .catch((e) => res.sendStatus(500));
 });
 
 router.get('/searchusers', function(req, res) {
