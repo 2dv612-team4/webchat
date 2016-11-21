@@ -12,6 +12,9 @@ let userSchema = new Schema({
   rooms: [
     { type: mongoose.Schema.Types.ObjectId, ref: 'room' },
   ],
+  friendrequests: [
+    { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
+  ],
 });
 
 let Model = mongoose.model('user', userSchema);
