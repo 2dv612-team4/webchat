@@ -1,34 +1,15 @@
 'use strict';
-const index = require('./index');
 const express = require('express');
-let hbs = require('hbs');
-const user = require('../model/DAL/userHandler.js');
 const userHandler = require('../model/DAL/userHandler.js');
 const co = require('co');
 const router = express.Router();
 
-/* GET friendfinder page. */
-router.get('/', function(req, res, next) {
-  let usernames = [];
-  if(req.session.loggedIn) {
-    let promise = user.findAllUsers();
-    promise.then(function(users) {
-      users.forEach(function(user) {
-        usernames.push(user.username);
-      });
-      hbs.registerPartial('usernames', usernames.toString());
-      hbs.registerPartial('users', users);
-      res.render('friendfinder', {layout: 'friendfinder.hbs'});
-    });
-  } else {
-    res.redirect('/');
 // TODO: fix code duplication
 
 /**
  * Sends user friend request
  */
-router.post('/:username', function(req, res) {
-router.post('sendrequest/:username', function(req, res) {
+router.post('/sendrequest/:username', function(req, res) {
   if(!req.session.loggedIn){
     return res.sendStatus(401);
   }
@@ -45,9 +26,10 @@ router.post('sendrequest/:username', function(req, res) {
       return res.sendStatus(304);
     }
     yield userHandler.addFriendRequest(reciverUser._id, requesterUser._id);
+    
     res.sendStatus(200);
   })
-  .catch((e) => console.log('error: ', e));
+  .catch(() => res.sendStatus(500));
 });
 
 /**
@@ -81,27 +63,7 @@ router.get('/', function(req, res){
   const username = req.session.loggedIn;
   userHandler.findFriendsWithUsername(username)
     .then((user) => res.json(user.friends))
-    .catch((e) => res.sendStatus(500));
+    .catch(() => res.sendStatus(500));
 });
-
-router.get('/searchusers', function(req, res) {
-  console.log('test');
-  const usertofind = req.query.searchuser;
-  console.log('searchusers: ' + usertofind);
-
-  let promise = user.findWithUsername(usertofind);
-  promise.then(function(user) {
-    if(user) {
-      console.log('user found: ' + user.username);
-    } else {
-      console.log('user not found: ' + usertofind);
-    }
-  })
-  .catch(function(err){
-    console.log('error when searching for user:', err);
-  });
-
-});
-
 
 module.exports = router;
