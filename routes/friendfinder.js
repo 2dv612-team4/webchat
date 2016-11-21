@@ -24,6 +24,7 @@ router.get('/', function(req, res, next) {
  * Sends user friend request
  */
 router.post('/:username', function(req, res) {
+router.post('sendrequest/:username', function(req, res) {
   if(!req.session.loggedIn){
     return res.sendStatus(401);
   }
