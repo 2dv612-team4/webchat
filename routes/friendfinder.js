@@ -4,7 +4,6 @@ const express = require('express');
 var hbs = require('hbs');
 const user = require('../model/DAL/userHandler.js');
 const router = express.Router();
-const co = require('co');
 
 /* GET friendfinder page. */
 router.get('/', function(req, res, next) {
@@ -32,7 +31,26 @@ router.post('/', function(req, res) {
   console.log('usertofriend: ' + usertofriend);
 
   // Add functionality to send a friend request here
+});
+
+router.get('/searchusers', function(req, res) {
+  console.log('test');
+  const usertofind = req.query.searchuser;
+  console.log('searchusers: ' + usertofind);
+
+  var promise = user.findWithUsername(usertofind);
+  promise.then(function(user) {
+    if(user) {
+      console.log('user found: ' + user.username);
+    } else {
+      console.log('user not found: ' + usertofind);
+    }
+  })
+  .catch(function(err){
+    console.log('error when searching for user:', err);
+  });
 
 });
+
 
 module.exports = router;
