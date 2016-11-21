@@ -5,6 +5,8 @@ const co = require('co');
 
 const add = (username, password) => new User({username, password}).save();
 const findWithUsername = (username) => User.findOne({ username }).exec();
+const findAllUsers = () => User.find({}).select('username').exec();
+const findFriendsWithUsername = (username) => User.findOne({ username }).select('friends').exec();
 
 //username: user recieving friend request. requestingUserID: ID of user sending request
 const addFriendRequest = (_id, requestingUserID) => User.update({_id}, {$push: {friendrequests: requestingUserID }}).exec();
@@ -34,9 +36,6 @@ const removeFriend = (userID, friendID) => new Promise((resolve, reject) => {
     }
   }).catch(() => reject(false));
 });
-
-const findAllUsers = () => User.find({}).select('username').exec();
-const findFriendsWithUsername = (username) => User.findOne({ username }).select('friends').exec();
 
 module.exports = {
   add: add,
