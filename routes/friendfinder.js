@@ -1,15 +1,15 @@
 'use strict';
 const index = require('./index');
 const express = require('express');
-var hbs = require('hbs');
+let hbs = require('hbs');
 const user = require('../model/DAL/userHandler.js');
 const router = express.Router();
 
 /* GET friendfinder page. */
 router.get('/', function(req, res, next) {
-  var usernames = [];
+  let usernames = [];
   if(req.session.loggedIn) {
-    var promise = user.findAllUsers();
+    let promise = user.findAllUsers();
     promise.then(function(users) {
       users.forEach(function(user) {
         usernames.push(user.username);
@@ -38,7 +38,7 @@ router.get('/searchusers', function(req, res) {
   const usertofind = req.query.searchuser;
   console.log('searchusers: ' + usertofind);
 
-  var promise = user.findWithUsername(usertofind);
+  let promise = user.findWithUsername(usertofind);
   promise.then(function(user) {
     if(user) {
       console.log('user found: ' + user.username);
