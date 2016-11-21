@@ -1,7 +1,6 @@
 'use strict';
 const express = require('express');
 const userHandler = require('../model/DAL/userHandler.js');
-const co = require('co');
 const router = express.Router();
 
 /* GET users listing. */
