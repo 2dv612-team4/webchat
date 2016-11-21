@@ -3,6 +3,8 @@ const index = require('./index');
 const express = require('express');
 let hbs = require('hbs');
 const user = require('../model/DAL/userHandler.js');
+const userHandler = require('../model/DAL/userHandler.js');
+const co = require('co');
 const router = express.Router();
 
 /* GET friendfinder page. */
@@ -20,6 +22,8 @@ router.get('/', function(req, res, next) {
     });
   } else {
     res.redirect('/');
+// TODO: fix code duplication
+
 /**
  * Sends user friend request
  */
@@ -46,12 +50,26 @@ router.post('sendrequest/:username', function(req, res) {
   .catch((e) => console.log('error: ', e));
 });
 
-router.post('/', function(req, res) {
-  const username = req.session.loggedIn;
-  const usertofriend = req.body.usertofriend;
-
-  console.log('username: ' + username);
-  console.log('usertofriend: ' + usertofriend);
+/**
+ * Removes friend requests
+ */
+router.post('/removerequest/:username', function(req, res){
+  if(!req.session.loggedIn){
+    return res.sendStatus(401);
+  }
+  const reciverUsername = req.params.username;
+  const requesterUsername = req.session.loggedIn;
+  co(function*(){
+    const [ requesterUser, reciverUser ] = yield [
+      userHandler.findWithUsername(requesterUsername),
+      userHandler.findWithUsername(reciverUsername),
+    ];
+    
+    yield userHandler.removeFriendRequest(reciverUser._id, requesterUser._id);
+    res.sendStatus(200);
+  })
+  .catch(() => res.sendStatus(500));
+});
 
 /** 
  * Get all user friends
