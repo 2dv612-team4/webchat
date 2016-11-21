@@ -20,7 +20,29 @@ router.get('/', function(req, res, next) {
     });
   } else {
     res.redirect('/');
+/**
+ * Sends user friend request
+ */
+router.post('/:username', function(req, res) {
+  if(!req.session.loggedIn){
+    return res.sendStatus(401);
   }
+  const reciverUsername = req.params.username;
+  const requesterUsername = req.session.loggedIn;
+  co(function*(){
+    const [ requesterUser, reciverUser ] = yield [
+      userHandler.findWithUsername(requesterUsername),
+      userHandler.findWithUsername(reciverUsername),
+    ];
+    const isFriendRequsetAlreadySent = reciverUser.friendrequests.find(id => 
+      id.toString() === requesterUser._id.toString());
+    if(isFriendRequsetAlreadySent){
+      return res.sendStatus(304);
+    }
+    yield userHandler.addFriendRequest(reciverUser._id, requesterUser._id);
+    res.sendStatus(200);
+  })
+  .catch((e) => console.log('error: ', e));
 });
 
 router.post('/', function(req, res) {
