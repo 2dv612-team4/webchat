@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
+    "start-local": "MONGODB_URI=mongodb://localhost/WebChat node ./bin/www",
     "eslint": "node ./node_modules/.bin/eslint ."
   },
   "dependencies": {
