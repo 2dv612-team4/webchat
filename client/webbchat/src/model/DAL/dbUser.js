@@ -1,12 +1,15 @@
 
-const serverUrl = 'http://localhost:4000/';
+//const serverUrl = 'http://localhost:4000/';
 
 export const sendFriendRequestTo = (username) => 
-  fetch(`${serverUrl}friends/sendrequest/${username}`,
-    { method: 'POST' });
+  fetch(`/friends/sendrequest/${username}`,
+    { method: 'POST',
+      credentials: 'include' });
 
 export const getAllFriends = () => 
-  fetch(`${serverUrl}friends/`);
+  fetch(`/friends/`, 
+    { credentials: 'include' } );
 
 export const getAllUsersContaining = (query) => 
-  fetch(`${serverUrl}users/search/${query}`);
+  fetch(`/users/search/${query}`, 
+    { credentials: 'include' });
