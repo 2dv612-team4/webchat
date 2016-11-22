@@ -14,7 +14,10 @@ class Users extends Component {
             .filter((user) => 
               user.username.toLowerCase().match('^'+this.props.filterQuery.toLowerCase()+'.*'))
                 .map((user, i) => 
-                  <User openChatt={this.openChatt.bind(this)} user={user} key={user.id}/>)}
+                  <User 
+                    openChatt={this.openChatt.bind(this)} 
+                    user={user} 
+                    key={user.id}/>)}
       </List>
     )
   }

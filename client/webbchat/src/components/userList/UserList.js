@@ -1,6 +1,6 @@
 import React from 'react';
-import FriendList from './FriendList';
-import FindUserList from './FindUserList';
+import FriendList from './friends/App';
+import FindUserList from './others/App';
 
 const UserList = () => (
   <div>

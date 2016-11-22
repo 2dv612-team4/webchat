@@ -10,3 +10,7 @@ export const setQuery = (query) => {
     query,
   };
 };
+
+export const setOtherUsers = () => {
+  return {};
+};

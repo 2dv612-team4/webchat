@@ -10,9 +10,17 @@ const friends = [
   { id: '4', username: 'Karl' },
 ];
 
+// TODO: get users from server...
+const otherUsers = [
+  { username: 'Björn'},
+  { username: 'Alex' },
+  { username: 'Sebbe' }
+]
+
 const defaultState = {
   friends,
   userSearchQuery: '',
+  otherUsers,
 };
 
 const store = createStore(rootReducer, defaultState);
