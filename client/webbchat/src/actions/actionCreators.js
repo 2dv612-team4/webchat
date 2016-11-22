@@ -1,7 +1,9 @@
 
-export const addUser = () => {
-
-  return {};
+export const setInitialFriends = (friends) => {
+  return {
+    type: 'SET_INITIAL_FRIENDS',
+    friends,
+  };
 };
 
 export const setQuery = (query) => {
