@@ -13,11 +13,10 @@ class Search extends Component {
   }
 
   onSearch(){
-    
     this.props.setQuery(this.state.searchQuery);
     if(this.state.searchQuery === ''){
       return this.props.setOtherUsers([]); 
-    }
+    } 
     getAllUsersContaining(this.state.searchQuery)
       .then(result => result.json())
       .then(users => {
@@ -25,8 +24,7 @@ class Search extends Component {
       })
       .catch(() => {
         // TODO: show notification..
-      })
-    
+      });
   }
   
   onSearchBoxInput(query){

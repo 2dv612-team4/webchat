@@ -6,7 +6,7 @@ const otherUsers = (state = [], action) => {
   default:
     return state;
   }
-  
+
 };
 
 export default otherUsers;
