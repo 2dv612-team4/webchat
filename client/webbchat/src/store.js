@@ -14,8 +14,9 @@ const friends = [
 const otherUsers = [
   { username: 'Björn'},
   { username: 'Alex' },
-  { username: 'Sebbe' }
-]
+  { username: 'Sebbe' },
+  { username: 'test2' },
+];
 
 const defaultState = {
   friends,
