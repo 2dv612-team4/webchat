@@ -36,7 +36,7 @@ class Users extends Component {
             displaySnackbar: true,
             snackbarText: 'Friend request already sent!', 
           })
-        }else if (result === 200){
+        }else if (result.status === 200){
           this.setState({
             displaySnackbar: true,
             snackbarText: 'Friend request sent', 
@@ -44,10 +44,7 @@ class Users extends Component {
         }
       })
       .catch(() => {
-        this.setState({
-          displaySnackbar: true,
-          snackbarText: 'unknown error',  
-        })
+        
       });
   }
 
