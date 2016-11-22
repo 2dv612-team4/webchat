@@ -1,14 +1,16 @@
 import React, { PropTypes } from 'react';
-import { ListItem, ListItemContent, ListItemAction, IconButton } from 'react-mdl';
+import { ListItem, ListItemContent, ListItemAction, IconButton, Tooltip } from 'react-mdl';
 
 const User = ({ onClick, user: {username} }) => (
   <ListItem>
     <ListItemContent >{username}</ListItemContent>
     <ListItemAction>
-      <IconButton 
-        name="add_circle" 
-        colored
-        onClick={() => onClick(username)} />
+      <Tooltip label="Send friend request" position="bottom">
+        <IconButton 
+          name="add_circle" 
+          colored
+          onClick={() => onClick(username)} />
+      </Tooltip>  
     </ListItemAction>
   </ListItem>
 );
