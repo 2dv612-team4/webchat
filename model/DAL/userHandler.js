@@ -5,12 +5,14 @@ const co = require('co');
 
 const add = (username, password) => new User({username, password}).save();
 const findWithUsername = (username) => User.findOne({ username }).exec();
+const findWithId = (_id) => User.findOne({_id}).exec();
 const findAllUsers = () => User.find({}).select('username').exec();
 const findFriendsWithUsername = (username) => User.findOne({ username }).select('friends').exec();
+const findWithPartialUsername = (username) => User.find({'username': {'$regex': '^'+username+'.*'}}).exec();
 
-//username: user recieving friend request. requestingUserID: ID of user sending request
+//_id: id of user recieving friend request. requestingUserID: ID of user sending request
 const addFriendRequest = (_id, requestingUserID) => User.update({_id}, {$push: {friendrequests: requestingUserID }}).exec();
-//username: user that recieved friend request. requestingUserID: ID of user that sent the request
+//_id: id of user that recieved friend request. requestingUserID: ID of user that sent the request
 const removeFriendRequest = (_id, requestingUserID) => User.update({_id}, {$pull: {friendrequests: requestingUserID }}).exec();
 //adds the users to eachothers friends-array in mongodb
 const addFriend = (userID, newFriendID) => new Promise((resolve, reject) => {
@@ -40,10 +42,12 @@ const removeFriend = (userID, friendID) => new Promise((resolve, reject) => {
 module.exports = {
   add: add,
   findWithUsername: findWithUsername,
+  findWithId: findWithId,
   addFriendRequest: addFriendRequest,
   addFriend: addFriend,
   removeFriend: removeFriend,
   removeFriendRequest: removeFriendRequest,
   findFriendsWithUsername: findFriendsWithUsername,
   findAllUsers: findAllUsers,
+  findWithPartialUsername: findWithPartialUsername,
 };

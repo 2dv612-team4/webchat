@@ -1,7 +1,7 @@
 'use strict';
 const index = require('./index');
 const express = require('express');
-var hbs = require('hbs');
+let hbs = require('hbs');
 const router = express.Router();
 
 /* GET chatroom page. */
