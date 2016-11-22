@@ -6,7 +6,7 @@ const UserList = () => (
   <div>
     Friends:
     <FriendList />
-    Users: 
+    Other: 
     <FindUserList />
   </div>
 );

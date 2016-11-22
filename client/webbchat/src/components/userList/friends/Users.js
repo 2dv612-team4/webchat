@@ -17,7 +17,7 @@ class Users extends Component {
                   <User 
                     openChatt={this.openChatt.bind(this)} 
                     user={user} 
-                    key={user.id}/>)}
+                    key={user.username}/>)}
       </List>
     )
   }
