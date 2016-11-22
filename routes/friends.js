@@ -20,13 +20,13 @@ router.post('/sendrequest/:username', function(req, res) {
       userHandler.findWithUsername(requesterUsername),
       userHandler.findWithUsername(reciverUsername),
     ];
-    const isFriendRequsetAlreadySent = reciverUser.friendrequests.find(id => 
+    const isFriendRequsetAlreadySent = reciverUser.friendrequests.find(id =>
       id.toString() === requesterUser._id.toString());
     if(isFriendRequsetAlreadySent){
       return res.sendStatus(304);
     }
     yield userHandler.addFriendRequest(reciverUser._id, requesterUser._id);
-    
+
     res.sendStatus(200);
   })
   .catch(() => res.sendStatus(500));
@@ -46,14 +46,14 @@ router.post('/removerequest/:username', function(req, res){
       userHandler.findWithUsername(requesterUsername),
       userHandler.findWithUsername(reciverUsername),
     ];
-    
+
     yield userHandler.removeFriendRequest(reciverUser._id, requesterUser._id);
     res.sendStatus(200);
   })
   .catch(() => res.sendStatus(500));
 });
 
-/** 
+/**
  * Get all user friends
 */
 router.get('/', function(req, res){
