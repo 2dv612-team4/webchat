@@ -8,7 +8,7 @@ const router = express.Router();
 router.get('/', function(req, res, next) {
   if(req.session.loggedIn) {
     hbs.registerPartial('user', req.session.loggedIn);
-    res.render('chatt', {layout: 'chatt.hbs'});
+    res.render('chat', {layout: 'chat.hbs'});
   } else {
     res.redirect('/');
   }

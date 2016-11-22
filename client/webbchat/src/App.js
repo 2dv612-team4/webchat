@@ -31,7 +31,7 @@ class App extends Component {
                       <Search />
                       <UserList />
                     </Cell>
-                    <Cell col={10} style={{ margin: '2px'}}>CHATT</Cell>
+                    <Cell col={10} style={{ margin: '2px'}}>CHAT</Cell>
                   </Grid>
                 </div>
               </Content>

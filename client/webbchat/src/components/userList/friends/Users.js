@@ -3,8 +3,9 @@ import { List } from 'react-mdl';
 import User from './User';
 
 class Users extends Component {
-  openChatt(userId){
+  openChat(userId){
     console.log('userId', userId);
+    // TODO: open chat
   }
 
   render() {
@@ -15,7 +16,7 @@ class Users extends Component {
               user.username.toLowerCase().match('^'+this.props.filterQuery.toLowerCase()+'.*'))
                 .map((user, i) => 
                   <User 
-                    openChatt={this.openChatt.bind(this)} 
+                    openChat={this.openChat.bind(this)} 
                     user={user} 
                     key={user.username}/>)}
       </List>
