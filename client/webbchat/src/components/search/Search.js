@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import SearchBox from './SearchBox';
 import SearchSubmit from './SearchSubmit';
+import { getAllUsersContaining } from '../../model/DAL/dbUser';
 
 class Search extends Component {
 
@@ -12,15 +13,26 @@ class Search extends Component {
   }
 
   onSearch(){
-    // TODO: make server ajax and set otherUsers to result...
-    // this.props.setOtherUsers()
+    
     this.props.setQuery(this.state.searchQuery);
+    if(this.state.searchQuery === ''){
+      return this.props.setOtherUsers([]); 
+    }
+    getAllUsersContaining(this.state.searchQuery)
+      .then(result => result.json())
+      .then(users => {
+        this.props.setOtherUsers(users)
+      })
+      .catch(() => {
+        // TODO: show notification..
+      })
+    
   }
   
   onSearchBoxInput(query){
     this.setState({searchQuery: query}, () => {
       // uncomment for realtime search
-      //this.props.setQuery(this.state.searchQuery);
+      this.onSearch();
     });
   }
 

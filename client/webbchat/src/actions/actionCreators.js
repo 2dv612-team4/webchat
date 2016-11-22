@@ -11,6 +11,9 @@ export const setQuery = (query) => {
   };
 };
 
-export const setOtherUsers = () => {
-  return {};
+export const setOtherUsers = (users) => {
+  return {
+    type: 'SET_USERS',
+    users,
+  };
 };

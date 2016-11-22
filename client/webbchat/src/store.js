@@ -10,13 +10,8 @@ const friends = [
   { id: '4', username: 'Karl' },
 ];
 
-// TODO: get users from server...
-const otherUsers = [
-  { username: 'Björn'},
-  { username: 'Alex' },
-  { username: 'Sebbe' },
-  { username: 'test2' },
-];
+// store for not friend users
+const otherUsers = [];
 
 const defaultState = {
   friends,

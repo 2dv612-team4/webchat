@@ -5,7 +5,13 @@ const otherUsers = (state = [], action) => {
    * - add usrs action,
    * - remove users action 
    * */  
-  return state;
+  switch (action.type) {
+  case 'SET_USERS':
+    return action.users;    
+  default:
+    return state;
+  }
+  
 };
 
 export default otherUsers;
