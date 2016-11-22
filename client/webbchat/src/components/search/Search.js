@@ -12,7 +12,16 @@ class Search extends Component {
   }
   
   onSearchBoxInput(query){
-    this.setState({searchQuery: query});
+    this.setState({searchQuery: query}, () => {
+      // uncomment for realtime search
+      //this.props.setQuery(this.state.searchQuery);
+    });
+  }
+
+  onSearchBoxEnter(event){
+    if(event.key === 'Enter'){
+      this.props.setQuery(this.state.searchQuery);
+    }
   }
 
   onSearchSubmit(){
@@ -23,7 +32,8 @@ class Search extends Component {
     return (   
       <div>
         <SearchBox
-          onInput={this.onSearchBoxInput.bind(this)}/>
+          onInput={this.onSearchBoxInput.bind(this)}
+          onSubmit={this.onSearchBoxEnter.bind(this)}/>
         <SearchSubmit 
           onSubmit={this.onSearchSubmit.bind(this)}/>
       </div>
