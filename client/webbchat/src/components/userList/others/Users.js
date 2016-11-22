@@ -1,42 +1,76 @@
 import React, { Component } from 'react';
-import { List } from 'react-mdl';
+import { List, Snackbar } from 'react-mdl';
 import User from './User';
 import { sendFriendRequestTo } from '../../../model/DAL/dbUser';
 
 class Users extends Component {
 
+  constructor(props){
+    super(props);
+    this.state = {
+      displaySnackbar: false,
+      snackbarText: '',
+    }
+  }
+
+  snackbarClick(){
+    this.setState({
+      displaySnackbar: false,
+      snackbarText: '',
+    })
+  }
+
+  handleSnackbarTimeout(){
+    this.setState({
+      displaySnackbar: false,
+      snackbarText: '',
+    })
+  }
+
   sendFriendRequest(name){
     sendFriendRequestTo(name)
       .then((result) => {
         console.log(result)
-        if(result.status === 304){
-          /** 
-           * TODO:
-           * show notification
-           *  - handle request already sent before
-           * */ 
+        if(result.status === 304){ 
+          this.setState({
+            displaySnackbar: true,
+            snackbarText: 'Friend request already sent!', 
+          })
         }else if (result === 200){
-          /**
-           * TODO:
-           * show notification
-           */
+          this.setState({
+            displaySnackbar: true,
+            snackbarText: 'Friend request sent', 
+          })
         }
       })
       .catch(() => {
-        // TODO: show error notification
+        this.setState({
+          displaySnackbar: true,
+          snackbarText: 'unknown error',  
+        })
       });
   }
 
+  
+
   render(){ 
     return (
-      <List>
-        {this.props.users
-            .map((user) => 
-              <User 
-                onClick={this.sendFriendRequest.bind(this)}
-                user={user} 
-                key={user.username}/>)}
-      </List>
+      <div>
+        <List>
+          {this.props.users
+              .map((user) => 
+                <User 
+                  onClick={this.sendFriendRequest.bind(this)}
+                  user={user} 
+                  key={user.username}/>)}
+        </List>
+        <Snackbar
+          active={this.state.displaySnackbar}
+          onClick={this.snackbarClick.bind(this)}
+          onTimeout={this.handleSnackbarTimeout.bind(this)}
+          action="Ok">{this.state.snackbarText}
+        </Snackbar>
+      </div>
     )
   }
 }
