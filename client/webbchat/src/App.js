@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import Search from './components/search/App'
 import UserList from './components/userList/UserList'
+import Logout from './components/logout/Logout'
 import { getAllFriends } from './model/DAL/dbUser'
 import './App.css';
 import { Layout, Header, Content, Grid, Cell} from 'react-mdl';
@@ -22,7 +23,8 @@ class App extends Component {
     return (
       <div style={{height: '100vh', position: 'relative'}}>
           <Layout fixedHeader>
-              <Header title="Title">
+              <Header title="Webchat">
+              <Logout />
               </Header>
               <Content>
                 <div style={{ margin: 'auto'}}>
