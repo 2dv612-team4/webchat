@@ -17,12 +17,12 @@ router.get('/search/:username', function(req, res){
     return res.sendStatus(406);
   }
   userHandler.findWithPartialUsername(username)
-    .then((users) => {
-      res.json(users.map((user) => {
-        return {
+    .then(users => {
+      res.json(users
+        .map(user => ({
           username: user.username,
-        };
-      }));
+        }))
+        .filter(user => user.username !== username));
     })
     .catch(() => res.sendStatus(500));
 });
