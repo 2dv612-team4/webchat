@@ -5,7 +5,9 @@
   "scripts": {
     "start": "node ./bin/www",
     "start-local": "MONGODB_URI=mongodb://localhost/WebChat node ./bin/www",
-    "eslint": "node ./node_modules/.bin/eslint ."
+    "start-local-react": "MONGODB_URI=mongodb://localhost/WebChat node ./bin/www development",
+    "eslint": "node ./node_modules/.bin/eslint .",
+    "move-build": "node buildMover"
   },
   "dependencies": {
     "body-parser": "~1.15.2",
@@ -21,6 +23,10 @@
     "serve-favicon": "~2.3.0"
   },
   "devDependencies": {
-    "eslint": "^3.10.0"
+    "eslint": "^3.10.0",
+    "fs-extra": "^1.0.0"
+  },
+  "engines": {
+    "node": "6.9.1"
   }
 }

@@ -2,12 +2,16 @@
   "name": "webbchat",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:4000/",
   "devDependencies": {
     "react-scripts": "0.7.0"
   },
   "dependencies": {
     "react": "^15.4.0",
-    "react-dom": "^15.4.0"
+    "react-dom": "^15.4.0",
+    "react-mdl": "^1.8.0",
+    "react-redux": "^4.4.6",
+    "redux": "^3.6.0"
   },
   "scripts": {
     "start": "react-scripts start",
