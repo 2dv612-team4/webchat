@@ -6,6 +6,7 @@ const co = require('co');
 const add = (username, password) => new User({username, password}).save();
 const findWithUsername = (username) => User.findOne({ username }).exec();
 const findWithId = (_id) => User.findOne({_id}).exec();
+const getFriendRequests = (username) => User.findOne({username}).populate('friendrequests').exec();
 const findAllUsers = () => User.find({}).select('username').exec();
 const findFriendsWithUsername = (username) => User.findOne({ username }).select('friends').exec();
 const findWithPartialUsername = (username) => User.find({'username': {'$regex': '^'+username+'.*'}}).exec();
@@ -50,4 +51,5 @@ module.exports = {
   findFriendsWithUsername: findFriendsWithUsername,
   findAllUsers: findAllUsers,
   findWithPartialUsername: findWithPartialUsername,
+  getFriendRequests: getFriendRequests,
 };
