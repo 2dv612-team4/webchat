@@ -27,3 +27,11 @@ When testing with local mongodb start with `npm run start-local`
     - you will be "logged in" as 'dev' with password '1234'.
 
 you can now talk to node server from react webpack dev server as user 'dev'
+
+# react build
+Assumes all dependencies are installed
+  - in react run ```npm run build```
+  - in root run ```npm run move-build```
+  - open ```views/chat.hbs``` 
+    - replace path ```/static/js/ || /static/css/```
+    - with path ```/javascripts/ || /stylesheets/```
