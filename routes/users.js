@@ -10,7 +10,7 @@ router.get('/', function(req, res) {
 });
 
 router.get('/search/:username', authenticate, function(req, res){
-  const username = req.params.username;
+  const username = req.session.loggedIn;
   if(username === ''){
     return res.sendStatus(406);
   }
