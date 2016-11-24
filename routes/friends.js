@@ -2,6 +2,7 @@
 const express = require('express');
 const userHandler = require('../model/DAL/userHandler.js');
 const co = require('co');
+const authenticate = require('./utils/authenticate');
 const router = express.Router();
 
 // TODO: fix code duplication
@@ -9,10 +10,7 @@ const router = express.Router();
 /**
  * Sends user friend request
  */
-router.post('/sendrequest/:username', function(req, res) {
-  if(!req.session.loggedIn){
-    return res.sendStatus(401);
-  }
+router.post('/sendrequest/:username', authenticate, function(req, res) {
   const reciverUsername = req.params.username;
   const requesterUsername = req.session.loggedIn;
   co(function*(){
@@ -35,10 +33,7 @@ router.post('/sendrequest/:username', function(req, res) {
 /**
  * Removes friend requests
  */
-router.post('/removerequest/:username', function(req, res){
-  if(!req.session.loggedIn){
-    return res.sendStatus(401);
-  }
+router.post('/removerequest/:username', authenticate, function(req, res){
   const reciverUsername = req.params.username;
   const requesterUsername = req.session.loggedIn;
   co(function*(){
@@ -56,10 +51,7 @@ router.post('/removerequest/:username', function(req, res){
 /**
  * Get all user friends
 */
-router.get('/', function(req, res){
-  if(!req.session.loggedIn){
-    return res.sendStatus(401);
-  }
+router.get('/', authenticate, function(req, res){
   const username = req.session.loggedIn;
   userHandler.findFriendsWithUsername(username)
     .then((user) => res.json(user.friends))

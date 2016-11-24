@@ -2,14 +2,12 @@
 const express = require('express');
 const userHandler = require('../model/DAL/userHandler.js');
 const router = express.Router();
+const authenticate = require('./utils/authenticate');
 
 /**
  * Get users pending friend requests
 */
-router.get('/', function(req, res){
-  if(!req.session.loggedIn){
-    return res.sendStatus(401);
-  }
+router.get('/', authenticate, function(req, res){
   const username = req.session.loggedIn;
   let promises = [];
   userHandler.findWithUsername(username)
