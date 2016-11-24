@@ -17,3 +17,13 @@ export const getAllUsersContaining = (query) =>
 export const getAllPendingRequests = () =>
   fetch(`/pending/`,
     { credentials: 'include' } );
+
+export const acceptFriendRequest = (id) =>
+  fetch(`/friends/acceptrequest/${id}`,
+    { method: 'POST',
+      credentials: 'include' } );
+
+export const rejectFriendRequest = (id) =>
+  fetch(`/friends/rejectrequest/${id}`,
+    { method: 'POST',
+      credentials: 'include' } );
