@@ -12,14 +12,16 @@ router.get('/', function(req, res){
   }
   const username = req.session.loggedIn;
   let promises = [];
-  userHandler.findWithUsername(username)
-    .then((user) => user.friendrequests.forEach(function(value){
+  userHandler.getFriendRequests(username)
+    /*.then((user) => user.friendrequests.forEach(function(value){
+      console.log(user);
       promises.push(userHandler.findWithId(value));
-    }))
-    .then(() => Promise.all(promises))
+    }))*/
+    //.then((user) => Promise.all(promises))
     .then(responses => {
+      console.log(responses);
       let parsedResponse = [];
-      responses.forEach(function(obj){
+      responses.friendrequests.forEach(function(obj){
         parsedResponse.push({
           'id': obj._id,
           'username' : obj.username,
