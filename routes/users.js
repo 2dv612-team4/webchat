@@ -2,16 +2,14 @@
 const express = require('express');
 const userHandler = require('../model/DAL/userHandler.js');
 const router = express.Router();
+const authenticate = require('./utils/authenticate');
 
 /* GET users listing. */
 router.get('/', function(req, res) {
   res.send('respond with a resource');
 });
 
-router.get('/search/:username', function(req, res){
-  if(!req.session.loggedIn){
-    return res.sendStatus(401);
-  }
+router.get('/search/:username', authenticate, function(req, res){
   const username = req.params.username;
   if(username === ''){
     return res.sendStatus(406);
