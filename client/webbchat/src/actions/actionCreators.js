@@ -19,3 +19,10 @@ export const setOtherUsers = (users) => {
     users,
   };
 };
+
+export const setPendingRequests = (pending) => {
+  return {
+    type: 'SET_PENDING_REQUESTS',
+    pending,
+  };
+};

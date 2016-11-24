@@ -3,7 +3,9 @@ import React, { Component } from 'react';
 import Search from './components/search/App'
 import UserList from './components/userList/UserList'
 import Logout from './components/logout/Logout'
+import Pending from './components/pending/App'
 import { getAllFriends } from './model/DAL/dbUser'
+import { getAllPendingRequests } from './model/DAL/dbUser'
 import './App.css';
 import { Layout, Header, Content, Grid, Cell} from 'react-mdl';
 
@@ -15,6 +17,13 @@ class App extends Component {
       .then(responce => responce.json())
       .then(friends => {
         this.props.setInitialFriends(friends)
+      })
+      .catch(e => console.log(e));
+
+    getAllPendingRequests()
+      .then(responce => responce.json())
+      .then(pendingRequests => {
+        this.props.setPendingRequests(pendingRequests)
       })
       .catch(e => console.log(e));
   }
@@ -36,6 +45,14 @@ class App extends Component {
                     <Cell col={10} style={{ margin: '2px'}}>CHAT</Cell>
                   </Grid>
                 </div>
+                <div style={{ margin: 'auto'}}>
+                <Grid className="demo-grid-ruler" >
+                <Cell col={10} style={{ margin: '2px'}}>Requests</Cell>
+                  <Cell col={2} style={{ minWidth: '200px'}} >
+                    <Pending />
+                  </Cell>
+                </Grid>
+                </div>
               </Content>
           </Layout>
       </div>
@@ -50,10 +67,11 @@ import * as actionsCreators from './actions/actionCreators';
 const mapStateToProps = (state) => {
   return {
     friends: state.friends,
+    pending: state.pending,
   };
 };
 
-const mapDispatchToProps = (dispatch) => bindActionCreators(actionsCreators, dispatch); 
+const mapDispatchToProps = (dispatch) => bindActionCreators(actionsCreators, dispatch);
 
 const AppState = connect(
   mapStateToProps,
@@ -61,5 +79,3 @@ const AppState = connect(
 )(App);
 
 export default AppState;
-
-
