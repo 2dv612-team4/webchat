@@ -11,19 +11,19 @@ const router = express.Router();
  * Sends user friend request
  */
 router.post('/sendrequest/:username', authenticate, function(req, res) {
-  const reciverUsername = req.params.username;
+  const receiverUsername = req.params.username;
   const requesterUsername = req.session.loggedIn;
   co(function*(){
-    const [ requesterUser, reciverUser ] = yield [
+    const [ requesterUser, receiverUser ] = yield [
       userHandler.findWithUsername(requesterUsername),
-      userHandler.findWithUsername(reciverUsername),
+      userHandler.findWithUsername(receiverUsername),
     ];
-    const isFriendRequsetAlreadySent = reciverUser.friendrequests.find(id =>
+    const isFriendRequestAlreadySent = receiverUser.friendrequests.find(id =>
       id.toString() === requesterUser._id.toString());
-    if(isFriendRequsetAlreadySent){
+    if(isFriendRequestAlreadySent){
       return res.sendStatus(304);
     }
-    yield userHandler.addFriendRequest(reciverUser._id, requesterUser._id);
+    yield userHandler.addFriendRequest(receiverUser._id, requesterUser._id);
 
     res.sendStatus(200);
   })
@@ -31,18 +31,47 @@ router.post('/sendrequest/:username', authenticate, function(req, res) {
 });
 
 /**
- * Removes friend requests
+ * Removes a sent friend request
  */
 router.post('/removerequest/:username', authenticate, function(req, res){
-  const reciverUsername = req.params.username;
+  const receiverUsername = req.params.username;
   const requesterUsername = req.session.loggedIn;
   co(function*(){
-    const [ requesterUser, reciverUser ] = yield [
+    const [ requesterUser, receiverUser ] = yield [
       userHandler.findWithUsername(requesterUsername),
-      userHandler.findWithUsername(reciverUsername),
+      userHandler.findWithUsername(receiverUsername),
     ];
 
-    yield userHandler.removeFriendRequest(reciverUser._id, requesterUser._id);
+    yield userHandler.removeFriendRequest(receiverUser._id, requesterUser._id);
+    res.sendStatus(200);
+  })
+  .catch(() => res.sendStatus(500));
+});
+
+/**
+ * Accepts a friend request
+ */
+router.post('/acceptrequest/:id', authenticate, function(req, res){
+  const requesterUserId = req.params.id;
+  const receiverUsername = req.session.loggedIn;
+  co(function*(){
+    const receiverUser = yield userHandler.findWithUsername(receiverUsername);
+    yield userHandler.addFriend(receiverUser._id, requesterUserId);
+    yield userHandler.removeFriendRequest(receiverUser._id, requesterUserId);
+    res.sendStatus(200);
+  })
+  .catch(() => res.sendStatus(500));
+});
+
+/**
+ * Rejects a friend request
+ */
+router.post('/rejectrequest/:id', authenticate, function(req, res){
+  const requesterUserId = req.params.id;
+  const receiverUsername = req.session.loggedIn;
+  co(function*(){
+    const receiverUser = yield userHandler.findWithUsername(receiverUsername);
+    yield userHandler.removeFriendRequest(receiverUser._id, requesterUserId);
     res.sendStatus(200);
   })
   .catch(() => res.sendStatus(500));
