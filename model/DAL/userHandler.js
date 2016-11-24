@@ -8,7 +8,7 @@ const findWithUsername = (username) => User.findOne({ username }).exec();
 const findWithId = (_id) => User.findOne({_id}).exec();
 const getFriendRequests = (username) => User.findOne({username}).populate('friendrequests').exec();
 const findAllUsers = () => User.find({}).select('username').exec();
-const findFriendsWithUsername = (username) => User.findOne({ username }).select('friends').exec();
+const findFriendsWithUsername = (username) => User.findOne({ username }).populate('friends').exec();
 const findWithPartialUsername = (username) => User.find({'username': {'$regex': '^'+username+'.*'}}).exec();
 
 //_id: id of user recieving friend request. requestingUserID: ID of user sending request

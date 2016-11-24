@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { List, Snackbar } from 'react-mdl';
 import User from './User';
-import { acceptFriendRequest } from '../../model/DAL/dbUser';
+import { acceptFriendRequest, rejectFriendRequest } from '../../model/DAL/dbUser';
 
 class Users extends Component {
 
@@ -27,7 +27,42 @@ class Users extends Component {
     })
   }
 
-  acceptFriendRequest(name){
+  acceptFriendRequest(id){
+    acceptFriendRequest(id)
+      .then((result) => {
+        if(result.status === 304){ 
+          this.setState({
+            displaySnackbar: true,
+            snackbarText: 'Error when accepting friend request!', 
+          })
+        }else if (result.status === 200){
+          this.setState({
+            displaySnackbar: true,
+            snackbarText: 'Accepted friend request', 
+          })
+        }
+      })
+      .catch(() => {
+      });
+  }
+
+  rejectFriendRequest(id){
+    rejectFriendRequest(id)
+      .then((result) => {
+        if(result.status === 304){ 
+          this.setState({
+            displaySnackbar: true,
+            snackbarText: 'Error when rejecting friend request!', 
+          })
+        }else if (result.status === 200){
+          this.setState({
+            displaySnackbar: true,
+            snackbarText: 'Rejected friend request', 
+          })
+        }
+      })
+      .catch(() => {
+      });
   }
 
   render(){
@@ -37,7 +72,8 @@ class Users extends Component {
           {this.props.users
               .map((user) =>
                 <User
-                  onClick={this.acceptFriendRequest.bind(this)}
+                  acceptFriendRequest={this.acceptFriendRequest.bind(this)}
+                  rejectFriendRequest={this.rejectFriendRequest.bind(this)}
                   user={user}
                   key={user.username}/>)}
         </List>
