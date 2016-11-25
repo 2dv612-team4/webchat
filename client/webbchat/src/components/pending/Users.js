@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { List, Snackbar } from 'react-mdl';
 import User from './User';
 import { acceptFriendRequest, rejectFriendRequest } from '../../model/DAL/dbUser';
+import webchatEmitter from '../../model/emitter';
 
 class Users extends Component {
 
@@ -11,6 +12,27 @@ class Users extends Component {
       displaySnackbar: false,
       snackbarText: '',
     }
+  }
+
+  componentWillMount(){
+    webchatEmitter.on('friend-request-rejected', (message) => {
+      this.setState({
+        displaySnackbar: true,
+        snackbarText: message, 
+      })
+    })
+    webchatEmitter.on('friend-request-accepted', (message) => {
+      this.setState({
+        displaySnackbar: true,
+        snackbarText: message, 
+      })
+    })
+    webchatEmitter.on('new-pending', (message) => {
+      this.setState({
+        displaySnackbar: true,
+        snackbarText: message, 
+      })
+    })
   }
 
   snackbarClick(){
@@ -28,41 +50,12 @@ class Users extends Component {
   }
 
   acceptFriendRequest(id){
-    acceptFriendRequest(id)
-      .then((result) => {
-        if(result.status === 304){ 
-          this.setState({
-            displaySnackbar: true,
-            snackbarText: 'Error when accepting friend request!', 
-          })
-        }else if (result.status === 200){
-          this.setState({
-            displaySnackbar: true,
-            snackbarText: 'Accepted friend request', 
-          })
-        }
-      })
-      .catch(() => {
-      });
+    webchatEmitter.emit('accept-friend-request', id);
   }
 
   rejectFriendRequest(id){
-    rejectFriendRequest(id)
-      .then((result) => {
-        if(result.status === 304){ 
-          this.setState({
-            displaySnackbar: true,
-            snackbarText: 'Error when rejecting friend request!', 
-          })
-        }else if (result.status === 200){
-          this.setState({
-            displaySnackbar: true,
-            snackbarText: 'Rejected friend request', 
-          })
-        }
-      })
-      .catch(() => {
-      });
+    console.log(this.props.users)
+    webchatEmitter.emit('reject-friend-request', id);
   }
 
   render(){
