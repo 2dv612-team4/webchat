@@ -27,3 +27,8 @@ export const rejectFriendRequest = (id) =>
   fetch(`/friends/rejectrequest/${id}`,
     { method: 'POST',
       credentials: 'include' } );
+
+export const getSocketsToken = (id) =>
+  fetch(`/users/sockettoken`,
+    { method: 'POST',
+      credentials: 'include' } );
