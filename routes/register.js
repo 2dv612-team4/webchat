@@ -3,7 +3,6 @@ const express = require('express');
 const router = express.Router();
 const userHandler = require('../model/DAL/userHandler.js');
 const co = require('co');
-
 /* GET home page. */
 router.get('/', function(req, res) {
   res.render('register', {layout: 'register.hbs'});

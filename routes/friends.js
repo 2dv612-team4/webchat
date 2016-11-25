@@ -4,7 +4,6 @@ const userHandler = require('../model/DAL/userHandler.js');
 const co = require('co');
 const authenticate = require('./utils/authenticate');
 const router = express.Router();
-
 // TODO: fix code duplication
 
 /**
