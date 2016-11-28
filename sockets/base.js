@@ -79,5 +79,26 @@ module.exports = (io) => {
         .catch((e) => io.to(socketid).emit('servererror', e.message));
     });
 
+    /**
+     * removes friend based in username of friend
+     */
+    socket.on('remove-friend', (toRemoveUsername) => {
+      friends.removeFriend(username, toRemoveUsername)
+        .then(({requesterFriends, receiverSocketId, reciverFriends}) => {
+          io.to(receiverSocketId)
+            .emit('friends', {
+              message: '',
+              friends: reciverFriends,
+            });
+
+          io.to(socketid)
+            .emit('friends', {
+              message: '',
+              friends: requesterFriends,
+            });
+        })
+        .catch((e) => io.to(socketid).emit('servererror', e.message));
+    });
+
   });
 };
