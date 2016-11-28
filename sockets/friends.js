@@ -43,11 +43,12 @@ const acceptFriendRequest =
     const receiverUser = yield userHandler.findWithUsername(username);
     yield userHandler.addFriend(receiverUser._id, id);
     yield userHandler.removeFriendRequest(receiverUser._id, id);
-    const { friends: accepterFriends, friendrequests:  accepterPendind } =  yield userHandler.findFriendsWithUsername(username);
+    const { friends: accepterFriends } =  yield userHandler.findFriendsWithUsername(username);
+    const { friendrequests:  accepterPending } = yield userHandler.getFriendRequests(username);
     const senderUser = yield userHandler.findWithId(id);
     const {friends: senderFriends, socketId: receiverSocketId} = yield userHandler.findFriendsWithUsername(senderUser.username);
 
-    return { receiverSocketId, senderFriends, accepterFriends, accepterPendind };
+    return { receiverSocketId, senderFriends, accepterFriends, accepterPending };
   });
 
 const getFriendsAndPending =  
