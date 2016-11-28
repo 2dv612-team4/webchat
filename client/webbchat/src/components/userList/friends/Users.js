@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { List } from 'react-mdl';
 import User from './User';
+import webchatEmitter from '../../../model/emitter';
 
 class Users extends Component {
   openChat(username){
@@ -10,6 +11,7 @@ class Users extends Component {
 
   removeFriend(username){
     console.log('removeFriend:', username);
+    webchatEmitter.emit('remove-friend', username);
   }
 
   render() {
