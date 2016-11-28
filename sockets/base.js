@@ -27,7 +27,13 @@ module.exports = (io) => {
       .catch((e) => io.to(socketid).emit('servererror', e.message));
 
     socket.on('disconnect', function () {
-      // TODO remove socket id from data base :)       
+      userHandler.setSocketId(userId, null)
+        .then(() => {
+          console.log('socketId set to null');
+        })
+        .catch(() => {
+          console.log('error while setting socket id');
+        });       
     });
 
     /**
