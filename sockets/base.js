@@ -31,9 +31,11 @@ module.exports = (io) => {
 
     socket.on('friend-request', (receiverUsername) => {
       friends.sendFriendRequest(username, receiverUsername)
-        .then(({ receiverSocketId, friendrequests }) => {
-          if(!receiverSocketId || !friendrequests){
+        .then(({ receiverSocketId, friendrequests, isFriendRequestAlreadyInbound, isFriendRequestAlreadySent }) => {
+          if(isFriendRequestAlreadySent){
             return io.to(socketid).emit('friend-request-error', 'Friend request already sent!');
+          }else if(isFriendRequestAlreadyInbound){
+            return io.to(socketid).emit('friend-request-error', 'You already have a pending request from target user!');
           }
 
           io.to(receiverSocketId)
