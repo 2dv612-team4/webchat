@@ -65,7 +65,7 @@ module.exports = (io) => {
      */
     socket.on('accept-friend-request', (id) => {
       friends.acceptFriendRequest(username, id)
-        .then(({ receiverSocketId, senderFriends, accepterFriends, accepterPendind }) => {
+        .then(({ receiverSocketId, senderFriends, accepterFriends, accepterPending }) => {
           
           io.to(receiverSocketId)
             .emit('friend-request-accepted', {
@@ -77,7 +77,7 @@ module.exports = (io) => {
             .emit('accept-friend-request-response', {
               message: '',
               friends: accepterFriends,
-              pending: accepterPendind,
+              pending: accepterPending,
             });
         })
       .catch((e) => io.to(socketid).emit('servererror', e.message));
