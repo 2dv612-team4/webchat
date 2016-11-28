@@ -35,6 +35,6 @@ h3 {
 .mdl-textfield.is-invalid .mdl-textfield__input{
   border-color: rgba(0,0,0,.26) !important;
 }
-#Username,#Password{
+#Username,#Password,#RepeatPassword{
   text-align: center !important;
 }
