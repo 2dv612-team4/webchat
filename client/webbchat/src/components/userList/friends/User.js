@@ -2,20 +2,20 @@ import React, { PropTypes } from 'react';
 import { ListItem, IconButton, Menu, MenuItem } from 'react-mdl';
 
 const User = ({ openChat, removeFriend, user: {username} }) => (
-  <ListItem icon="person"> 
+  <ListItem icon="person" > 
     <div
       onClick={() => openChat(username)}>
     {username}
     </div>
-    <IconButton name="more_vert" id="demo-menu-lower-left" />
-    <Menu target="demo-menu-lower-left" >
+    <IconButton name="more_vert" id={`menu_iconbutton_id_${username}`}/>
+    <Menu target={`menu_iconbutton_id_${username}`} >
       <MenuItem     
         onClick={() => openChat(username)}
-        >Open chat
+        >Open chat {username}
       </MenuItem>
       <MenuItem 
         onClick={() => removeFriend(username)}
-        >Remove friend
+        >Remove friend {username}
       </MenuItem>
     </Menu>
     
