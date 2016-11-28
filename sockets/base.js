@@ -28,7 +28,9 @@ module.exports = (io) => {
       })
       .catch((e) => io.to(socketid).emit('servererror', e.message));
 
-
+    /**
+     * On user wants to send friend request
+     */
     socket.on('friend-request', (receiverUsername) => {
       friends.sendFriendRequest(username, receiverUsername)
         .then(({ receiverSocketId, friendrequests }) => {
@@ -48,6 +50,9 @@ module.exports = (io) => {
         .catch((e) => io.to(socketid).emit('servererror', e.message));
     });
 
+    /**
+     * On user wants to accsept friend request
+     */
     socket.on('accept-friend-request', (id) => {
       friends.acceptFriendRequest(username, id)
         .then(({ receiverSocketId, senderFriends, accepterFriends, accepterPendind }) => {
@@ -68,6 +73,9 @@ module.exports = (io) => {
       .catch((e) => io.to(socketid).emit('servererror', e.message));
     });
 
+    /**
+     * On user wants to reject friend request
+     */
     socket.on('reject-friend-request', (id) => {
       friends.rejectFriendRequest(username, id)
         .then((pending) => {
