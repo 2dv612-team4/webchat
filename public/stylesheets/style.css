@@ -1,45 +1,40 @@
+
 * {
  margin: 0;
  padding: 0;
-}
-
-a {
-  color: #000;
 }
 
 .body-wrapper {
   width: 100%;
   height: 100vh;
 }
-
-/*
-body{
-  height: 100vh;
-  width: 100%;
-}*/
+/*Centers content*/
 #maincontent{
   position: relative;
   top: 50%;
   transform: translateY(-50%);
+  text-align: center;
 }
 
 #formplacement{
   margin: 0 auto;
 }
-
+/*removes scrollbar*/
 h3 {
   margin: 0;
   padding: 0;
 }
-
-html {
-   font-family: GillSans, Calibri, Trebuchet, sans-serif ,entangled;
-}
-::-webkit-input-placeholder { /* WebKit browsers */
-    color:    black;
-     opacity: 0.5 !important;
-}
-
+/*spacing between input and title*/
 #title{
   margin-bottom:2%;
+}
+
+#submitDiv{
+  margin-bottom: 5%;
+}
+.mdl-textfield.is-invalid .mdl-textfield__input{
+  border-color: rgba(0,0,0,.26) !important;
+}
+#Username,#Password,#RepeatPassword{
+  text-align: center !important;
 }
