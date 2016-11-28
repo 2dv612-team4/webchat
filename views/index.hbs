@@ -1,27 +1,36 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Webchat</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-blue.min.css">
+    <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
-  <body class="blue lighten-5">
+  <body class="mdl-color--blue-100">
   <div class="body-wrapper">
-    <div id="maincontent" class="center">
-      <h3 id="title">Login</h3>
-      <div class="row valign-wrapper">
-        <div class="col s12 m8 l3 " id="formplacement">
+    <div id="maincontent">
+      <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--3-col" id="formplacement">
+          <h3 id="title" class="mdl-color-text--grey-800">Login</h3>
           <form action="/" name="login" method="post">
-            <i class="material-icons prefix">account_circle</i>
-            <input type="text" name="username" placeholder="Username"  required="true" class="center">
-            <i class="material-icons prefix">https</i>
-            <input type="password" name="password" placeholder="Password" required="true" class="center">
-            <input type="submit" value="Login" class="waves-effect waves-light btn">
+            <div class="mdl-textfield mdl-js-textfield">
+              <i class="material-icons prefix">account_circle</i>
+              <input type="text" name="username" required="true" class="mdl-textfield__input mdl-color-text--grey-800" id="Username">
+              <label class="mdl-textfield__label mdl-color-text--grey-800" for="Username">Username</label>
+            </div>
+            <div class="mdl-textfield mdl-js-textfield">
+              <i class="material-icons prefix">https</i>
+              <input type="Password" name="username" required="true" class="mdl-textfield__input mdl-color-text--grey-800" id="Password">
+              <label class="mdl-textfield__label mdl-color-text--grey-800" for="Password">Password</label>
+            </div>
+            <div id="submitDiv">
+              <input type="submit" value="Login" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color-text--grey-800">
+            </div>
           </form>
+          <a href="/register" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color-text--grey-800" id="registerButton">Register</a>
         </div>
       </div>
-      <a href="/register" class="waves-effect waves-light btn">Register</a>
     </div>
   </div>
   </body>

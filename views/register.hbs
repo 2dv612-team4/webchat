@@ -1,30 +1,42 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Webchat</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+    <title>Register</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-blue.min.css">
+    <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
-  <body class="blue lighten-5">
+  <body class="mdl-color--blue-100">
     <div class="body-wrapper">
-    <div id="maincontent" class="center">
-    <h3 id="title">Register</h3>
-    <div class="row valign-wrapper">
-      <div class="col s12 m8 l3" id="formplacement">
-    <form action="/register" name="register" method="post">
-        <i class="material-icons prefix">account_circle</i>
-        <input type="text" name="username" placeholder="Username"  required="true" class="center">
-        <i class="material-icons prefix">https</i>
-        <input type="password" name="password" placeholder="Password"required="true" class="center">
-        <i class="material-icons prefix">https</i>
-        <input type="password" name="repeatPassword" placeholder="Repeat Password"required="true" class="center">
-        <input type="submit" value="Register" class="waves-effect waves-light btn">
-    </form>
-  </div>
-</div>
-    <a href="/" class="waves-effect waves-light btn ">Back</a>
+    <div id="maincontent">
+      <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--3-col" id="formplacement">
+            <h3 id="title" class="mdl-color-text--grey-800">Register</h3>
+              <form action="/register" name="register" method="post">
+                <div class="mdl-textfield mdl-js-textfield">
+                  <i class="material-icons prefix">account_circle</i>
+                  <input type="text" name="username" required="true" class="mdl-textfield__input mdl-color-text--grey-800" id="Username">
+                  <label class="mdl-textfield__label mdl-color-text--grey-800" for="Username">Username:</label>
+                </div>
+                <div class="mdl-textfield mdl-js-textfield">
+                  <i class="material-icons prefix">https</i>
+                  <input type="password" name="password" required="true" class="mdl-textfield__input mdl-color-text--grey-800" id="Password">
+                  <label class="mdl-textfield__label mdl-color-text--grey-800" for="Password">Password:</label>
+                </div>
+                <div class="mdl-textfield mdl-js-textfield">
+                  <i class="material-icons prefix">https</i>
+                  <input type="password" name="repeatPassword" required="true" class="mdl-textfield__input mdl-color-text--grey-800" id="RepeatPassword">
+                  <label class="mdl-textfield__label mdl-color-text--grey-800" for="RepeatPassword">Repeat password:</label>
+                </div>
+                <div id="submitDiv">
+                  <input type="submit" value="Register" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color-text--grey-800">
+                </div>
+              </form>
+            </div>
+          </div>
+          <a href="/" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color-text--grey-800">Back</a>
+      </div>
     </div>
-  </div>
   </body>
 </html>
