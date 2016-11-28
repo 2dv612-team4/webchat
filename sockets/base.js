@@ -43,7 +43,7 @@ module.exports = (io) => {
             });
 
           io.to(socketid)
-            .emit('friend-request', `Friend request sent to ${receiverUsername}`);
+            .emit('friend-request-response', `Friend request sent to ${receiverUsername}`);
         })
         .catch((e) => io.to(socketid).emit('servererror', e.message));
     });
@@ -53,13 +53,13 @@ module.exports = (io) => {
         .then(({ receiverSocketId, senderFriends, accepterFriends, accepterPendind }) => {
           
           io.to(receiverSocketId)
-            .emit('friends', {
+            .emit('friend-request-accepted', {
               message: `${username} accepted your friend request`,
               friends: senderFriends,
             });
 
           io.to(socketid)
-            .emit('accepted-friend-request', {
+            .emit('accept-friend-request-response', {
               message: '',
               friends: accepterFriends,
               pending: accepterPendind,
@@ -71,7 +71,7 @@ module.exports = (io) => {
     socket.on('reject-friend-request', (id) => {
       friends.rejectFriendRequest(username, id)
         .then((pending) => {
-          io.to(socketid).emit('rejected-friend-request', {
+          io.to(socketid).emit('rejected-friend-request-response', {
             pending,
             message: 'Friend request rejected',
           });
