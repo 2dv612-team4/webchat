@@ -61,9 +61,33 @@ const getFriendsAndPending =
     return { pending, friends };
   });
 
+const removeFriend = 
+  co.wrap(function*(username, toRemoveUsername){
+    const [ userOne, userTwo ] = yield [
+      userHandler.findWithUsername(username),
+      userHandler.findWithUsername(toRemoveUsername),
+    ];
+    yield userHandler.removeFriend(userOne._id, userTwo._id);
+    
+    const [
+        { friends: requesterFriends }, 
+        { friends: reciverFriends },
+      ] = yield [
+        userHandler.findFriendsWithUsername(username),
+        userHandler.findFriendsWithUsername(toRemoveUsername),
+      ];
+
+    return {
+      requesterFriends, 
+      receiverSocketId: userTwo.socketId, 
+      reciverFriends,
+    };
+  });
+
 module.exports = {
   rejectFriendRequest,
   acceptFriendRequest,
   getFriendsAndPending,
   sendFriendRequest,
+  removeFriend,
 };
