@@ -26,6 +26,24 @@ var server = http.createServer(app);
  */
 
 server.listen(port);
+
+// sockets connection
+const io = require('socket.io').listen(server);
+
+const socketioJwt = require('socketio-jwt');
+const config = require('../config/config'); 
+/*io.set('authorization', socketioJwt.authorize({
+  secret: config.jwtsecret,
+  handshake: true,
+}));*/
+io.use(socketioJwt.authorize({
+  secret: config.jwtsecret,
+  handshake: true
+}));
+
+
+require('../sockets/base')(io);
+
 server.on('error', onError);
 server.on('listening', onListening);
 
