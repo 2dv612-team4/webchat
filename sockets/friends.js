@@ -43,11 +43,12 @@ const acceptFriendRequest =
     const receiverUser = yield userHandler.findWithUsername(username);
     yield userHandler.addFriend(receiverUser._id, id);
     yield userHandler.removeFriendRequest(receiverUser._id, id);
-    const { friends: accepterFriends, friendrequests:  accepterPendind } =  yield userHandler.findFriendsWithUsername(username);
+    const { friends: accepterFriends } =  yield userHandler.findFriendsWithUsername(username);
+    const { friendrequests:  accepterPending } = yield userHandler.getFriendRequests(username);
     const senderUser = yield userHandler.findWithId(id);
     const {friends: senderFriends, socketId: receiverSocketId} = yield userHandler.findFriendsWithUsername(senderUser.username);
 
-    return { receiverSocketId, senderFriends, accepterFriends, accepterPendind };
+    return { receiverSocketId, senderFriends, accepterFriends, accepterPending };
   });
 
 const getFriendsAndPending =  
@@ -68,9 +69,33 @@ const getFriendsAndPending =
     return { pending, friends };
   });
 
+const removeFriend = 
+  co.wrap(function*(username, toRemoveUsername){
+    const [ userOne, userTwo ] = yield [
+      userHandler.findWithUsername(username),
+      userHandler.findWithUsername(toRemoveUsername),
+    ];
+    yield userHandler.removeFriend(userOne._id, userTwo._id);
+    
+    const [
+        { friends: requesterFriends }, 
+        { friends: reciverFriends },
+      ] = yield [
+        userHandler.findFriendsWithUsername(username),
+        userHandler.findFriendsWithUsername(toRemoveUsername),
+      ];
+
+    return {
+      requesterFriends, 
+      receiverSocketId: userTwo.socketId, 
+      reciverFriends,
+    };
+  });
+
 module.exports = {
   rejectFriendRequest,
   acceptFriendRequest,
   getFriendsAndPending,
   sendFriendRequest,
+  removeFriend,
 };

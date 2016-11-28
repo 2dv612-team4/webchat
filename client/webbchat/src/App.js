@@ -4,17 +4,11 @@ import Search from './components/search/App'
 import UserList from './components/userList/UserList'
 import Logout from './components/logout/Logout'
 import Pending from './components/pending/App'
-import { getAllFriends } from './model/DAL/dbUser'
-import { getAllPendingRequests } from './model/DAL/dbUser'
 import './App.css';
 import { Layout, Header, Content, Grid, Cell} from 'react-mdl';
 
 class App extends Component {
-
-  constructor(props){
-    super(props);
-  }
-
+  
   render() {
     return (
       <div style={{height: '100vh', position: 'relative'}}>

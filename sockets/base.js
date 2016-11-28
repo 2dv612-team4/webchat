@@ -3,8 +3,6 @@ const friends = require('./friends');
 
 module.exports = (io) => {
 
-   // TODO: on disconnect remove socket id
-
   io.on('connection', function (socket) {
     console.log('onConnection');
     const username = socket.decoded_token.username;
@@ -28,7 +26,19 @@ module.exports = (io) => {
       })
       .catch((e) => io.to(socketid).emit('servererror', e.message));
 
+    socket.on('disconnect', function () {
+      userHandler.setSocketId(userId, null)
+        .then(() => {
+          console.log('socketId set to null');
+        })
+        .catch(() => {
+          console.log('error while setting socket id');
+        });       
+    });
 
+    /**
+     * On user wants to send friend request
+     */
     socket.on('friend-request', (receiverUsername) => {
       friends.sendFriendRequest(username, receiverUsername)
         .then(({ receiverSocketId, friendrequests, isFriendRequestAlreadyInbound, isFriendRequestAlreadySent }) => {
@@ -45,38 +55,65 @@ module.exports = (io) => {
             });
 
           io.to(socketid)
-            .emit('friend-request', `Friend request sent to ${receiverUsername}`);
+            .emit('friend-request-response', `Friend request sent to ${receiverUsername}`);
         })
         .catch((e) => io.to(socketid).emit('servererror', e.message));
     });
 
+    /**
+     * On user wants to accsept friend request
+     */
     socket.on('accept-friend-request', (id) => {
       friends.acceptFriendRequest(username, id)
-        .then(({ receiverSocketId, senderFriends, accepterFriends, accepterPendind }) => {
+        .then(({ receiverSocketId, senderFriends, accepterFriends, accepterPending }) => {
           
           io.to(receiverSocketId)
-            .emit('friends', {
+            .emit('friend-request-accepted', {
               message: `${username} accepted your friend request`,
               friends: senderFriends,
             });
 
           io.to(socketid)
-            .emit('accepted-friend-request', {
+            .emit('accept-friend-request-response', {
               message: '',
               friends: accepterFriends,
-              pending: accepterPendind,
+              pending: accepterPending,
             });
         })
       .catch((e) => io.to(socketid).emit('servererror', e.message));
     });
 
+    /**
+     * On user wants to reject friend request
+     */
     socket.on('reject-friend-request', (id) => {
       friends.rejectFriendRequest(username, id)
         .then((pending) => {
-          io.to(socketid).emit('rejected-friend-request', {
+          io.to(socketid).emit('rejected-friend-request-response', {
             pending,
             message: 'Friend request rejected',
           });
+        })
+        .catch((e) => io.to(socketid).emit('servererror', e.message));
+    });
+
+    /**
+     * removes friend based in username of friend
+     */
+    socket.on('remove-friend', (toRemoveUsername) => {
+      friends.removeFriend(username, toRemoveUsername)
+        .then(({requesterFriends, receiverSocketId, reciverFriends}) => {
+          io.to(receiverSocketId)
+            .emit('friends', {
+              message: '',
+              friends: reciverFriends,
+            });
+
+          io.to(socketid)
+            .emit('friends', {
+              message: '',
+              friends: requesterFriends,
+            });
         })
         .catch((e) => io.to(socketid).emit('servererror', e.message));
     });
