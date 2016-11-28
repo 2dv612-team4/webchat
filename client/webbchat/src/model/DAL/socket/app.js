@@ -79,16 +79,32 @@ const init = (store) => {
 
 
       // EventEmitter
+      /**
+       * Sends friend request user with username
+       */
       webchatEmitter.on('friend-request', (username) => {
         server.emit('friend-request', username);
       });
 
+      /**
+       * Accsepts friend request from user with id
+       */
       webchatEmitter.on('accept-friend-request', (id) => {
         server.emit('accept-friend-request', id);
       });
 
+      /**
+       * rejects freind request from user with id
+       */
       webchatEmitter.on('reject-friend-request', (id) => {
         server.emit('reject-friend-request', id);
+      });
+
+      /**
+       * removes friend with username
+       */
+      webchatEmitter.on('remove-friend', (username) => {
+        server.emit('remove-friend', username);
       });
 
     });
