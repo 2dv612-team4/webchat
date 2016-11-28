@@ -93,7 +93,9 @@ const init = (store) => {
         store.dispatch(actionsCreators.setPendingRequests(obj.pending));
       });
 
-
+      server.on('servererror', function(message){
+        console.log('server error', message);
+      });
 
       // EventEmitter
       /**
