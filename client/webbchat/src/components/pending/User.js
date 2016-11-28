@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { ListItem, ListItemContent, ListItemAction, IconButton, Tooltip } from 'react-mdl';
 
-const User = ({ openChatt, user: {username, id}}) => (
+const User = ({ rejectFriendRequest, acceptFriendRequest, user: {username, _id}}) => (
   <ListItem>
     <ListItemContent >{username}</ListItemContent>
     <ListItemAction>
@@ -9,13 +9,13 @@ const User = ({ openChatt, user: {username, id}}) => (
         <IconButton
           name="add_circle"
           colored
-          onClick={() => openChatt(id)} />
+          onClick={() => acceptFriendRequest(_id)} />
       </Tooltip>
       <Tooltip label="Reject friend request" position="bottom">
         <IconButton
-          name="add_circle"
+          name="remove_circle"
           colored
-          onClick={() => openChatt(id)} />
+          onClick={() => rejectFriendRequest(_id)} />
       </Tooltip>
     </ListItemAction>
   </ListItem>
@@ -23,7 +23,8 @@ const User = ({ openChatt, user: {username, id}}) => (
 
 User.propTypes = {
   user: PropTypes.object,
-  openChatt: PropTypes.func,
+  acceptFriendRequest: PropTypes.func,
+  rejectFriendRequest: PropTypes.func,
 }
 
 export default User;

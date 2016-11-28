@@ -3,10 +3,27 @@ const express = require('express');
 const userHandler = require('../model/DAL/userHandler.js');
 const router = express.Router();
 const authenticate = require('./utils/authenticate');
+const jwt = require('jsonwebtoken');
+const config = require('../config/config');
 
 /* GET users listing. */
 router.get('/', function(req, res) {
   res.send('respond with a resource');
+});
+
+router.post('/sockettoken', authenticate, function(req, res){
+  const username = req.session.loggedIn;
+  userHandler.findWithUsername(username)
+    .then(user => {
+      
+      const token = jwt.sign({username: user.username, id: user._id}, config.jwtsecret, { expiresIn: '7d' });
+      res.json({token: token});
+    })
+    .catch((e) => {
+      console.log(e);
+      res.sendStatus(500);
+    });
+  
 });
 
 router.get('/search/:username', authenticate, function(req, res){

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { List, Snackbar } from 'react-mdl';
 import User from './User';
 import { sendFriendRequestTo } from '../../../model/DAL/dbUser';
+import webchatEmitter from '../../../model/emitter';
 
 class Users extends Component {
 
@@ -11,6 +12,22 @@ class Users extends Component {
       displaySnackbar: false,
       snackbarText: '',
     }
+  }
+
+  componentWillMount(){
+    webchatEmitter.on('friend-request-error', (message) => {
+      this.setState({
+        displaySnackbar: true,
+        snackbarText: message, 
+      })
+    });
+
+    webchatEmitter.on('friend-request-success', (message) => {
+      this.setState({
+        displaySnackbar: true,
+        snackbarText: message, 
+      })
+    }); 
   }
 
   snackbarClick(){
@@ -28,24 +45,7 @@ class Users extends Component {
   }
 
   sendFriendRequest(name){
-    sendFriendRequestTo(name)
-      .then((result) => {
-        console.log(result)
-        if(result.status === 304){ 
-          this.setState({
-            displaySnackbar: true,
-            snackbarText: 'Friend request already sent!', 
-          })
-        }else if (result.status === 200){
-          this.setState({
-            displaySnackbar: true,
-            snackbarText: 'Friend request sent', 
-          })
-        }
-      })
-      .catch(() => {
-        
-      });
+    webchatEmitter.emit('friend-request', name);
   }
 
   render(){ 

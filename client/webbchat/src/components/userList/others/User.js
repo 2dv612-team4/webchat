@@ -17,7 +17,7 @@ const User = ({ onClick, user: {username} }) => (
 
 User.propTypes = {
   user: PropTypes.object,
-  openChatt: PropTypes.func,
+  onClick: PropTypes.func,
 }
 
 export default User;

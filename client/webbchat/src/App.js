@@ -13,19 +13,6 @@ class App extends Component {
 
   constructor(props){
     super(props);
-    getAllFriends()
-      .then(responce => responce.json())
-      .then(friends => {
-        this.props.setInitialFriends(friends)
-      })
-      .catch(e => console.log(e));
-
-    getAllPendingRequests()
-      .then(responce => responce.json())
-      .then(pendingRequests => {
-        this.props.setPendingRequests(pendingRequests)
-      })
-      .catch(e => console.log(e));
   }
 
   render() {
