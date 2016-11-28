@@ -11,11 +11,11 @@ const User = ({ openChat, removeFriend, user: {username} }) => (
     <Menu target={`menu_iconbutton_id_${username}`} >
       <MenuItem     
         onClick={() => openChat(username)}
-        >Open chat {username}
+        >Open chat
       </MenuItem>
       <MenuItem 
         onClick={() => removeFriend(username)}
-        >Remove friend {username}
+        >Remove friend
       </MenuItem>
     </Menu>
     
