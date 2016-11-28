@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { List, Snackbar } from 'react-mdl';
 import User from './User';
-import { acceptFriendRequest } from '../../model/DAL/dbUser';
+import { acceptFriendRequest, rejectFriendRequest } from '../../model/DAL/dbUser';
+import webchatEmitter from '../../model/emitter';
 
 class Users extends Component {
 
@@ -11,6 +12,27 @@ class Users extends Component {
       displaySnackbar: false,
       snackbarText: '',
     }
+  }
+
+  componentWillMount(){
+    webchatEmitter.on('friend-request-rejected', (message) => {
+      this.setState({
+        displaySnackbar: true,
+        snackbarText: message, 
+      })
+    })
+    webchatEmitter.on('friend-request-accepted', (message) => {
+      this.setState({
+        displaySnackbar: true,
+        snackbarText: message, 
+      })
+    })
+    webchatEmitter.on('new-pending', (message) => {
+      this.setState({
+        displaySnackbar: true,
+        snackbarText: message, 
+      })
+    })
   }
 
   snackbarClick(){
@@ -27,7 +49,13 @@ class Users extends Component {
     })
   }
 
-  acceptFriendRequest(name){
+  acceptFriendRequest(id){
+    webchatEmitter.emit('accept-friend-request', id);
+  }
+
+  rejectFriendRequest(id){
+    console.log(this.props.users)
+    webchatEmitter.emit('reject-friend-request', id);
   }
 
   render(){
@@ -37,7 +65,8 @@ class Users extends Component {
           {this.props.users
               .map((user) =>
                 <User
-                  onClick={this.acceptFriendRequest.bind(this)}
+                  acceptFriendRequest={this.acceptFriendRequest.bind(this)}
+                  rejectFriendRequest={this.rejectFriendRequest.bind(this)}
                   user={user}
                   key={user.username}/>)}
         </List>

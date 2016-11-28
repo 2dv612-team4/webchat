@@ -8,8 +8,13 @@ const findWithUsername = (username) => User.findOne({ username }).exec();
 const findWithId = (_id) => User.findOne({_id}).exec();
 const getFriendRequests = (username) => User.findOne({username}).populate('friendrequests').exec();
 const findAllUsers = () => User.find({}).select('username').exec();
-const findFriendsWithUsername = (username) => User.findOne({ username }).select('friends').exec();
+const findFriendsWithUsername = (username) => User.findOne({ username }).populate('friends').exec();
 const findWithPartialUsername = (username) => User.find({'username': {'$regex': '^'+username+'.*'}}).exec();
+
+/**
+ * updates socketId of user
+ */
+const setSocketId = (_id, socketId) => User.update({ _id }, { socketId }).exec(); 
 
 //_id: id of user recieving friend request. requestingUserID: ID of user sending request
 const addFriendRequest = (_id, requestingUserID) => User.update({_id}, {$push: {friendrequests: requestingUserID }}).exec();
@@ -52,4 +57,5 @@ module.exports = {
   findAllUsers: findAllUsers,
   findWithPartialUsername: findWithPartialUsername,
   getFriendRequests: getFriendRequests,
+  setSocketId,
 };
