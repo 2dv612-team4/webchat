@@ -3,8 +3,6 @@ const friends = require('./friends');
 
 module.exports = (io) => {
 
-   // TODO: on disconnect remove socket id
-
   io.on('connection', function (socket) {
     console.log('onConnection');
     const username = socket.decoded_token.username;
@@ -27,6 +25,10 @@ module.exports = (io) => {
         io.to(socketid).emit('onload-friends', friends);
       })
       .catch((e) => io.to(socketid).emit('servererror', e.message));
+
+    socket.on('disconnect', function () {
+      // TODO remove socket id from data base :)       
+    });
 
     /**
      * On user wants to send friend request
