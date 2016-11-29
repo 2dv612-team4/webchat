@@ -26,3 +26,10 @@ export const setPendingRequests = (pending) => {
     pending,
   };
 };
+
+export const setUsernameRequests = (username) => {
+  return {
+    type: 'SET_USERNAME_REQUESTS',
+    username,
+  };
+};

@@ -14,14 +14,19 @@ module.exports = (io) => {
     const username = socket.decoded_token.username;
     const userId = socket.decoded_token.id;
     const socketid = socket.id;
-    
+
     /**
      * sets socketId on client connect
      */
     userHandler.setSocketId(userId, socketid)
       .then(() => console.log('socketId set!'))
-      .catch(() => console.log('error while setting socket id')); 
-    
+      .catch(() => console.log('error while setting socket id'));
+
+    /**
+     * sends username of logged in user
+     */
+    emitToSpecificUser(io, socketid, 'onload-username', username);
+
     /**
      * sends inital friends and pending data
      */
@@ -47,17 +52,17 @@ module.exports = (io) => {
       friendHelper.sendFriendRequest(username, receiverUsername)
         .then(({ receiverSocketId, friendrequests, isFriendRequestAlreadyInbound, isFriendRequestAlreadySent }) => {
           if(isFriendRequestAlreadySent){
-            return emitToSpecificUser(io, socketid, 'friend-request-error', 
+            return emitToSpecificUser(io, socketid, 'friend-request-error',
               'Friend request already sent!');
           }else if(isFriendRequestAlreadyInbound){
-            return emitToSpecificUser(io, socketid, 'friend-request-error', 
+            return emitToSpecificUser(io, socketid, 'friend-request-error',
               `You already have a pending request from ${receiverUsername}`);
           }
           emitToSpecificUser(io, receiverSocketId, 'pending', {
-            message: `User: ${username}, sent you a friend request.`, 
+            message: `User: ${username}, sent you a friend request.`,
             pending: friendrequests });
-          
-          emitToSpecificUser(io, socketid, 'friend-request-response', 
+
+          emitToSpecificUser(io, socketid, 'friend-request-response',
             `Friend request sent to ${receiverUsername}`);
         })
         .catch((e) => emitToSpecificUser(io, socketid, 'servererror', e.message)));
@@ -82,7 +87,7 @@ module.exports = (io) => {
     socket.on('reject-friend-request', (id) =>
       friendHelper.rejectFriendRequest(username, id)
         .then((pending) =>
-          emitToSpecificUser(io, socketid, 'rejected-friend-request-response', { 
+          emitToSpecificUser(io, socketid, 'rejected-friend-request-response', {
             pending, message: 'Friend request rejected' })
         )
         .catch((e) => emitToSpecificUser(io, socketid, 'servererror', e.message)));
@@ -90,12 +95,12 @@ module.exports = (io) => {
     /**
      * removes friend based in username of friend
      */
-    socket.on('remove-friend', (toRemoveUsername) => 
+    socket.on('remove-friend', (toRemoveUsername) =>
       friendHelper.removeFriend(username, toRemoveUsername)
         .then(({requesterFriends, receiverSocketId, reciverFriends}) => {
-          emitToSpecificUser(io, receiverSocketId, 'friends', 
+          emitToSpecificUser(io, receiverSocketId, 'friends',
             { message: '', friends: reciverFriends });
-          emitToSpecificUser(io, socketid, 'friends', 
+          emitToSpecificUser(io, socketid, 'friends',
             { message: '', friends: requesterFriends });
         })
         .catch((e) => emitToSpecificUser(io, socketid, 'servererror', e.message)));
