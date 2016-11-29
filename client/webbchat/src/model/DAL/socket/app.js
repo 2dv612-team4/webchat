@@ -3,6 +3,7 @@ import * as actionsCreators from '../../../actions/actionCreators';
 import { getSocketsToken } from '../dbUser';
 import webchatEmitter from '../../emitter';
 
+// TODO:
 const init = (store) => {
   
   getSocketsToken()
@@ -28,6 +29,14 @@ const init = (store) => {
       server.on('onload-friends', function (friends) {
         store.dispatch(actionsCreators.setInitialFriends(friends));
       });
+
+      /**
+       * updated friends array
+       * friends array
+       */
+      server.on('friends', function (obj) {
+        store.dispatch(actionsCreators.setInitialFriends(obj.friends));
+      });
       
       /**
        * recives new pending requests
@@ -39,56 +48,82 @@ const init = (store) => {
       });
 
       /**
-       * recives new friends
+       * recives message after friend request is sent
        */
-      server.on('friends', function (obj) {
+      server.on('friend-request-response', function(message){
+        webchatEmitter.emit('friend-request-success', message);
+      });
+
+      /**
+       * User X accepted your freind request
+       * friends array
+       * message
+       */
+      server.on('friend-request-accepted', function(obj) {
         webchatEmitter.emit('friend-request-success', obj.message);
         store.dispatch(actionsCreators.setInitialFriends(obj.friends));
       });
 
       /**
-       * recives message after friend request is sent
-       */
-      server.on('friend-request', function(message){
-        webchatEmitter.emit('friend-request-success', message);
-      });
-
-      /**
-       * recives error messages from sent friend requests
+       * recives error messages from sent failed friend requests
        */
       server.on('friend-request-error', function(message){
         webchatEmitter.emit('friend-request-error', message);
       });
 
       /**
-       * recives message, friends array
+       * fired after a successfull 'accept-friend-request' request
+       * recives empty message, 
+       * friends array
+       * pending array
        */
-      server.on('accepted-friend-request', function(obj){
+      server.on('accept-friend-request-response', function(obj){
         //webchatEmitter.emit('friend-request-accepted', obj.message);
         store.dispatch(actionsCreators.setInitialFriends(obj.friends));
         store.dispatch(actionsCreators.setPendingRequests(obj.pending));
       });
 
       /**
+       * fired after a successfull 'reject-friend-request' request
        * recives message
+       * pending array
        */
-      server.on('rejected-friend-request', function(obj){
-        webchatEmitter.emit('friend-request-rejected', obj.message);
+      server.on('rejected-friend-request-response', function(obj){
+        //webchatEmitter.emit('friend-request-rejected', obj.message);
         store.dispatch(actionsCreators.setPendingRequests(obj.pending));
       });
 
+      server.on('servererror', function(message){
+        console.log('server error', message);
+      });
 
       // EventEmitter
+      /**
+       * Sends friend request user with username
+       */
       webchatEmitter.on('friend-request', (username) => {
         server.emit('friend-request', username);
       });
 
+      /**
+       * Accsepts friend request from user with id
+       */
       webchatEmitter.on('accept-friend-request', (id) => {
         server.emit('accept-friend-request', id);
       });
 
+      /**
+       * rejects freind request from user with id
+       */
       webchatEmitter.on('reject-friend-request', (id) => {
         server.emit('reject-friend-request', id);
+      });
+
+      /**
+       * removes friend with username
+       */
+      webchatEmitter.on('remove-friend', (username) => {
+        server.emit('remove-friend', username);
       });
 
     });

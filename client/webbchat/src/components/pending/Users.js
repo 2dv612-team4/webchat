@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { List, Snackbar } from 'react-mdl';
 import User from './User';
-import { acceptFriendRequest, rejectFriendRequest } from '../../model/DAL/dbUser';
 import webchatEmitter from '../../model/emitter';
 
 class Users extends Component {
