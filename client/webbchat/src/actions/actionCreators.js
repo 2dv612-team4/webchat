@@ -26,3 +26,11 @@ export const setPendingRequests = (pending) => {
     pending,
   };
 };
+
+export const updateSnackbar = (snackbar) => {
+  return {
+    type: 'UPDATE_SNACKBAR',
+    snackbar,
+  };
+};
+
