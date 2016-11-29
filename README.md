@@ -39,4 +39,4 @@ Assumes all dependencies are installed
   - In project root run `npm run move-build`
   - open `views/chat.hbs` 
     - replace path `/static/js/` with `/javascripts/`
-    - replace path `/static/css/` with `/stylesheets/`
+    - replace path `/static/css/` with `/stylesheets/` 

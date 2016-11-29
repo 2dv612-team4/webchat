@@ -25,13 +25,20 @@ const sendFriendRequest =
     const isFriendRequestAlreadySent = receiverUser.friendrequests.find(id =>
       id.toString() === requesterUser._id.toString());
     if(isFriendRequestAlreadySent){
-      return {receiverSocketId: null, friendrequests: null, isFriendRequestAlreadyInbound: false, isFriendRequestAlreadySent: true};
+      return {receiverSocketId: null, friendrequests: null, isFriendRequestAlreadyInbound: false, isFriendRequestAlreadySent: true, isAlreadyFriend: false};
     }
+
+    const isAlreadyFriend = receiverUser.friendrequests.find(id =>
+      id.toString() === requesterUser._id.toString());
+    if(isAlreadyFriend){
+      return {receiverSocketId: null, friendrequests: null, isFriendRequestAlreadyInbound: false, isFriendRequestAlreadySent: true, isAlreadyFriend: true};
+    }
+
 
     const isFriendRequestAlreadyInbound = requesterUser.friendrequests.find(id =>
       id.toString() === receiverUser._id.toString());
     if(isFriendRequestAlreadyInbound){
-      return {receiverSocketId: null, friendrequests: null, isFriendRequestAlreadyInbound: true, isFriendRequestAlreadySent: false}; 
+      return {receiverSocketId: null, friendrequests: null, isFriendRequestAlreadyInbound: true, isFriendRequestAlreadySent: false, isAlreadyFriend: false}; 
     }
     yield userHandler.addFriendRequest(receiverUser._id, requesterUser._id);
     
@@ -41,7 +48,8 @@ const sendFriendRequest =
       receiverSocketId, 
       friendrequests: serializeUsers(friendrequests), 
       isFriendRequestAlreadyInbound: false, 
-      isFriendRequestAlreadySent: false, 
+      isFriendRequestAlreadySent: false,
+      isAlreadyFriend: false, 
     };
   });
 
