@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { List, Snackbar } from 'react-mdl';
 import User from './User';
-import webchatEmitter from '../../model/emitter';
+import webchatEmitter from '../../../model/emitter';
 
 class Users extends Component {
 
