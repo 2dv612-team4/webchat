@@ -1,5 +1,5 @@
 const userHandler = require('../model/DAL/userHandler.js');
-const friends = require('./friends');
+const friendHelper = require('./friendHelper');
 
 module.exports = (io) => {
 
@@ -19,7 +19,7 @@ module.exports = (io) => {
         console.log('error while setting socket id');
       }); 
     
-    friends.getFriendsAndPending(username)
+    friendHelper.getFriendsAndPending(username)
       .then(({pending, friends}) => {
         io.to(socketid).emit('onload-pending', pending);
         io.to(socketid).emit('onload-friends', friends);
@@ -40,7 +40,7 @@ module.exports = (io) => {
      * On user wants to send friend request
      */
     socket.on('friend-request', (receiverUsername) => {
-      friends.sendFriendRequest(username, receiverUsername)
+      friendHelper.sendFriendRequest(username, receiverUsername)
         .then(({ receiverSocketId, friendrequests, isFriendRequestAlreadyInbound, isFriendRequestAlreadySent }) => {
           if(isFriendRequestAlreadySent){
             return io.to(socketid).emit('friend-request-error', 'Friend request already sent!');
@@ -64,7 +64,7 @@ module.exports = (io) => {
      * On user wants to accsept friend request
      */
     socket.on('accept-friend-request', (id) => {
-      friends.acceptFriendRequest(username, id)
+      friendHelper.acceptFriendRequest(username, id)
         .then(({ receiverSocketId, senderFriends, accepterFriends, accepterPending }) => {
           
           io.to(receiverSocketId)
@@ -87,7 +87,7 @@ module.exports = (io) => {
      * On user wants to reject friend request
      */
     socket.on('reject-friend-request', (id) => {
-      friends.rejectFriendRequest(username, id)
+      friendHelper.rejectFriendRequest(username, id)
         .then((pending) => {
           io.to(socketid).emit('rejected-friend-request-response', {
             pending,
@@ -101,7 +101,7 @@ module.exports = (io) => {
      * removes friend based in username of friend
      */
     socket.on('remove-friend', (toRemoveUsername) => {
-      friends.removeFriend(username, toRemoveUsername)
+      friendHelper.removeFriend(username, toRemoveUsername)
         .then(({requesterFriends, receiverSocketId, reciverFriends}) => {
           io.to(receiverSocketId)
             .emit('friends', {
