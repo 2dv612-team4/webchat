@@ -1,5 +1,5 @@
 const userHandler = require('../model/DAL/userHandler.js');
-const friendHelper = require('./friendHelper');
+const friendHelper = require('./utils/friendHelper');
 
 const emitToSpecificUser = (io, socketId, channel, data) => {
   io.to(socketId).emit(channel, data);

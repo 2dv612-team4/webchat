@@ -1,4 +1,4 @@
-const userHandler = require('../model/DAL/userHandler.js');
+const userHandler = require('../../model/DAL/userHandler.js');
 const co = require('co');
 
 /**
