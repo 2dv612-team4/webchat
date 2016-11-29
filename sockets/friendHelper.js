@@ -1,11 +1,20 @@
 const userHandler = require('../model/DAL/userHandler.js');
 const co = require('co');
 
-// TODO: add comments
-//userHandler.removeFriendRequest('5837867333bc3736491b0322','5837866b33bc3736491b0321');
-//userHandler.removeFriendRequest('5836199444a765f7cc404f90','5837866b33bc3736491b0321');
+/**
+ * Removes unvanted user infomation
+ */
+const serializeUsers = (users) => users.map(getOnlyIdAndUsername); 
+const getOnlyIdAndUsername = ({ _id, username }) => ({  _id, username });
 
-// TODO: decuple this function, remove io, socketid dependency
+/**
+ * sends friend request to user with username
+ * returns
+ *  - receiverSocketId from user to send request to
+ *  - friendrequests from user to send request to
+ *  - isFriendRequestAlreadySent 
+ *  - isFriendRequestAlreadyInbound
+ */
 const sendFriendRequest = 
   co.wrap(function*(username, receiverUsername){
     const [ requesterUser, receiverUser ] = yield [
@@ -27,55 +36,84 @@ const sendFriendRequest =
     yield userHandler.addFriendRequest(receiverUser._id, requesterUser._id);
     
     const { socketId: receiverSocketId, friendrequests } = yield userHandler.getFriendRequests(receiverUsername);
-    return { receiverSocketId, friendrequests, isFriendRequestAlreadyInbound: false, isFriendRequestAlreadySent: false };
+
+    return { 
+      receiverSocketId, 
+      friendrequests: serializeUsers(friendrequests), 
+      isFriendRequestAlreadyInbound: false, 
+      isFriendRequestAlreadySent: false, 
+    };
   });
 
+/**
+ * rejects friend request
+ * returns
+ *  - friendrequests array from user that rejects friend request 
+ */
 const rejectFriendRequest =  
   co.wrap(function*(username, id){
     const receiverUser = yield userHandler.findWithUsername(username);
     yield userHandler.removeFriendRequest(receiverUser._id, id);
     const { friendrequests } = yield userHandler.getFriendRequests(username);
-    return friendrequests;
+    return serializeUsers(friendrequests);
   });
-  
+
+/**
+ * accepts friend request
+ * returns
+ *  - socketId from friend how got accepted
+ *  - friends array from friend how got accepted
+ *  - friends array from user that accepted
+ *  - pending array from user that accepted 
+ */
 const acceptFriendRequest =  
   co.wrap(function*(username, id){
-    const receiverUser = yield userHandler.findWithUsername(username);
-    yield userHandler.addFriend(receiverUser._id, id);
-    yield userHandler.removeFriendRequest(receiverUser._id, id);
+    const userToAccept = yield userHandler.findWithUsername(username);
+    yield userHandler.addFriend(userToAccept._id, id);
+    yield userHandler.removeFriendRequest(userToAccept._id, id);
+
     const { friends: accepterFriends } =  yield userHandler.findFriendsWithUsername(username);
     const { friendrequests:  accepterPending } = yield userHandler.getFriendRequests(username);
-    const senderUser = yield userHandler.findWithId(id);
-    const {friends: senderFriends, socketId: receiverSocketId} = yield userHandler.findFriendsWithUsername(senderUser.username);
 
-    return { receiverSocketId, senderFriends, accepterFriends, accepterPending };
+    const senderUser = yield userHandler.findWithId(id);
+    const {friends: userToAcceptFriends, socketId: receiverSocketId} = yield userHandler.findFriendsWithUsername(senderUser.username);
+
+    return { 
+      receiverSocketId, 
+      senderFriends: serializeUsers(userToAcceptFriends), 
+      accepterFriends: serializeUsers(accepterFriends), 
+      accepterPending: serializeUsers(accepterPending),
+    };
   });
 
+/**
+ * gets friends array and pending array from user by username
+ */
 const getFriendsAndPending =  
   co.wrap(function*(username){
-    const [{friendrequests: userFriendrequests}, {friends: userFriends} ] =  yield [
+    const [{friendrequests: pending}, { friends } ] =  yield [
       userHandler.getFriendRequests(username),
       userHandler.findFriendsWithUsername(username),
     ];
-    const pending = userFriendrequests.map(request => ({
-      _id: request._id,
-      username: request.username,
-    }));
+    return { 
+      pending: serializeUsers(pending), 
+      friends: serializeUsers(friends), 
+    };
+  }); 
 
-    const friends = userFriends.map(request => ({
-      _id: request._id,
-      username: request.username,
-    }));
-    return { pending, friends };
-  });
-
+/**
+ * removes friend from user by username
+ * returns 
+ *  - friends array for both users 
+ *  - socketId for removed friend
+ */
 const removeFriend = 
   co.wrap(function*(username, toRemoveUsername){
-    const [ userOne, userTwo ] = yield [
+    const [ requesterUser, userToRemove ] = yield [
       userHandler.findWithUsername(username),
       userHandler.findWithUsername(toRemoveUsername),
     ];
-    yield userHandler.removeFriend(userOne._id, userTwo._id);
+    yield userHandler.removeFriend(requesterUser._id, userToRemove._id);
     
     const [
         { friends: requesterFriends }, 
@@ -86,9 +124,9 @@ const removeFriend =
       ];
 
     return {
-      requesterFriends, 
-      receiverSocketId: userTwo.socketId, 
-      reciverFriends,
+      requesterFriends: serializeUsers(requesterFriends), 
+      receiverSocketId: userToRemove.socketId, 
+      reciverFriends: serializeUsers(reciverFriends),
     };
   });
 
