@@ -3,6 +3,7 @@ import friends from './friends';
 import pending from './pending';
 import userSearchQuery from './userSearchQuery';
 import otherUsers from './otherUsers';
+import snackbar from './snackbar';
 
-const rootReducer = combineReducers({ friends, userSearchQuery, otherUsers, pending });
+const rootReducer = combineReducers({ friends, userSearchQuery, otherUsers, pending, snackbar });
 export default rootReducer;
