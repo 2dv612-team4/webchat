@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import Search from './components/search/App'
 import UserList from './components/userList/UserList'
 import Logout from './components/logout/Logout'
+import Snackbar from './components/snackbar/App'
 import { Layout, Header, Content, Drawer, Navigation} from 'react-mdl';
 import './App.css';
 
@@ -20,12 +21,12 @@ class App extends Component {
                 <span><Search /></span>
                 <span><UserList /></span>
               </Navigation>
-                
               </Drawer>
               <Content>
                 chat
               </Content>
           </Layout>
+          <Snackbar/>
       </div>
     );
   }
