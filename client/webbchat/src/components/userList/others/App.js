@@ -7,6 +7,7 @@ import Users from './Users';
 const mapStateToProps = (state) => {
   return {
     users: state.otherUsers,
+    updateSnackbar: state.updateSnackbar,
   };
 };
 
