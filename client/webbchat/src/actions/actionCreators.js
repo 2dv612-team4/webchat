@@ -27,10 +27,16 @@ export const setPendingRequests = (pending) => {
   };
 };
 
+export const setUsernameRequests = (username) => {
+  return {
+    type: 'SET_USERNAME_REQUESTS',
+    username,
+  };
+};
+
 export const updateSnackbar = (snackbar) => {
   return {
     type: 'UPDATE_SNACKBAR',
     snackbar,
   };
 };
-

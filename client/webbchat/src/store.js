@@ -19,6 +19,7 @@ const defaultState = {
   userSearchQuery: '',
   otherUsers,
   pending,
+  username: '',
   snackbar,
 };
 
