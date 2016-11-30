@@ -50,14 +50,18 @@ module.exports = (io) => {
      */
     socket.on('friend-request', (receiverUsername) =>
       friendHelper.sendFriendRequest(username, receiverUsername)
-        .then(({ receiverSocketId, friendrequests, isFriendRequestAlreadyInbound, isFriendRequestAlreadySent }) => {
+        .then(({ receiverSocketId, friendrequests, isFriendRequestAlreadyInbound, isFriendRequestAlreadySent, isAlreadyFriend }) => {
           if(isFriendRequestAlreadySent){
             return emitToSpecificUser(io, socketid, 'friend-request-error',
               'Friend request already sent!');
           }else if(isFriendRequestAlreadyInbound){
             return emitToSpecificUser(io, socketid, 'friend-request-error',
               `You already have a pending request from ${receiverUsername}`);
+          }else if(isAlreadyFriend){
+            return emitToSpecificUser(io, socketid, 'friend-request-error', 
+              `You are already friends with ${receiverUsername}`);
           }
+
           emitToSpecificUser(io, receiverSocketId, 'pending', {
             message: `User: ${username}, sent you a friend request.`,
             pending: friendrequests });

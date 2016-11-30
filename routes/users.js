@@ -33,15 +33,19 @@ router.get('/search/:username', authenticate, function(req, res){
   if(searchUsername === ''){
     return res.sendStatus(406);
   }
-  userHandler.findWithPartialUsername(searchUsername)
+  userHandler.findWithUsername(loggedInUsername).then(({friends}) => {
+    userHandler.findWithPartialUsername(searchUsername)
     .then(users => {
-      res.json(users
+      res.json(
+        users
+        .filter(user => user.username !== loggedInUsername)
+        .filter(user => !friends.find(id => id.toString() === user._id.toString()))
         .map(user => ({
           username: user.username,
-        }))
-        .filter(user => user.username !== loggedInUsername));
+        })));
     })
     .catch(() => res.sendStatus(500));
+  });
 });
 
 module.exports = router;
