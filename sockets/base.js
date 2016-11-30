@@ -14,6 +14,7 @@ module.exports = (io) => {
     const username = socket.decoded_token.username;
     const userId = socket.decoded_token.id;
     const socketid = socket.id;
+    const isPremium = socket.decoded_token.premiumExpirationDate > Date.now();
 
     /**
      * sets socketId on client connect

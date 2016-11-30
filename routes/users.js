@@ -16,7 +16,7 @@ router.post('/sockettoken', authenticate, function(req, res){
   userHandler.findWithUsername(username)
     .then(user => {
       
-      const token = jwt.sign({username: user.username, id: user._id}, config.jwtsecret, { expiresIn: '7d' });
+      const token = jwt.sign({username: user.username, id: user._id, premiumExpirationDate: user.premiumExpirationDate}, config.jwtsecret, { expiresIn: '7d' });
       res.json({token: token});
     })
     .catch((e) => {
