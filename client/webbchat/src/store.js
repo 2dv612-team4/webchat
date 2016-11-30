@@ -15,6 +15,7 @@ const defaultState = {
   userSearchQuery: '',
   otherUsers,
   pending,
+  username: '',
 };
 
 const store = createStore(rootReducer, defaultState);
