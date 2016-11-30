@@ -2,19 +2,20 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actionsCreators from '../../actions/actionCreators';
-import Users from './Users';
+import GeneralSnackbar from './Snackbar';
 
 const mapStateToProps = (state) => {
   return {
-    users: state.pending,
+    updateSnackbar: state.snackbar,
+    snackbar: state.snackbar,
   };
 };
 
 const mapDispatchToProps = (dispatch) => bindActionCreators(actionsCreators, dispatch);
 
-const App = connect(
+const AppState = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Users);
+)(GeneralSnackbar);
 
-export default App;
+export default AppState;

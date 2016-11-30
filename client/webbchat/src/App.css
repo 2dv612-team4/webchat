@@ -26,3 +26,15 @@
 #logout {
   background-color: rgb(63,110,190); 
 }
+
+/*
+  !important for now..
+*/
+.mdl-layout__drawer .mdl-navigation .mdl-navigation__link {
+  padding: 16px 16px !important;
+}
+
+.mdl-layout__drawer .mdl-navigation .mdl-navigation__link:hover {
+    /* background-color: rgb(224,224,224); */
+    background-color: initial !important;
+}

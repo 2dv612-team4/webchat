@@ -9,12 +9,18 @@ const friends = [];
 const otherUsers = [];
 
 const pending = [];
+const snackbar = {
+  display: false,
+  text: ''
+};
 
 const defaultState = {
   friends,
   userSearchQuery: '',
   otherUsers,
   pending,
+  username: '',
+  snackbar,
 };
 
 const store = createStore(rootReducer, defaultState);
