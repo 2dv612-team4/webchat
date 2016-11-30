@@ -10,11 +10,14 @@ const otherUsers = [];
 
 const pending = [];
 
+const settings = [];
+
 const defaultState = {
   friends,
   userSearchQuery: '',
   otherUsers,
   pending,
+  settings,
 };
 
 const store = createStore(rootReducer, defaultState);

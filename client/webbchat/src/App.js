@@ -4,17 +4,20 @@ import Search from './components/search/App'
 import UserList from './components/userList/UserList'
 import Logout from './components/logout/Logout'
 import Pending from './components/pending/App'
+import Settings from './components/settings/App'
+
 import './App.css';
 import { Layout, Header, Content, Grid, Cell} from 'react-mdl';
 
 class App extends Component {
-  
+
   render() {
     return (
       <div style={{height: '100vh', position: 'relative'}}>
           <Layout fixedHeader>
               <Header title="Webchat">
-              <Logout />
+                <Settings />
+                <Logout />
               </Header>
               <Content>
                 <div style={{ margin: 'auto'}}>
@@ -49,6 +52,7 @@ const mapStateToProps = (state) => {
   return {
     friends: state.friends,
     pending: state.pending,
+    settings: state.settings,
   };
 };
 
