@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import Search from './components/search/App'
 import UserList from './components/userList/UserList'
 import Logout from './components/logout/Logout'
-import Pending from './components/pending/App'
 import Settings from './components/settings/App'
 import Snackbar from './components/snackbar/App'
 import { Layout, Header, Content, Drawer, Navigation} from 'react-mdl';
