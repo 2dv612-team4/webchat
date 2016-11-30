@@ -40,3 +40,10 @@ export const updateSnackbar = (snackbar) => {
     snackbar,
   };
 };
+
+export const setIsPremium = (isPremium) => {
+  return {
+    type: 'SET_IS_PREMIUM',
+    isPremium,
+  };
+};
