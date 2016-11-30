@@ -1,5 +1,5 @@
 
-const settings = (state = [], action) => {
+const username = (state = '', action) => {
 
   switch (action.type) {
   case 'SET_USERNAME_REQUESTS':
@@ -9,4 +9,4 @@ const settings = (state = [], action) => {
   }
 };
 
-export default settings;
+export default username;

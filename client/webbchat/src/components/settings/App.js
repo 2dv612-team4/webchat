@@ -6,7 +6,7 @@ import Settings from './Settings';
 
 const mapStateToProps = (state) => {
   return {
-    settings: state.settings,
+    username: state.username,
   };
 };
 

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { List } from 'react-mdl';
-import Setting from './Setting';
+import { Button, Menu, MenuItem } from 'react-mdl';
 
 class Settings extends Component {
   payment(username){
@@ -14,21 +13,21 @@ class Settings extends Component {
   }
 
   render() {
-  let uName = []
-  let usernameObject = JSON.parse(JSON.stringify({
-    username: this.props.settings
-  }));
-  uName.push(usernameObject);
-    return (
-      <List>
-        {uName
-          .map((name) =>
-            <Setting
-              payment={this.payment.bind(this)}
-              other={this.other.bind(this)}
-              name={name}
-              key={name.username}/>)}
-      </List>
+    const username = this.props.username;
+    return ( 
+      <div>
+        <Button raised  accent name="SettingsButton" id={`menu_iconbutton_id_${username}`}>{username}</Button>
+        <Menu align='right' target={`menu_iconbutton_id_${username}`} >
+          <MenuItem
+            onClick={() => this.payment.bind(this, username)}
+            >Pay For Premium To Remove Adds
+          </MenuItem>
+          <MenuItem
+            onClick={() => this.other.bind(this, username)}
+            >Some Other Option
+          </MenuItem>
+        </Menu>
+      </div>
     )
   }
 }

@@ -52,7 +52,7 @@ const mapStateToProps = (state) => {
   return {
     friends: state.friends,
     pending: state.pending,
-    settings: state.settings,
+    username: state.username,
   };
 };
 

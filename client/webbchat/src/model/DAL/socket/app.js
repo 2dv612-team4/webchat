@@ -15,6 +15,13 @@ const init = (store) => {
       /*server.on('connect', function (socket) {
       });*/
       // Sockets
+      
+      /**
+       * 
+       */
+      server.on('onload-username', function (username) {
+        store.dispatch(actionsCreators.setUsernameRequests(username));
+      });
 
       /**
        * loads initial pending requests
