@@ -1,5 +1,6 @@
 
-this is the main repo
+
+For none code documentation look here: [wiki](https://github.com/2dv612-team4/webchat/wiki)
 
 # For mongoDB
 
