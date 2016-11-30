@@ -33,3 +33,10 @@ export const setUsernameRequests = (username) => {
     username,
   };
 };
+
+export const updateSnackbar = (snackbar) => {
+  return {
+    type: 'UPDATE_SNACKBAR',
+    snackbar,
+  };
+};

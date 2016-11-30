@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import SearchBox from './SearchBox';
-import SearchSubmit from './SearchSubmit';
 import { getAllUsersContaining } from '../../model/DAL/dbUser';
 
 class Search extends Component {
@@ -50,8 +49,6 @@ class Search extends Component {
         <SearchBox
           onInput={this.onSearchBoxInput.bind(this)}
           onSubmit={this.onSearchBoxEnter.bind(this)}/>
-        <SearchSubmit 
-          onSubmit={this.onSearchSubmit.bind(this)}/>
       </div>
     )
   }

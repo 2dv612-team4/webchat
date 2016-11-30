@@ -6,12 +6,12 @@ import Users from './Users';
 
 const mapStateToProps = (state) => {
   return {
-    users: state.otherUsers,
+    users: state.pending,
     updateSnackbar: state.updateSnackbar,
   };
 };
 
-const mapDispatchToProps = (dispatch) => bindActionCreators(actionsCreators, dispatch); 
+const mapDispatchToProps = (dispatch) => bindActionCreators(actionsCreators, dispatch);
 
 const App = connect(
   mapStateToProps,

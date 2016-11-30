@@ -1,6 +1,7 @@
 import React from 'react';
 import FriendList from './friends/App';
 import FindUserList from './others/App';
+import Pending from './pending/App';
 
 const UserList = () => (
   <div>
@@ -8,6 +9,8 @@ const UserList = () => (
     <FriendList />
     Other: 
     <FindUserList />
+    Pending
+    <Pending />
   </div>
 );
 
