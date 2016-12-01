@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { List } from 'react-mdl';
 import User from './User';
+import connect from '../../../connect/connect'
 
 import webchatEmitter from '../../../model/emitter';
 
@@ -40,4 +41,7 @@ class Users extends Component {
   }
 }
 
-export default Users; 
+export default connect((state) => ({
+  users: state.otherUsers,
+  updateSnackbar: state.updateSnackbar,
+}), Users); 

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 
-import Search from './components/search/App'
+import Search from './components/search/Search'
 import UserList from './components/userList/UserList'
 import Logout from './components/logout/Logout'
-import Settings from './components/settings/App'
-import Snackbar from './components/snackbar/App'
-import Advertisement from './components/advertisements/App'
+import Settings from './components/settings/Settings'
+import Snackbar from './components/snackbar/Snackbar'
+import Advertisement from './components/advertisements/Advertisement'
 import { Layout, Header, Content, Drawer, Navigation, Grid, Cell} from 'react-mdl';
 
 import './App.css';

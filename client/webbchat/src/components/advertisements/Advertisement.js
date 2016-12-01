@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import adImage from './advertisement.png';
-
+import connect from '../../connect/connect'
 
 class Advertisement extends Component {
   render() {
@@ -15,4 +15,6 @@ class Advertisement extends Component {
   }
 }
 
-export default Advertisement;
+export default connect((state) => ({
+  isPremium: state.isPremium,
+}), Advertisement);
