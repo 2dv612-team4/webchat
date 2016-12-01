@@ -100,6 +100,13 @@ const init = (store) => {
         store.dispatch(actionsCreators.setPendingRequests(obj.pending));
       });
 
+      /**
+       * set premium state
+       */
+      server.on('set-is-premium', function (isPremium) {
+        store.dispatch(actionsCreators.setIsPremium(isPremium));
+      });
+
       server.on('servererror', function(message){
         console.log('server error', message);
       });

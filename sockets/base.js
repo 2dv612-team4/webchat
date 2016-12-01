@@ -14,6 +14,7 @@ module.exports = (io) => {
     const username = socket.decoded_token.username;
     const userId = socket.decoded_token.id;
     const socketid = socket.id;
+    const isPremium = new Date(socket.decoded_token.premiumExpirationDate).getTime() > Date.now();
 
     /**
      * sets socketId on client connect
@@ -26,6 +27,11 @@ module.exports = (io) => {
      * sends username of logged in user
      */
     emitToSpecificUser(io, socketid, 'onload-username', username);
+
+    /**
+     * sends premium status of logged in user
+     */
+    emitToSpecificUser(io, socketid, 'set-is-premium', isPremium);
 
     /**
      * sends inital friends and pending data
