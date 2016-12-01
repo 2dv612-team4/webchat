@@ -64,7 +64,7 @@ module.exports = (io) => {
             return emitToSpecificUser(io, socketid, 'friend-request-error',
               `You already have a pending request from ${receiverUsername}`);
           }else if(isAlreadyFriend){
-            return emitToSpecificUser(io, socketid, 'friend-request-error', 
+            return emitToSpecificUser(io, socketid, 'friend-request-error',
               `You are already friends with ${receiverUsername}`);
           }
 
@@ -114,5 +114,26 @@ module.exports = (io) => {
             { message: '', friends: requesterFriends });
         })
         .catch((e) => emitToSpecificUser(io, socketid, 'servererror', e.message)));
+
+    /**
+     * If user wants to update premium
+     */
+    socket.on('update-premium', (username) => {
+      if(isPremium){
+        emitToSpecificUser(io, socketid, 'update-premium-response-fail', {
+          message: 'You already have premium!' });
+      } else {
+        let today = new Date();
+        let endDate = new Date();
+        endDate.setDate(today.getDate() + 30);
+        // Should mabye use an util?
+        userHandler.updatePremiumExpirationDate(username, endDate)
+          .then((resp) =>
+            emitToSpecificUser(io, socketid, 'update-premium-response-success', {
+              resp, message: 'You have updated to premium!' })
+          )
+          .catch((e) => emitToSpecificUser(io, socketid, 'servererror', e.message));
+      }
+    });
   });
 };

@@ -5,7 +5,7 @@ import webchatEmitter from '../../emitter';
 
 // TODO:
 const init = (store) => {
-  
+
   getSocketsToken()
     .then(responce => responce.json())
     .then((obj) => {
@@ -15,9 +15,9 @@ const init = (store) => {
       /*server.on('connect', function (socket) {
       });*/
       // Sockets
-      
+
       /**
-       * 
+       *
        */
       server.on('onload-username', function (username) {
         store.dispatch(actionsCreators.setUsernameRequests(username));
@@ -30,8 +30,8 @@ const init = (store) => {
         store.dispatch(actionsCreators.setPendingRequests(pending));
       });
 
-      /** 
-       * loads inital friends 
+      /**
+       * loads inital friends
        * */
       server.on('onload-friends', function (friends) {
         store.dispatch(actionsCreators.setInitialFriends(friends));
@@ -44,7 +44,7 @@ const init = (store) => {
       server.on('friends', function (obj) {
         store.dispatch(actionsCreators.setInitialFriends(obj.friends));
       });
-      
+
       /**
        * recives new pending requests
        * and messages
@@ -72,7 +72,7 @@ const init = (store) => {
       });
 
       /**
-       * recives error messages from sent failed friend requests
+      pending array * recives error messages from sent failed friend requests
        */
       server.on('friend-request-error', function(message){
         webchatEmitter.emit('friend-request-error', message);
@@ -80,7 +80,7 @@ const init = (store) => {
 
       /**
        * fired after a successfull 'accept-friend-request' request
-       * recives empty message, 
+       * recives empty message,
        * friends array
        * pending array
        */
@@ -140,10 +140,24 @@ const init = (store) => {
         server.emit('remove-friend', username);
       });
 
+      /**
+       * Add premium
+       */
+      webchatEmitter.on('update-premium', (username) => {
+        server.emit('update-premium', username);
+      });
+
+      server.on('update-premium-response-fail', function(obj){
+        webchatEmitter.emit('update-premium-response-fail-snackbar', obj.message);
+      });
+
+      server.on('update-premium-response-success', function(obj){
+        webchatEmitter.emit('update-premium-response-success-snackbar', obj.message);
+      });
+
+
+
     });
 };
 
 export default init;
-
-
-
