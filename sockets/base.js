@@ -128,10 +128,10 @@ module.exports = (io) => {
         endDate.setDate(today.getDate() + 30);
         // Should mabye use an util?
         userHandler.updatePremiumExpirationDate(username, endDate)
-          .then((resp) =>
+          .then(() => {
             emitToSpecificUser(io, socketid, 'update-premium-response-success', {
-              resp, message: 'You have updated to premium!' })
-          )
+              message: 'You have updated to premium!', isPremium: true });
+          })
           .catch((e) => emitToSpecificUser(io, socketid, 'servererror', e.message));
       }
     });
