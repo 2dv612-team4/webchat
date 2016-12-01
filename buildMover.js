@@ -26,18 +26,13 @@ try {
   console.log(`moved ${fileNameIndex} to ${destinationIndex}chat.hbs`);
 
   const chatHbs = './views/chat.hbs';
-  fs.readFile(chatHbs, 'utf8', function (err,data) {
-    if (err) {
-      return console.log(err);
-    }
-    let result = data.replace(/static\/js/g, 'javascripts');
-    result = result.replace(/static\/css/g, 'stylesheets');
+  const fileContent = fs.readFileSync(chatHbs, 'utf8');
 
-    fs.writeFileSync(chatHbs, result, 'utf8', function (err) {
-      if (err) return console.log(err);
-    });
-    console.log('success!');
-  });
+  let result = fileContent.replace(/static\/js/g, 'javascripts');
+  result = result.replace(/static\/css/g, 'stylesheets');
+
+  fs.writeFileSync(chatHbs, result, 'utf8');
+  console.log('success!');
 
 } catch (err) {
   console.error(err);
