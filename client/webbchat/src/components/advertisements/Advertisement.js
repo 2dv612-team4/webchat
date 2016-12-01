@@ -10,9 +10,7 @@ class Advertisement extends Component {
     }
 
     return ( 
-      <div>
         <img src={(adImage)} alt='pesky ad'/>
-      </div>
     )
   }
 }
