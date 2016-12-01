@@ -22,7 +22,9 @@ class Payment extends Component {
       openDialog: false
     });
   }
-
+  /*
+  * Not in use
+  */
   componentWillMount(){
     webchatEmitter.on('update-premium-response-fail-snackbar', (message) => {
       this.props.update({
@@ -40,6 +42,7 @@ class Payment extends Component {
 
   giveUserPremium(username, premium) {
     if(premium){
+      //Implement something better
       console.log("You already have premium!");
     }else {
       webchatEmitter.emit('update-premium', username);
@@ -54,7 +57,7 @@ class Payment extends Component {
       <div>
       <Button colored onClick={this.handleOpenDialog} raised ripple>Show Dialog</Button>
         <Dialog open={this.state.openDialog}>
-          <DialogTitle>Allow data collection?</DialogTitle>
+          <DialogTitle>Premium</DialogTitle>
           <DialogContent>
             <p>Do you want to buy premium!</p>
           </DialogContent>
