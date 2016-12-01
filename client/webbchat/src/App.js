@@ -6,7 +6,7 @@ import Logout from './components/logout/Logout'
 import Settings from './components/settings/App'
 import Snackbar from './components/snackbar/App'
 import Advertisement from './components/advertisements/App'
-import { Layout, Header, Content, Drawer, Navigation} from 'react-mdl';
+import { Layout, Header, Content, Drawer, Navigation, Grid, Cell} from 'react-mdl';
 
 import './App.css';
 
@@ -27,8 +27,13 @@ class App extends Component {
               </Navigation>
               </Drawer>
               <Content>
-                chat
-              <Advertisement/>
+              <Grid noSpacing={true}>
+                <Cell id="willbechat" col={10}>
+                </Cell>
+                <Cell id="advert" col={2}>
+                  <Advertisement/>
+                </Cell>
+              </Grid>
               </Content>
           </Layout>
           <Snackbar/>
