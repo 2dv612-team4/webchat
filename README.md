@@ -1,5 +1,6 @@
 
-this is the main repo
+
+For none code documentation look here: [wiki](https://github.com/2dv612-team4/webchat/wiki)
 
 # For mongoDB
 
@@ -21,17 +22,19 @@ Commits on master is deployed automatically and the app will be available here:
 When testing with local mongodb start with `npm run start-local`
 
 # react development
-  - start node server and register a new user with username: dev, password: 1234, stop server. 
-  - run node server with flag ```development``` or run ```npm run start-local-react```, webserver will now run in development mode
-    - auth will be disable
-    - you will be "logged in" as 'dev' with password '1234'.
+  - Start node server and register a new user with username: `dev`, password: `1234` 
+  - Stop server
+  - Run node server with  `npm run start-local-react`, or with flag `development` Webserver will now run in development mode
+    - Auth will be disable
+    - You will be "logged in" as 'dev' with password '1234'.
+  - Go to the react project (from root: `cd client/webbchat/`)
+  - Run `npm install` and `npm start`
+  - Build whatever you want.. 
+    - with react on: http://localhost:3000
+    - with node server on: http://localhost:4000 
 
-you can now talk to node server from react webpack dev server as user 'dev'
 
 # react build
 Assumes all dependencies are installed
-  - in react run ```npm run build```
-  - in root run ```npm run move-build```
-  - open ```views/chat.hbs``` 
-    - replace path ```/static/js/ || /static/css/```
-    - with path ```/javascripts/ || /stylesheets/```
+  - In react projekt (from root: `cd client/webbchat/`) Run `npm run build`
+  - In project root run `npm run move-build`

@@ -26,3 +26,24 @@ export const setPendingRequests = (pending) => {
     pending,
   };
 };
+
+export const setUsernameRequests = (username) => {
+  return {
+    type: 'SET_USERNAME_REQUESTS',
+    username,
+  };
+};
+
+export const updateSnackbar = (snackbar) => {
+  return {
+    type: 'UPDATE_SNACKBAR',
+    snackbar,
+  };
+};
+
+export const setIsPremium = (isPremium) => {
+  return {
+    type: 'SET_IS_PREMIUM',
+    isPremium,
+  };
+};

@@ -45,6 +45,9 @@ const removeFriend = (userID, friendID) => new Promise((resolve, reject) => {
   }).catch(() => reject(false));
 });
 
+//updates the expiration date of premium feature. 
+const updatePremiumExpirationDate = (_id, premiumExpirationDate) => User.update({_id}, {premiumExpirationDate}).exec();
+
 module.exports = {
   add: add,
   findWithUsername: findWithUsername,
@@ -58,4 +61,5 @@ module.exports = {
   findWithPartialUsername: findWithPartialUsername,
   getFriendRequests: getFriendRequests,
   setSocketId,
+  updatePremiumExpirationDate: updatePremiumExpirationDate,
 };
