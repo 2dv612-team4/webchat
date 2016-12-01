@@ -38,6 +38,3 @@ When testing with local mongodb start with `npm run start-local`
 Assumes all dependencies are installed
   - In react projekt (from root: `cd client/webbchat/`) Run `npm run build`
   - In project root run `npm run move-build`
-  - open `views/chat.hbs` 
-    - replace path `/static/js/` with `/javascripts/`
-    - replace path `/static/css/` with `/stylesheets/` 
