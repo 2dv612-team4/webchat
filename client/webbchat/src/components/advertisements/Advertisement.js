@@ -1,12 +1,15 @@
 import React, { PropTypes } from 'react';
 import connect from '../../connect/connect'
-const publicImage = '/images/advertisement.png';
+
+const verticalImage = '/images/vertical_advertisement.png';
+const mobileImage = '/images/advertisement.png';
 
 const Advertisement = ({ isPremium }) => {
   if(isPremium){
     return null;
   }
-  return (<img src={publicImage} alt='pesky ad'/>)
+  // insert else if(mobileVersion) here, then use mobileImage. 
+  return (<img src={verticalImage} id='verticalAd' alt='pesky ad'/>)
 };
 
 Advertisement.propTypes = {
