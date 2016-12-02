@@ -6,9 +6,9 @@ class Payment extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {};
-    this.handleOpenDialog = this.handleOpenDialog.bind(this);
-    this.handleCloseDialog = this.handleCloseDialog.bind(this);
+    this.state = {
+      openDialog: false,
+    };
   }
 
   handleOpenDialog() {
@@ -55,7 +55,7 @@ class Payment extends Component {
     const premium = this.props.premium;
     return (
       <div>
-      <Button colored onClick={this.handleOpenDialog} raised ripple>Show Dialog</Button>
+      <Button colored onClick={() => this.handleOpenDialog()} raised ripple>Show Dialog</Button>
         <Dialog open={this.state.openDialog}>
           <DialogTitle>Premium</DialogTitle>
           <DialogContent>
@@ -63,7 +63,7 @@ class Payment extends Component {
           </DialogContent>
           <DialogActions>
             <Button type='button' onClick={() => this.giveUserPremium(username, premium)}>Yes</Button>
-            <Button type='button' onClick={this.handleCloseDialog}>No</Button>
+            <Button type='button' onClick={() => this.handleCloseDialog()}>No</Button>
           </DialogActions>
         </Dialog>
       </div>
