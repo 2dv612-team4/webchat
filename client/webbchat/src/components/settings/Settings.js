@@ -40,5 +40,6 @@ class Settings extends Component {
 export default connect((state) => ({
   username: state.username,
   isPremium: state.isPremium,
+  updateSnackbar: state.updateSnackbar,
 }), Settings);
 

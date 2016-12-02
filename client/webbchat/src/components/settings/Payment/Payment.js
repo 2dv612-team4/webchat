@@ -22,9 +22,7 @@ class Payment extends Component {
       openDialog: false
     });
   }
-  /*
-  * Not in use
-  */
+  
   componentWillMount(){
     webchatEmitter.on('update-premium-response-fail-snackbar', (message) => {
       this.props.update({
@@ -32,7 +30,7 @@ class Payment extends Component {
         text: message,
       });
     });
-    webchatEmitter.on('update-premium-response-success', (message) => {
+    webchatEmitter.on('update-premium-response-success-snackbar', (message) => {
       this.props.update({
         display: true,
         text: message,
@@ -41,13 +39,14 @@ class Payment extends Component {
   }
 
   giveUserPremium(username, premium) {
+    this.handleCloseDialog();
     if(premium){
       //Implement something better
       console.log("You already have premium!");
-    }else {
-      webchatEmitter.emit('update-premium', username);
+      return;
     }
-    this.handleCloseDialog();
+    webchatEmitter.emit('update-premium', username);
+    
   }
 
   render() {
