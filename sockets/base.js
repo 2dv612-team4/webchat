@@ -120,13 +120,12 @@ module.exports = (io) => {
      */
     socket.on('update-premium', (username) => {
       if(isPremium){
-        emitToSpecificUser(io, socketid, 'update-premium-response-fail', {
-          message: 'You already have premium!' });
+        // Do nothing if user have premium.
+        // Don't want to remove check beacause of validation on server.
       } else {
         let today = new Date();
         let endDate = new Date();
         endDate.setDate(today.getDate() + 30);
-        // Should mabye use an util?
         userHandler.updatePremiumExpirationDate(username, endDate)
           .then(() => {
             emitToSpecificUser(io, socketid, 'update-premium-response-success', {

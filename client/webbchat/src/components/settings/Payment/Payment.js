@@ -22,14 +22,8 @@ class Payment extends Component {
       openDialog: false
     });
   }
-  
+
   componentWillMount(){
-    webchatEmitter.on('update-premium-response-fail-snackbar', (message) => {
-      this.props.update({
-        display: true,
-        text: message,
-      });
-    });
     webchatEmitter.on('update-premium-response-success-snackbar', (message) => {
       this.props.update({
         display: true,
@@ -41,12 +35,13 @@ class Payment extends Component {
   giveUserPremium(username, premium) {
     this.handleCloseDialog();
     if(premium){
-      //Implement something better
-      console.log("You already have premium!");
+      this.props.update({
+        display: true,
+        text: "You already have premium!",
+      });
       return;
     }
     webchatEmitter.emit('update-premium', username);
-    
   }
 
   render() {

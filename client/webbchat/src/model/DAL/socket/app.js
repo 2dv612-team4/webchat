@@ -147,10 +147,6 @@ const init = (store) => {
         server.emit('update-premium', username);
       });
 
-      server.on('update-premium-response-fail', function(obj){
-        webchatEmitter.emit('update-premium-response-fail-snackbar', obj.message);
-      });
-
       server.on('update-premium-response-success', function(obj){
         console.log(obj.isPremium);
         store.dispatch(actionsCreators.setIsPremium(obj.isPremium));
