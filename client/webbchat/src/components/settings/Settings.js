@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Menu, MenuItem } from 'react-mdl';
 import Payment from './Payment/Payment';
+import connect from '../../connect/connect'
 
 class Settings extends Component {
 
@@ -36,4 +37,9 @@ class Settings extends Component {
   }
 }
 
-export default Settings;
+export default connect((state) => ({
+  username: state.username,
+  isPremium: state.isPremium,
+  updateSnackbar: state.updateSnackbar,
+}), Settings);
+

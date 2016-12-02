@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import SearchBox from './SearchBox';
 import { getAllUsersContaining } from '../../model/DAL/dbUser';
+import connect from '../../connect/connect'
 
 class Search extends Component {
 
@@ -54,4 +55,7 @@ class Search extends Component {
   }
 }
 
-export default Search
+export default connect((state) => ({
+  filterQuery: state.userSearchQuery,
+  setOtherUsers: state.setOtherUsers,
+}), Search);

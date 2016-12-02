@@ -1,7 +1,7 @@
 import React from 'react';
-import FriendList from './friends/App';
-import FindUserList from './others/App';
-import Pending from './pending/App';
+import FriendList from './friends/Users';
+import FindUserList from './others/Users';
+import Pending from './pending/Users';
 
 const UserList = () => (
   <div>
