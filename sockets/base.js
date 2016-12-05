@@ -145,10 +145,8 @@ module.exports = (io) => {
       console.log('With: ' + friendToChatWith);
       socket.join('room1');
       socket.room = 'room1';
-      // echo to client they've connected
       socket.emit('update-chat', 'SERVER', 'you have connected to room1');
       socket.broadcast.to('room1').emit('update-chat', 'SERVER', username + ' has connected to this room');
-      socket.emit('update-rooms', rooms, 'room1');
     });
 
     socket.on('send-chat-message', function (message) {
