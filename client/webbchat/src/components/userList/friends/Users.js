@@ -8,6 +8,9 @@ import connect from '../../../connect/connect'
 class Users extends Component {
   openChat(username){
     console.log('openChat for:', username);
+    webchatEmitter.emit('join-chat-room', username);
+    console.log('joinChatRoom should be emitted');
+    webchatEmitter.emit('send-chat-message', 'test message');
     // TODO: open chat
   }
 
@@ -17,16 +20,16 @@ class Users extends Component {
   }
 
   render() {
-    return (   
+    return (
       <List>
         {this.props.users
-            .filter((user) => 
+            .filter((user) =>
               user.username.toLowerCase().match('^'+this.props.filterQuery.toLowerCase()+'.*'))
-                .map((user, i) => 
-                  <User 
+                .map((user, i) =>
+                  <User
                     openChat={this.openChat.bind(this)}
-                    removeFriend={this.removeFriend.bind(this)} 
-                    user={user} 
+                    removeFriend={this.removeFriend.bind(this)}
+                    user={user}
                     key={user.username}/>)}
       </List>
     )

@@ -7,33 +7,38 @@ import webchatEmitter from '../../emitter';
 const init = (store) => {
 
   getSocketsToken()
-    .then(responce => responce.json())
+    .then(response => response.json())
     .then((obj) => {
-      const server = io('', {
+      const socket = io('', {
         query: 'token=' + obj.token,
       });
-      /*server.on('connect', function (socket) {
-      });*/
-      // Sockets
+
+      /**
+       * Update chat text field with message
+       */
+      socket.on('update-chat', function (username, message) {
+        console.log('New message from: ' + username + ' - ' + message);
+      });
+
 
       /**
        *
        */
-      server.on('onload-username', function (username) {
+      socket.on('onload-username', function (username) {
         store.dispatch(actionsCreators.setUsernameRequests(username));
       });
 
       /**
        * loads initial pending requests
        */
-      server.on('onload-pending', function (pending) {
+      socket.on('onload-pending', function (pending) {
         store.dispatch(actionsCreators.setPendingRequests(pending));
       });
 
       /**
        * loads inital friends
        * */
-      server.on('onload-friends', function (friends) {
+      socket.on('onload-friends', function (friends) {
         store.dispatch(actionsCreators.setInitialFriends(friends));
       });
 
@@ -41,7 +46,7 @@ const init = (store) => {
        * updated friends array
        * friends array
        */
-      server.on('friends', function (obj) {
+      socket.on('friends', function (obj) {
         store.dispatch(actionsCreators.setInitialFriends(obj.friends));
       });
 
@@ -49,7 +54,7 @@ const init = (store) => {
        * recives new pending requests
        * and messages
        */
-      server.on('pending', function (obj) {
+      socket.on('pending', function (obj) {
         webchatEmitter.emit('new-pending', obj.message);
         store.dispatch(actionsCreators.setPendingRequests(obj.pending));
       });
@@ -57,7 +62,7 @@ const init = (store) => {
       /**
        * recives message after friend request is sent
        */
-      server.on('friend-request-response', function(message){
+      socket.on('friend-request-response', function(message){
         webchatEmitter.emit('friend-request-success', message);
       });
 
@@ -66,7 +71,7 @@ const init = (store) => {
        * friends array
        * message
        */
-      server.on('friend-request-accepted', function(obj) {
+      socket.on('friend-request-accepted', function(obj) {
         webchatEmitter.emit('friend-request-success', obj.message);
         store.dispatch(actionsCreators.setInitialFriends(obj.friends));
       });
@@ -74,7 +79,7 @@ const init = (store) => {
       /**
       pending array * recives error messages from sent failed friend requests
        */
-      server.on('friend-request-error', function(message){
+      socket.on('friend-request-error', function(message){
         webchatEmitter.emit('friend-request-error', message);
       });
 
@@ -84,7 +89,7 @@ const init = (store) => {
        * friends array
        * pending array
        */
-      server.on('accept-friend-request-response', function(obj){
+      socket.on('accept-friend-request-response', function(obj){
         //webchatEmitter.emit('friend-request-accepted', obj.message);
         store.dispatch(actionsCreators.setInitialFriends(obj.friends));
         store.dispatch(actionsCreators.setPendingRequests(obj.pending));
@@ -95,7 +100,7 @@ const init = (store) => {
        * recives message
        * pending array
        */
-      server.on('rejected-friend-request-response', function(obj){
+      socket.on('rejected-friend-request-response', function(obj){
         //webchatEmitter.emit('friend-request-rejected', obj.message);
         store.dispatch(actionsCreators.setPendingRequests(obj.pending));
       });
@@ -103,61 +108,73 @@ const init = (store) => {
       /**
        * set premium state
        */
-      server.on('set-is-premium', function (isPremium) {
+      socket.on('set-is-premium', function (isPremium) {
         store.dispatch(actionsCreators.setIsPremium(isPremium));
       });
 
-      server.on('servererror', function(message){
+      socket.on('servererror', function(message){
         console.log('server error', message);
       });
 
       // EventEmitter
       /**
+       * Send message to the current chatroom
+       */
+      webchatEmitter.on('send-chat-message', (message) => {
+        socket.emit('send-chat-message', message);
+      });
+
+      /**
+       * Joins a chatroom
+       */
+      webchatEmitter.on('join-chat-room', (username) => {
+        socket.emit('join-chat-room', username);
+      });
+
+      /**
        * Sends friend request user with username
        */
       webchatEmitter.on('friend-request', (username) => {
-        server.emit('friend-request', username);
+        socket.emit('friend-request', username);
       });
 
       /**
        * Accsepts friend request from user with id
        */
       webchatEmitter.on('accept-friend-request', (id) => {
-        server.emit('accept-friend-request', id);
+        socket.emit('accept-friend-request', id);
       });
 
       /**
        * rejects freind request from user with id
        */
       webchatEmitter.on('reject-friend-request', (id) => {
-        server.emit('reject-friend-request', id);
+        socket.emit('reject-friend-request', id);
       });
 
       /**
        * removes friend with username
        */
       webchatEmitter.on('remove-friend', (username) => {
-        server.emit('remove-friend', username);
+        socket.emit('remove-friend', username);
       });
 
       /**
        * Add premium
        */
       webchatEmitter.on('update-premium', (username) => {
-        server.emit('update-premium', username);
+        socket.emit('update-premium', username);
       });
 
-      server.on('update-premium-response-fail', function(obj){
+      socket.on('update-premium-response-fail', function(obj){
         webchatEmitter.emit('update-premium-response-fail-snackbar', obj.message);
       });
 
-      server.on('update-premium-response-success', function(obj){
+      socket.on('update-premium-response-success', function(obj){
         console.log(obj.isPremium);
         store.dispatch(actionsCreators.setIsPremium(obj.isPremium));
         webchatEmitter.emit('update-premium-response-success-snackbar', obj.message);
       });
-
-
 
     });
 };
