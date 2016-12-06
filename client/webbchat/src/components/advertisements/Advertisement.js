@@ -1,20 +1,22 @@
-import React, { Component } from 'react';
-import adImage from './advertisement.png';
+import React, { PropTypes } from 'react';
+import connect from '../../connect/connect'
 
+const verticalImage = '/images/vertical_advertisement.png';
+const mobileImage = '/images/advertisement.png';
 
-class Advertisement extends Component {
-  render() {
-    const isPremium = this.props.isPremium;
-    if(isPremium){
-      return (<div></div>);
-    }
-
-    return ( 
-      <div>
-        <img src={(adImage)} alt='pesky ad'/>
-      </div>
-    )
+const Advertisement = ({ isPremium }) => {
+  if(isPremium){
+    return null;
   }
+  // insert else if(mobileVersion) here, then use mobileImage. 
+  return (<img src={verticalImage} id='verticalAd' alt='pesky ad'/>)
+};
+
+Advertisement.propTypes = {
+  isPremium: PropTypes.bool,
 }
 
-export default Advertisement;
+export default connect((state) => ({
+  isPremium: state.isPremium,
+}), Advertisement);;
+

@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { Button, Menu, MenuItem } from 'react-mdl';
+import Payment from './Payment/Payment';
+import connect from '../../connect/connect'
 
 class Settings extends Component {
+
   payment(username){
-    console.log('Payment Method For:', username);
-    // TODO: Make Payment
+
   }
 
   other(username){
@@ -14,16 +16,19 @@ class Settings extends Component {
 
   render() {
     const username = this.props.username;
-    return ( 
+    const isPremium = this.props.isPremium;
+    const updateSnackbar = this.props.updateSnackbar;
+    return (
       <div>
-        <Button raised  accent name="SettingsButton" id={`menu_iconbutton_id_${username}`}>{username}</Button>
+      <Payment name={username} premium={isPremium} update={updateSnackbar}/>
+        <Button raised accent name="SettingsButton" id={`menu_iconbutton_id_${username}`}>{username}</Button>
         <Menu align='right' target={`menu_iconbutton_id_${username}`} >
           <MenuItem
-            onClick={() => this.payment.bind(this, username)}
+            onClick={() => this.payment(username)}
             >Pay For Premium To Remove Adds
           </MenuItem>
           <MenuItem
-            onClick={() => this.other.bind(this, username)}
+            onClick={() => this.other(username)}
             >Some Other Option
           </MenuItem>
         </Menu>
@@ -32,4 +37,9 @@ class Settings extends Component {
   }
 }
 
-export default Settings;
+export default connect((state) => ({
+  username: state.username,
+  isPremium: state.isPremium,
+  updateSnackbar: state.updateSnackbar,
+}), Settings);
+
