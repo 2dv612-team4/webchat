@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { List } from 'react-mdl';
 import User from './User';
 import webchatEmitter from '../../../model/emitter';
+import connect from '../../../connect/connect'
+
 
 class Users extends Component {
   openChat(username){
@@ -31,4 +33,7 @@ class Users extends Component {
   }
 }
 
-export default Users;
+export default connect((state) => ({
+  users: state.friends,
+  filterQuery: state.userSearchQuery,
+}), Users)

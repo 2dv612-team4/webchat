@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Snackbar } from 'react-mdl';
+import connect from '../../connect/connect'
 
 class GeneralSnackbar extends Component {
 
@@ -30,4 +31,7 @@ class GeneralSnackbar extends Component {
   }
 }
 
-export default GeneralSnackbar; 
+export default connect((state) => ({
+  updateSnackbar: state.snackbar,
+  snackbar: state.snackbar,
+}), GeneralSnackbar);

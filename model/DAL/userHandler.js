@@ -14,7 +14,7 @@ const findWithPartialUsername = (username) => User.find({'username': {'$regex': 
 /**
  * updates socketId of user
  */
-const setSocketId = (_id, socketId) => User.update({ _id }, { socketId }).exec(); 
+const setSocketId = (_id, socketId) => User.update({ _id }, { socketId }).exec();
 
 //_id: id of user recieving friend request. requestingUserID: ID of user sending request
 const addFriendRequest = (_id, requestingUserID) => User.update({_id}, {$push: {friendrequests: requestingUserID }}).exec();
@@ -45,8 +45,8 @@ const removeFriend = (userID, friendID) => new Promise((resolve, reject) => {
   }).catch(() => reject(false));
 });
 
-//updates the expiration date of premium feature. 
-const updatePremiumExpirationDate = (_id, premiumExpirationDate) => User.update({_id}, {premiumExpirationDate}).exec();
+//updates the expiration date of premium feature.
+const updatePremiumExpirationDate = (username, premiumExpirationDate) => User.update({username}, {premiumExpirationDate}).exec();
 
 module.exports = {
   add: add,

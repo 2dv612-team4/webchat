@@ -1,31 +1,22 @@
-import React, { Component } from 'react';
+import React, { PropTypes } from 'react';
+import connect from '../../connect/connect'
 
+const verticalImage = '/images/vertical_advertisement.png';
+const mobileImage = '/images/advertisement.png';
 
-class Advertisement extends Component {
-  render() {
-    const isPremium = this.props.isPremium;
-    if(isPremium)
-    {
-      return (<div></div>);
-    }
-
-    return ( 
-      <div>
-        <img src='/images/advertisement.png' alt='pesky ad'
-        style={{
-          width: '400px',
-          height: '400px',
-          backgroundColor: 'blue',
-          border: '3px solid black',
-          zIndex: 9999,
-          display: 'block',
-        }}
-        />
-        <div style={{background: 'url(http://www.getmdl.io/assets/demos/welcome_card.jpg) center / cover'}}></div>
-        <p>pelle gillar att se ads</p>
-      </div>
-    )
+const Advertisement = ({ isPremium }) => {
+  if(isPremium){
+    return null;
   }
+  // insert else if(mobileVersion) here, then use mobileImage. 
+  return (<img src={verticalImage} id='verticalAd' alt='pesky ad'/>)
+};
+
+Advertisement.propTypes = {
+  isPremium: PropTypes.bool,
 }
 
-export default Advertisement;
+export default connect((state) => ({
+  isPremium: state.isPremium,
+}), Advertisement);;
+
