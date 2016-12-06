@@ -28,16 +28,16 @@ class App extends Component {
               </Navigation>
               </Drawer>
               <Content>
+              <div>
+              <Payment />
+              </div>
               <Grid noSpacing={true}>
-                <Cell id="willbechat" col={10}>
+                <Cell id="willbechat" col={9}>
                 </Cell>
                 <Cell id="advert" col={2}>
                   <Advertisement/>
                 </Cell>
               </Grid>
-              <div>
-                <Payment />
-              </div>
               </Content>
 
           </Layout>
