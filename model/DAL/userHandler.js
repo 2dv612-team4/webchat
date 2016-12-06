@@ -10,6 +10,7 @@ const getFriendRequests = (username) => User.findOne({username}).populate('frien
 const findAllUsers = () => User.find({}).select('username').exec();
 const findFriendsWithUsername = (username) => User.findOne({ username }).populate('friends').exec();
 const findWithPartialUsername = (username) => User.find({'username': {'$regex': '^'+username+'.*'}}).exec();
+const changePassword = (_id, newPassword) => User.update({_id}, {$set: {$password: newPassword}}).exec();
 
 /**
  * updates socketId of user
@@ -62,4 +63,5 @@ module.exports = {
   getFriendRequests: getFriendRequests,
   setSocketId,
   updatePremiumExpirationDate: updatePremiumExpirationDate,
+  changePassword: changePassword,
 };

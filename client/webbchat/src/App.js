@@ -27,12 +27,12 @@ class App extends Component {
                 <span><UserList /></span>
               </Navigation>
               </Drawer>
-              <Content>
-              <div>
+              <Content id="contentArea">
+              <div style={{position: 'fixed', top: '8%', right: '8%', width: '300px'}}>
               <Payment />
               </div>
               <Grid noSpacing={true}>
-                <Cell id="willbechat" col={9}>
+                <Cell id="willbechat" col={10}>
                 </Cell>
                 <Cell id="advert" col={2}>
                   <Advertisement/>
