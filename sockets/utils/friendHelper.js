@@ -9,12 +9,9 @@ const co = require('co');
 //const getOnlyIdAndUsername = ({ _id, username }) => ({  _id, username });
 
 /**
- * sends friend request to user with username
- * returns
- *  - receiverSocketId from user to send request to
- *  - friendrequests from user to send request to
- *  - isFriendRequestAlreadySent 
- *  - isFriendRequestAlreadyInbound
+ * [sends friend request to user with username]
+ * @param  {String} username [username of user who send request]
+ * @param  {String} receiverUsername [username of user who recives request]
  */
 const sendFriendRequest = 
   co.wrap(function*(username, receiverUsername){
@@ -54,10 +51,12 @@ const sendFriendRequest =
     };
   });
 
+
 /**
- * rejects friend request
- * returns
- *  - friendrequests array from user that rejects friend request 
+ * [rejects friend request]
+ * @param  {String} username [username of a user]
+ * @param  {String} id [id of a user]
+ * @return {Promise}
  */
 const rejectFriendRequest =  
   co.wrap(function*(username, id){
@@ -68,12 +67,10 @@ const rejectFriendRequest =
   });
 
 /**
- * accepts friend request
- * returns
- *  - socketId from friend how got accepted
- *  - friends array from friend how got accepted
- *  - friends array from user that accepted
- *  - pending array from user that accepted 
+ * [accepts friend request]
+ * @param  {String} username [username of a user]
+ * @param  {String} id [id of a user]
+ * @return {Promise}
  */
 const acceptFriendRequest =
   co.wrap(function*(username, id){
@@ -101,8 +98,11 @@ const acceptFriendRequest =
     };
   });
 
+
 /**
- * gets friends array and pending array from user by username
+ * [gets friends array and pending array from user by username]
+ * @param  {String} username
+ * @return {Promise}
  */
 const getFriendsAndPending =  
   co.wrap(function*(username){
@@ -117,10 +117,10 @@ const getFriendsAndPending =
   }); 
 
 /**
- * removes friend from user by username
- * returns 
- *  - friends array for both users 
- *  - socketId for removed friend
+ * [removed friend from user by username]
+ * @param  {String} username [username of requester]
+ * @param  {Object} obj [object with username and chatId]
+ * @return {promise} []
  */
 const removeFriend = 
   co.wrap(function*(username, obj){
