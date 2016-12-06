@@ -161,7 +161,9 @@ const init = (store) => {
         store.dispatch(actionsCreators.buyAdPremium(wantToBuy));
       });
 
-
+      webchatEmitter.on('change-password-settings', (wantToChangePassword) => {
+        store.dispatch(actionsCreators.changeUserPassword(wantToChangePassword));
+      });
 
     });
 };

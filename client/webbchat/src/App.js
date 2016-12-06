@@ -5,6 +5,7 @@ import UserList from './components/userList/UserList'
 import Logout from './components/logout/Logout'
 import Settings from './components/settings/Settings'
 import Payment from './components/settings/Payment/Payment'
+import ChangePassword from './components/settings/ChangePassword/ChangePassword'
 import Snackbar from './components/snackbar/Snackbar'
 import Advertisement from './components/advertisements/Advertisement'
 import { Layout, Header, Content, Drawer, Navigation, Grid, Cell} from 'react-mdl';
@@ -30,6 +31,7 @@ class App extends Component {
               <Content id="contentArea">
               <div style={{position: 'fixed', top: '8%', right: '8%', width: '300px'}}>
               <Payment />
+              <ChangePassword />
               </div>
               <Grid noSpacing={true}>
                 <Cell id="willbechat" col={10}>

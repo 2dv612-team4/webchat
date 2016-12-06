@@ -6,13 +6,12 @@ import webchatEmitter from '../../model/emitter';
 
 class Settings extends Component {
 
-  payment(username){
+  payment(){
     webchatEmitter.emit('buy-premium', true);
   }
 
-  other(username){
-    console.log('Some other setting function:', username);
-    // TODO: Implement other function, like password change
+  changePassword(username){
+    webchatEmitter.emit('change-password-settings', true);
   }
 
   render() {
@@ -22,12 +21,12 @@ class Settings extends Component {
         <Button raised accent name="SettingsButton" id={`menu_iconbutton_id_${username}`}>{username}</Button>
         <Menu align='right' target={`menu_iconbutton_id_${username}`} >
           <MenuItem
-            onClick={() => this.payment(username)}
+            onClick={() => this.payment()}
             >Pay For Premium To Remove Adds
           </MenuItem>
           <MenuItem
-            onClick={() => this.other(username)}
-            >Some Other Option
+            onClick={() => this.changePassword(username)}
+            >Change Password
           </MenuItem>
         </Menu>
       </div>
