@@ -7,6 +7,7 @@ import Settings from './components/settings/Settings'
 import Payment from './components/settings/Payment/Payment'
 import Snackbar from './components/snackbar/Snackbar'
 import Advertisement from './components/advertisements/Advertisement'
+import MobileAd from './components/advertisements/AdvertisementMobile'
 import { Layout, Header, Content, Drawer, Navigation, Grid, Cell} from 'react-mdl';
 
 import './App.css';
@@ -17,7 +18,7 @@ class App extends Component {
     return (
       <div style={{height: '100vh', position: 'relative'}}>
           <Layout fixedHeader fixedDrawer>
-              <Header title="Webchat">
+              <Header title="Webchat" id="header">
                 <Settings />
                 <Logout />
               </Header>
@@ -32,11 +33,15 @@ class App extends Component {
               <Payment />
               </div>
               <Grid noSpacing={true}>
-                <Cell id="willbechat" col={10}>
+                <Cell id="willbechat" col={10} phone={12}>
                 </Cell>
-                <Cell id="advert" col={2}>
+                <Cell id="advert" col={2} hidePhone={true}>
                   <Advertisement/>
                 </Cell>
+                <Cell id="mobileAd" phone={12} hideDesktop={true} hideTablet={true}>
+                  <MobileAd/>
+                </Cell>
+
               </Grid>
               </Content>
 
