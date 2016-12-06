@@ -136,8 +136,8 @@ const init = (store) => {
       /**
        * removes friend with username
        */
-      webchatEmitter.on('remove-friend', (username) => {
-        server.emit('remove-friend', username);
+      webchatEmitter.on('remove-friend', (obj) => {
+        server.emit('remove-friend', { username: obj.username, chatId: obj.chatId});
       });
 
       /**
@@ -152,7 +152,6 @@ const init = (store) => {
       });
 
       server.on('update-premium-response-success', function(obj){
-        console.log(obj.isPremium);
         store.dispatch(actionsCreators.setIsPremium(obj.isPremium));
         webchatEmitter.emit('update-premium-response-success-snackbar', obj.message);
       });
