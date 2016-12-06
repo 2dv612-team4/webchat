@@ -26,7 +26,7 @@ class App extends Component {
                 <span><UserList /></span>
               </Navigation>
               </Drawer>
-              <Content>
+              <Content id="contentArea">
               <Grid noSpacing={true}>
                 <Cell id="willbechat" col={10}>
                 </Cell>
