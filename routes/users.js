@@ -1,4 +1,3 @@
-'use strict';
 const express = require('express');
 const userHandler = require('../model/DAL/userHandler.js');
 const router = express.Router();
@@ -39,7 +38,7 @@ router.get('/search/:username', authenticate, function(req, res){
       res.json(
         users
         .filter(user => user.username !== loggedInUsername)
-        .filter(user => !friends.find(id => id.toString() === user._id.toString()))
+        .filter(user => !friends.find(friend => friend.user.toString() === user._id.toString()))
         .map(user => ({
           username: user.username,
         })));
