@@ -1,5 +1,3 @@
-'use strict';
-
 const mongoose = require('mongoose');
 
 let Schema = mongoose.Schema;
@@ -10,10 +8,10 @@ let userSchema = new Schema({
   premiumExpirationDate: {type: Date}, 
 
   friends: [
-    { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
-  ],
-  rooms: [
-    { type: mongoose.Schema.Types.ObjectId, ref: 'room' },
+    {
+      user: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
+      chat:  { type: mongoose.Schema.Types.ObjectId, ref: 'room' },
+    },
   ],
   friendrequests: [
     { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
