@@ -6,34 +6,35 @@ import connect from '../../../connect/connect'
 
 
 class Users extends Component {
-  openChat(username){
-    console.log('openChat for:', username);
+  openChat(chatId){
+    console.log('openChat for:', chatId);
     // TODO: open chat
   }
 
-  removeFriend(username){
+  removeFriend(username, chatId){
     console.log('removeFriend:', username);
-    webchatEmitter.emit('remove-friend', username);
+    webchatEmitter.emit('remove-friend', {username, chatId});
   }
 
   render() {
     return (   
       <List>
-        {this.props.users
-            .filter((user) => 
-              user.username.toLowerCase().match('^'+this.props.filterQuery.toLowerCase()+'.*'))
-                .map((user, i) => 
+        {this.props.friends
+            .filter((friend) => 
+              friend.user.username.toLowerCase().match('^'+this.props.filterQuery.toLowerCase()+'.*'))
+                .map((friend, i) => 
                   <User 
                     openChat={this.openChat.bind(this)}
                     removeFriend={this.removeFriend.bind(this)} 
-                    user={user} 
-                    key={user.username}/>)}
+                    user={friend.user}
+                    chat={friend.chat} 
+                    key={friend.user.username}/>)}
       </List>
     )
   }
 }
 
 export default connect((state) => ({
-  users: state.friends,
+  friends: state.friends,
   filterQuery: state.userSearchQuery,
 }), Users)
