@@ -104,6 +104,7 @@ const init = (store) => {
        * set premium state
        */
       server.on('set-is-premium', function (isPremium) {
+        store.dispatch(actionsCreators.buyAdPremium(false));
         store.dispatch(actionsCreators.setIsPremium(isPremium));
       });
 
@@ -152,9 +153,12 @@ const init = (store) => {
       });
 
       server.on('update-premium-response-success', function(obj){
-        console.log(obj.isPremium);
         store.dispatch(actionsCreators.setIsPremium(obj.isPremium));
         webchatEmitter.emit('update-premium-response-success-snackbar', obj.message);
+      });
+
+      webchatEmitter.on('buy-premium', (wantToBuy) => {
+        store.dispatch(actionsCreators.buyAdPremium(wantToBuy));
       });
 
 
