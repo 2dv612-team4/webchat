@@ -105,8 +105,8 @@ module.exports = (io) => {
     /**
      * removes friend based in username of friend
      */
-    socket.on('remove-friend', (toRemoveUsername) =>
-      friendHelper.removeFriend(username, toRemoveUsername)
+    socket.on('remove-friend', (obj) =>
+      friendHelper.removeFriend(username, obj)
         .then(({requesterFriends, receiverSocketId, reciverFriends}) => {
           emitToSpecificUser(io, receiverSocketId, 'friends',
             { message: '', friends: reciverFriends });
