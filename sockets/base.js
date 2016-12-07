@@ -5,8 +5,9 @@ const emitToSpecificUser = (io, socketId, channel, data) => {
   io.to(socketId).emit(channel, data);
 };
 
-module.exports = (io) => {
+var rooms = ['room1','room2','room3'];
 
+module.exports = (io) => {
   io.on('connection', function (socket) {
     /**
      * connecter credentials
@@ -15,6 +16,8 @@ module.exports = (io) => {
     const userId = socket.decoded_token.id;
     const socketid = socket.id;
     const isPremium = new Date(socket.decoded_token.premiumExpirationDate).getTime() > Date.now();
+
+    console.log('Connected with username: ' + username);
 
     /**
      * sets socketId on client connect
@@ -105,8 +108,8 @@ module.exports = (io) => {
     /**
      * removes friend based in username of friend
      */
-    socket.on('remove-friend', (toRemoveUsername) =>
-      friendHelper.removeFriend(username, toRemoveUsername)
+    socket.on('remove-friend', (obj) =>
+      friendHelper.removeFriend(username, obj)
         .then(({requesterFriends, receiverSocketId, reciverFriends}) => {
           emitToSpecificUser(io, receiverSocketId, 'friends',
             { message: '', friends: reciverFriends });
@@ -135,5 +138,20 @@ module.exports = (io) => {
           .catch((e) => emitToSpecificUser(io, socketid, 'servererror', e.message));
       }
     });
+
+    socket.on('join-chat-room', (friendToChatWith) => {
+      console.log(username + ' joining room1');
+      console.log('With: ' + friendToChatWith);
+      socket.join('room1');
+      socket.room = 'room1';
+      socket.emit('update-chat', 'SERVER', 'you have connected to room1');
+      socket.broadcast.to('room1').emit('update-chat', 'SERVER', username + ' has connected to this room');
+    });
+
+    socket.on('send-chat-message', function (message) {
+      console.log('send chat message to all users in room');
+      io.sockets.in(socket.room).emit('update-chat', username, message);
+    });
+
   });
 };
