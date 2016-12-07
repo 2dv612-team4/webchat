@@ -6,7 +6,6 @@ const emitToSpecificUser = (io, socketId, channel, data) => {
 };
 
 module.exports = (io) => {
-
   io.on('connection', function (socket) {
     /**
      * connecter credentials
