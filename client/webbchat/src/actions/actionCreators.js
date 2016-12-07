@@ -47,3 +47,10 @@ export const setIsPremium = (isPremium) => {
     isPremium,
   };
 };
+
+export const buyAdPremium = (buyPremium) => {
+  return {
+    type: 'BUY_PREMIUM',
+    buyPremium,
+  };
+};

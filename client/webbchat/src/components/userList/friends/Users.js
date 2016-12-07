@@ -6,9 +6,12 @@ import connect from '../../../connect/connect'
 
 
 class Users extends Component {
+
   openChat(chatId){
     console.log('openChat for:', chatId);
-    // TODO: open chat
+    webchatEmitter.emit('join-chat-room', chatId);
+    console.log('joinChatRoom should be emitted');
+    webchatEmitter.emit('send-chat-message', 'test message');
   }
 
   removeFriend(username, chatId){
@@ -17,7 +20,7 @@ class Users extends Component {
   }
 
   render() {
-    return (   
+    return (
       <List>
         {this.props.friends
             .filter((friend) => 

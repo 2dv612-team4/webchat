@@ -4,8 +4,10 @@ import Search from './components/search/Search'
 import UserList from './components/userList/UserList'
 import Logout from './components/logout/Logout'
 import Settings from './components/settings/Settings'
+import Payment from './components/settings/Payment/Payment'
 import Snackbar from './components/snackbar/Snackbar'
 import Advertisement from './components/advertisements/Advertisement'
+import MobileAd from './components/advertisements/AdvertisementMobile'
 import { Layout, Header, Content, Drawer, Navigation, Grid, Cell} from 'react-mdl';
 
 import './App.css';
@@ -16,25 +18,33 @@ class App extends Component {
     return (
       <div style={{height: '100vh', position: 'relative'}}>
           <Layout fixedHeader fixedDrawer>
-              <Header title="Webchat">
+              <Header title="Webchat" id="header">
                 <Settings />
                 <Logout />
               </Header>
-              <Drawer >
+              <Drawer>
               <Navigation>
                 <span><Search /></span>
                 <span><UserList /></span>
               </Navigation>
               </Drawer>
-              <Content>
+              <Content id="contentArea">
+              <div style={{position: 'fixed', top: '8%', right: '8%', width: '300px'}}>
+              <Payment />
+              </div>
               <Grid noSpacing={true}>
-                <Cell id="willbechat" col={10}>
+                <Cell id="willbechat" col={10} phone={12}>
                 </Cell>
-                <Cell id="advert" col={2}>
+                <Cell id="advert" col={2} hidePhone={true}>
                   <Advertisement/>
                 </Cell>
+                <Cell id="mobileAd" phone={12} hideDesktop={true} hideTablet={true}>
+                  <MobileAd/>
+                </Cell>
+
               </Grid>
               </Content>
+
           </Layout>
           <Snackbar/>
       </div>
