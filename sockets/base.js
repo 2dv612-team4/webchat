@@ -1,5 +1,6 @@
 const userHandler = require('../model/DAL/userHandler.js');
 const friendHelper = require('./utils/friendHelper');
+const bcrypt = require('bcrypt');
 
 const emitToSpecificUser = (io, socketId, channel, data) => {
   io.to(socketId).emit(channel, data);
@@ -151,6 +152,28 @@ module.exports = (io) => {
     socket.on('send-chat-message', function (message) {
       console.log('send chat message to all users in room');
       io.sockets.in(socket.room).emit('update-chat', username, message);
+    });
+
+
+    /*
+    * If user wants to Update Password
+    */
+    socket.on('update-password', (username, oldpassword, newPassword) => {
+      userHandler.findWithUsername(username).then((user) => {
+        bcrypt.compare(oldpassword, user.password).then(function(isPasswordCorrect){
+          if(isPasswordCorrect){
+            const hash = bcrypt.hash(newPassword, 10);
+            userHandler.changePassword(username, hash).then((res, rej) => {
+              console.log(rej);
+              emitToSpecificUser(io, socketid, 'update-password-response-success', {
+                message: 'You have updated your password!'});
+            }).catch((e) => emitToSpecificUser(io, socketid, 'servererror', e.message));
+          }else{
+            emitToSpecificUser(io, socketid, 'update-password-response-fail', {
+              message: 'Wrong old password!'});
+          }
+        });
+      });
     });
 
   });
