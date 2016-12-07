@@ -155,8 +155,8 @@ const init = (store) => {
       /**
        * removes friend with username
        */
-      webchatEmitter.on('remove-friend', (username) => {
-        socket.emit('remove-friend', username);
+      webchatEmitter.on('remove-friend', (obj) => {
+        socket.emit('remove-friend', { username: obj.username, chatId: obj.chatId});
       });
 
       /**
