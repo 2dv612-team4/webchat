@@ -8,7 +8,37 @@ const findWithUsername = (username) => User.findOne({ username }).exec();
 const findWithId = (_id) => User.findOne({_id}).exec();
 const getFriendRequests = (username) => User.findOne({username}).populate('friendrequests').exec();
 const findAllUsers = () => User.find({}).select('username').exec();
-const findFriendsWithUsername = (username) => User.findOne({ username }).populate('friends').exec();
+
+/**
+ * [gets user object with friends array containing users]
+ * @param  {[Objet]} type [gets user by type]
+ * @return {[Promise]}          [resolves to user object]
+ */
+const findFriendsWith = (type) => User.findOne(type)
+  .populate({
+    path: 'friends.user',
+    model: 'user',
+  })
+  .populate({
+    path: 'friends.chat',
+    model: 'room',
+  })
+  .exec();
+
+/**
+ * [gets user object with friends array containing users]
+ * @param  {[String]} username [user to get]
+ * @return {[Promise]}          [resolves to user object]
+ */
+const findFriendsWithUsername = (username) => findFriendsWith({ username });
+
+/**
+ * [gets user object with friends array containing users]
+ * @param  {[Object]} _id [user to get]
+ * @return {[Promise]}          [resolves to user object]
+ */
+const findFriendsWithId = (_id) => findFriendsWith({ _id });
+
 const findWithPartialUsername = (username) => User.find({'username': {'$regex': '^'+username+'.*'}}).exec();
 const changePassword = (_id, newPassword) => User.update({_id}, {$set: {$password: newPassword}}).exec();
 
@@ -22,11 +52,19 @@ const addFriendRequest = (_id, requestingUserID) => User.update({_id}, {$push: {
 //_id: id of user that recieved friend request. requestingUserID: ID of user that sent the request
 const removeFriendRequest = (_id, requestingUserID) => User.update({_id}, {$pull: {friendrequests: requestingUserID }}).exec();
 //adds the users to eachothers friends-array in mongodb
-const addFriend = (userID, newFriendID) => new Promise((resolve, reject) => {
+const addFriend = (userID, newFriendID, chatId) => new Promise((resolve, reject) => {
   co(function*(){
-    const result = yield User.update({_id: userID}, {$push: {friends: newFriendID}}).exec();
+    const result = yield User.update({_id: userID}, {$push: {
+      friends: {
+        user: newFriendID,
+        chat: chatId,
+      }}}).exec();
     if(result){
-      const res = yield User.update({_id: newFriendID}, {$push: {friends: userID}}).exec();
+      const res = yield User.update({_id: newFriendID}, {$push: {
+        friends: {
+          user: userID,
+          chat: chatId,
+        }}}).exec();
       if(res){
         resolve(true);
       }
@@ -34,11 +72,18 @@ const addFriend = (userID, newFriendID) => new Promise((resolve, reject) => {
   }).catch(() => reject(false));
 });
 //removes the users from eachothers friends-array in mongodb
-const removeFriend = (userID, friendID) => new Promise((resolve, reject) => {
+const removeFriend = (userID, friendID, chatID) => new Promise((resolve, reject) => {
   co(function*(){
-    const result = yield User.update({_id: userID}, {$pull: {friends: friendID}}).exec();
+
+    const result = yield User.update({_id: userID}, {$pull: {friends: {
+      user: friendID,
+      chat: chatID,
+    }}}).exec();
     if(result){
-      const res = yield User.update({_id: friendID}, {$pull: {friends: userID}}).exec();
+      const res = yield User.update({_id: friendID}, {$pull: {friends: {
+        user: userID,
+        chat: chatID,
+      }}}).exec();
       if(res){
         resolve(true);
       }
@@ -50,18 +95,19 @@ const removeFriend = (userID, friendID) => new Promise((resolve, reject) => {
 const updatePremiumExpirationDate = (username, premiumExpirationDate) => User.update({username}, {premiumExpirationDate}).exec();
 
 module.exports = {
-  add: add,
-  findWithUsername: findWithUsername,
-  findWithId: findWithId,
-  addFriendRequest: addFriendRequest,
-  addFriend: addFriend,
-  removeFriend: removeFriend,
-  removeFriendRequest: removeFriendRequest,
-  findFriendsWithUsername: findFriendsWithUsername,
-  findAllUsers: findAllUsers,
-  findWithPartialUsername: findWithPartialUsername,
-  getFriendRequests: getFriendRequests,
+  add,
+  findWithUsername,
+  findWithId,
+  addFriendRequest,
+  addFriend,
+  removeFriend,
+  removeFriendRequest,
+  findFriendsWithUsername,
+  findFriendsWithId,
+  findAllUsers,
+  findWithPartialUsername,
+  getFriendRequests,
   setSocketId,
-  updatePremiumExpirationDate: updatePremiumExpirationDate,
-  changePassword: changePassword,
+  updatePremiumExpirationDate,
+  changePassword,
 };

@@ -6,34 +6,38 @@ import connect from '../../../connect/connect'
 
 
 class Users extends Component {
-  openChat(username){
-    console.log('openChat for:', username);
-    // TODO: open chat
+
+  openChat(chatId){
+    console.log('openChat for:', chatId);
+    webchatEmitter.emit('join-chat-room', chatId);
+    console.log('joinChatRoom should be emitted');
+    webchatEmitter.emit('send-chat-message', 'test message');
   }
 
-  removeFriend(username){
+  removeFriend(username, chatId){
     console.log('removeFriend:', username);
-    webchatEmitter.emit('remove-friend', username);
+    webchatEmitter.emit('remove-friend', {username, chatId});
   }
 
   render() {
-    return (   
+    return (
       <List>
-        {this.props.users
-            .filter((user) => 
-              user.username.toLowerCase().match('^'+this.props.filterQuery.toLowerCase()+'.*'))
-                .map((user, i) => 
+        {this.props.friends
+            .filter((friend) => 
+              friend.user.username.toLowerCase().match('^'+this.props.filterQuery.toLowerCase()+'.*'))
+                .map((friend, i) => 
                   <User 
                     openChat={this.openChat.bind(this)}
                     removeFriend={this.removeFriend.bind(this)} 
-                    user={user} 
-                    key={user.username}/>)}
+                    user={friend.user}
+                    chat={friend.chat} 
+                    key={friend.user.username}/>)}
       </List>
     )
   }
 }
 
 export default connect((state) => ({
-  users: state.friends,
+  friends: state.friends,
   filterQuery: state.userSearchQuery,
 }), Users)
