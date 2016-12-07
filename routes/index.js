@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const user = require('../model/DAL/userHandler.js');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt-nodejs');
 
 /* GET start page. */
 router.get('/', function(req, res){
@@ -36,7 +36,12 @@ router.post('/', function(req, res){
         // If username and password from form is the same as username and
         // password from db, set session and redirect to chatroom
         // Else username and/or password was wrong
-        bcrypt.compare(formPassword, dbPasswordHash).then(function(isPasswordCorrect){
+        bcrypt.compare(formPassword, dbPasswordHash, function(err, isPasswordCorrect){
+          if(err){
+            console.log('Error', err);
+            return res.redirect('/');
+          }
+
           if(formUsername == dbUsername && isPasswordCorrect){
             req.session.loggedIn = dbUsername;
             res.redirect('/chatroom');
