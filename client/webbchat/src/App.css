@@ -23,6 +23,18 @@
   to { transform: rotate(360deg); }
 }
 
+#contentArea{
+  overflow: hidden;
+}
+/*Correct color for loginpage, Refactoring where header and buttons will be changed incoming someday.
+#header{
+  background-color: #BBDEFB;
+}*/
+#searchField{
+  width: 200px;
+  margin-top: -6.5%;
+}
+
 #logout {
   background-color: rgb(63,110,190);
 }
@@ -42,6 +54,24 @@
   bottom: 0;
 }
 
-#contentArea{
-  overflow: hidden;
+#premiumConfirm{
+  position: absolute;
+    text-align: center;
+    background: #3F51B5;
+    right: 0;
+}
+
+#premiumText{
+  margin-top: 5px;
+  color: white;
+}
+
+#premiumButtonAccept,#premiumButtonDecline{
+  margin-bottom:5%;
+  margin-left: 2%;
+  margin-right: 2%;
+}
+
+#premiumButtonAccept{
+  background-color: rgb(63,110,190);
 }

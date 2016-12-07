@@ -24,14 +24,14 @@ class App extends Component {
               </Header>
               <Drawer>
               <Navigation>
-                <span><Search /></span>
-                <span><UserList /></span>
+                <span id="searchField"><Search/></span>
+                <span><UserList/></span>
               </Navigation>
               </Drawer>
               <Content id="contentArea">
-              <div style={{position: 'fixed', top: '8%', right: '8%', width: '300px'}}>
+              <Cell id="premiumConfirm" col={2} shadow={2}>
               <Payment />
-              </div>
+              </Cell>
               <Grid noSpacing={true}>
                 <Cell id="willbechat" col={10} phone={12}>
                 </Cell>
