@@ -6,6 +6,7 @@ import userSearchQuery from './userSearchQuery';
 import otherUsers from './otherUsers';
 import snackbar from './snackbar';
 import isPremium from './isPremium';
+import changePassword from './changePassword';
 import buyPremium from './buyPremium';
 
 const rootReducer = combineReducers({
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   username,
   snackbar,
   isPremium,
+  changePassword,
   buyPremium,
 });
 
