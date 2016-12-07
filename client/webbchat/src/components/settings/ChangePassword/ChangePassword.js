@@ -21,45 +21,51 @@ class ChangePassword extends Component {
     });
   }*/
 
-  acceptChangePassword(username, oldPassword, newPassword, repeatedNewPassword) {
-    console.log(username)
-    console.log(oldPassword)
-    console.log(newPassword)
-    console.log(repeatedNewPassword)
-    /*if(isPremium){
-      this.props.updateSnackbar({
-        display: true,
-        text: 'You already have premium!',
-      });
-      this.closeBuyPremium();
-      return;
-    }
-    webchatEmitter.emit('update-premium', username);
-    this.closeBuyPremium();*/
+  constructor(props) {
+    super(props);
+    this.state = {
+      oldPassword: '',
+      newPassword: '',
+      repeatNewPassword: ''
+    };
+  }
+
+  acceptChangePassword() {
+    console.log(this.props.username);
+    console.log(this.state.oldPassword);
+    console.log(this.state.newPassword);
+    console.log(this.state.repeatNewPassword);
   }
 
   closeChangePassword() {
     webchatEmitter.emit('change-password-settings', false);
   }
 
+  oldPasswordInput(input){
+    this.setState({oldPassword: input});
+  }
+
+  newPasswordInput(input){
+    this.setState({newPassword: input});
+  }
+
+  repeatNewPassword(input){
+    this.setState({repeatNewPassword: input});
+  }
+
   render() {
-    const username = this.props.username;
     const changePassword = this.props.changePassword;
     if(changePassword){
       return (
         <div>PasswordField
           <p>Change password?</p>
 
-          <PasswordField passwordlabel='Old Password' passwordref='oldpassword' />
-          <PasswordField passwordlabel='New Password' passwordref='newpassword' />
-          <PasswordField passwordlabel='Repeat New Password' passwordref='repeatnewpassword' />
+          <PasswordField onInput={this.oldPasswordInput.bind(this)} passwordlabel='Old Password'  />
+          <PasswordField onInput={this.newPasswordInput.bind(this)} passwordlabel='New Password' />
+          <PasswordField onInput={this.repeatNewPassword.bind(this)} passwordlabel='Repeat New Password' />
 
           <Button raised colored ripple type='button'
-            onClick={() => this.acceptChangePassword(username,
-              this.refs.oldpassword.inputRef.value,
-              this.refs.newpassword.inputRef.value,
-              this.refs.repeatnewpassword.inputRef.value
-            )}>Accept
+            onClick={() => this.acceptChangePassword()}>Accept
           </Button>
 
           <Button raised accent ripple type='button'
@@ -73,7 +79,25 @@ class ChangePassword extends Component {
 }
 
 
-/*<Textfield
+/*
+
+this.refs.oldpassword.inputRef.value,
+this.refs.newpassword.inputRef.value,
+this.refs.repeatnewpassword.inputRef.value
+const username = this.props.username;
+
+
+
+<PasswordField passwordlabel='Old Password'  />
+<PasswordField passwordlabel='New Password' />
+<PasswordField passwordlabel='Repeat New Password' />
+
+<Button raised colored ripple type='button'
+  onClick={() => this.acceptChangePassword(username, this, 'asd', 'asd')}>Accept
+</Button>
+
+
+<Textfield
   label="Old Password"
   floatingLabel
   required
