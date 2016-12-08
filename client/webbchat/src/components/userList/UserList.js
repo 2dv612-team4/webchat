@@ -5,15 +5,14 @@ import Pending from './pending/Users';
 
 const UserList = () => (
   <div>
-    Friends:
+    <p>Friends:</p>
     <FriendList />
-    Other: 
+    <p>Other:</p>
     <FindUserList />
-    Pending
+    <p>Pending</p>
     <Pending />
   </div>
 );
 
 
 export default UserList;
-

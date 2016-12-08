@@ -10,7 +10,6 @@ import Snackbar from './components/snackbar/Snackbar'
 import Advertisement from './components/advertisements/Advertisement'
 import MobileAd from './components/advertisements/AdvertisementMobile'
 import { Layout, Header, Content, Drawer, Navigation, Grid, Cell} from 'react-mdl';
-
 import './App.css';
 
 class App extends Component {
@@ -25,29 +24,29 @@ class App extends Component {
               </Header>
               <Drawer>
               <Navigation>
-                <span><Search /></span>
-                <span><UserList /></span>
+                <span id="searchField"><Search/></span>
+                <span><UserList/></span>
               </Navigation>
               </Drawer>
-              <Content id="contentArea">
-              <div style={{position: 'fixed', top: '8%', right: '8%', width: '300px'}}>
-              <Payment />
-              <ChangePassword />
-              </div>
-              <Grid noSpacing={true}>
-                <Cell id="willbechat" col={10} phone={12}>
+                <Content id="contentArea">
+                <Cell id="premiumConfirm" col={2} shadow={2}>
+                  <Payment />
                 </Cell>
-                <Cell id="advert" col={2} hidePhone={true}>
-                  <Advertisement/>
+                <Cell id="passwordChange" col={2} shadow={2}>
+                  <ChangePassword />
                 </Cell>
-                <Cell id="mobileAd" phone={12} hideDesktop={true} hideTablet={true}>
-                  <MobileAd/>
-                </Cell>
-
-              </Grid>
+                <Grid noSpacing={true}>
+                    <Cell id="willbechat" col={10} phone={12}>
+                    </Cell>
+                  <Cell id="advert" col={2} hidePhone={true}>
+                    <Advertisement/>
+                  </Cell>
+                  <Cell id="mobileAd" phone={12} hideDesktop={true} hideTablet={true}>
+                    <MobileAd/>
+                  </Cell>
+                </Grid>
               </Content>
-
-          </Layout>
+            </Layout>
           <Snackbar/>
       </div>
     );

@@ -69,18 +69,18 @@ class ChangePassword extends Component {
     const changePassword = this.props.changePassword;
     if(changePassword){
       return (
-        <div>PasswordField
+        <div id="passwordContainer">
           <p>Change password?</p>
 
           <PasswordField onInput={this.oldPasswordInput.bind(this)} passwordlabel='Old Password'  />
           <PasswordField onInput={this.newPasswordInput.bind(this)} passwordlabel='New Password' />
           <PasswordField onInput={this.repeatNewPassword.bind(this)} passwordlabel='Repeat New Password' />
 
-          <Button raised colored ripple type='button'
+          <Button id="settingsbuttonAccept" raised colored ripple type='button'
             onClick={() => this.acceptChangePassword()}>Accept
           </Button>
 
-          <Button raised accent ripple type='button'
+          <Button id="settingsbuttonDecline" raised ripple type='button'
             onClick={() => this.closeChangePassword()}>No
           </Button>
         </div>

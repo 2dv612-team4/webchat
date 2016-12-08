@@ -2,13 +2,12 @@ import React, { PropTypes } from 'react';
 import { Textfield } from 'react-mdl';
 
 const PasswordField = ({ onInput, passwordlabel }) => (
-    <Textfield
+    <Textfield id="changePasswordField"
       label={passwordlabel}
       onChange={(event) => onInput(event.target.value)}
       floatingLabel
       required
       type="password"
-      style={{width: '100px'}}
     />
 );
 
