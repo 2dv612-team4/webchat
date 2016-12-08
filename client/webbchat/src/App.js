@@ -5,6 +5,7 @@ import UserList from './components/userList/UserList'
 import Logout from './components/logout/Logout'
 import Settings from './components/settings/Settings'
 import Payment from './components/settings/Payment/Payment'
+import ChangePassword from './components/settings/ChangePassword/ChangePassword'
 import Snackbar from './components/snackbar/Snackbar'
 import Advertisement from './components/advertisements/Advertisement'
 import MobileAd from './components/advertisements/AdvertisementMobile'
@@ -32,6 +33,8 @@ class App extends Component {
               <Cell id="premiumConfirm" col={2} shadow={2}>
               <Payment />
               </Cell>
+              <ChangePassword />
+              </div>
               <Grid noSpacing={true}>
                 <Cell id="willbechat" col={10} phone={12}>
                 </Cell>

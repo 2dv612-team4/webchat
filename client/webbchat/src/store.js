@@ -24,6 +24,7 @@ const defaultState = {
   snackbar,
   isPremium: false,
   buyPremium: false,
+  changePassword: false,
 };
 const store = createStore(rootReducer, defaultState);
 
