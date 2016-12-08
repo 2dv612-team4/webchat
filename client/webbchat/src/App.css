@@ -53,10 +53,15 @@ label{
   margin-top: -6.5%;
 }
 
-
+/*Logoutbutton*/
 #logout {
-  background-color: rgb(182, 210, 233);
+  background-color: rgb(147, 196, 237)!important;
   margin-left: 10%;
+}
+
+button[name="SettingsButton"]
+{
+  background-color: rgb(182,210,233) !important;
 }
 
 
@@ -93,7 +98,11 @@ label{
   width: 175px;
   margin-left:
 }
-/*Color on the acceptbuttons*/
+/*Color on the YES buttons*/
 #settingsbuttonAccept{
-  background-color: rgb(182, 210, 233);
+  background-color: rgb(147, 196, 237);
+}
+/*Color on the NO buttons*/
+#settingsbuttonDecline{
+  background-color: rgb(182,210,233);
 }
