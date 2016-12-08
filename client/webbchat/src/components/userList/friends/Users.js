@@ -8,14 +8,10 @@ import connect from '../../../connect/connect'
 class Users extends Component {
 
   openChat(chatId){
-    console.log('openChat for:', chatId);
-    webchatEmitter.emit('join-chat-room', chatId);
-    console.log('joinChatRoom should be emitted');
-    webchatEmitter.emit('send-chat-message', 'test message');
+    this.props.setChatOpen(chatId);
   }
 
   removeFriend(username, chatId){
-    console.log('removeFriend:', username);
     webchatEmitter.emit('remove-friend', {username, chatId});
   }
 
@@ -40,4 +36,5 @@ class Users extends Component {
 export default connect((state) => ({
   friends: state.friends,
   filterQuery: state.userSearchQuery,
+  setChatOpen: state.setChatOpen,
 }), Users)
