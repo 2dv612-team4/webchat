@@ -8,6 +8,9 @@ import snackbar from './snackbar';
 import isPremium from './isPremium';
 import buyPremium from './buyPremium';
 
+import chat from './chat';
+import chatOpen from './chatOpen';
+
 const rootReducer = combineReducers({
   friends,
   userSearchQuery,
@@ -17,6 +20,8 @@ const rootReducer = combineReducers({
   snackbar,
   isPremium,
   buyPremium,
+  chat,
+  chatOpen,
 });
 
 export default rootReducer;

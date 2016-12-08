@@ -15,6 +15,8 @@ const snackbar = {
   text: '',
 };
 
+const chat = [];
+
 const defaultState = {
   friends,
   userSearchQuery: '',
@@ -24,7 +26,10 @@ const defaultState = {
   snackbar,
   isPremium: false,
   buyPremium: false,
+  chat,
+  chatOpen: '',
 };
+
 const store = createStore(rootReducer, defaultState);
 
 export default store;
