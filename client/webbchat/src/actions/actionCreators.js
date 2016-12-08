@@ -55,9 +55,42 @@ export const buyAdPremium = (buyPremium) => {
   };
 };
 
+export const addMessage = (chatId, username, message) => {
+  return {
+    type: 'ADD_MESSAGE',
+    chatId, 
+    message, 
+    username,
+  };
+};
+
+export const addChat = ({ _id, messages}) => {
+  return {
+    type: 'ADD_CHAT',
+    chatId: _id,
+    messages,
+  };
+};
+
+export const removeChat = (chatId) => {
+  return {
+    type: 'REMOVE_CHAT',
+    chatId,
+  };
+};
+
+export const setChatOpen = (chatId) => {
+  return {
+    type: 'SET_CHAT_OPEN',
+    chatId,
+  };
+};
+
+
 export const changeUserPassword = (changePassword) => {
   return {
     type: 'CHANGE_PASSWORD',
     changePassword,
   };
 };
+

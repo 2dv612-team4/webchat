@@ -9,6 +9,9 @@ import isPremium from './isPremium';
 import changePassword from './changePassword';
 import buyPremium from './buyPremium';
 
+import chat from './chat';
+import chatOpen from './chatOpen';
+
 const rootReducer = combineReducers({
   friends,
   userSearchQuery,
@@ -19,6 +22,8 @@ const rootReducer = combineReducers({
   isPremium,
   changePassword,
   buyPremium,
+  chat,
+  chatOpen,
 });
 
 export default rootReducer;

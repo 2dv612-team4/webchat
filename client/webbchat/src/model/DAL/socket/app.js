@@ -14,15 +14,7 @@ const init = (store) => {
       });
 
       /**
-       * Update chat text field with message
-       */
-      socket.on('update-chat', function (username, message) {
-        console.log('New message from: ' + username + ' - ' + message);
-      });
-
-
-      /**
-       *
+       * loads initail username... 
        */
       socket.on('onload-username', function (username) {
         store.dispatch(actionsCreators.setUsernameRequests(username));
@@ -39,14 +31,19 @@ const init = (store) => {
        * loads inital friends
        * */
       socket.on('onload-friends', function (friends) {
+        
+        friends.forEach(({chat}) =>
+          store.dispatch(actionsCreators.addChat(chat)));
+
         store.dispatch(actionsCreators.setInitialFriends(friends));
       });
 
       /**
-       * updated friends array
+       * on friend remove
        * friends array
        */
-      socket.on('friends', function (obj) {
+      socket.on('remove-friend', function (obj) {
+        store.dispatch(actionsCreators.removeChat(obj.chatId));
         store.dispatch(actionsCreators.setInitialFriends(obj.friends));
       });
 
@@ -72,6 +69,9 @@ const init = (store) => {
        * message
        */
       socket.on('friend-request-accepted', function(obj) {
+        socket.emit('join-chat-rooms');
+        obj.friends.forEach(({chat}) =>
+          store.dispatch(actionsCreators.addChat(chat)));
         webchatEmitter.emit('friend-request-success', obj.message);
         store.dispatch(actionsCreators.setInitialFriends(obj.friends));
       });
@@ -90,7 +90,11 @@ const init = (store) => {
        * pending array
        */
       socket.on('accept-friend-request-response', function(obj){
-        //webchatEmitter.emit('friend-request-accepted', obj.message);
+        socket.emit('join-chat-rooms');
+        
+        obj.friends.forEach(({chat}) =>
+          store.dispatch(actionsCreators.addChat(chat)));
+
         store.dispatch(actionsCreators.setInitialFriends(obj.friends));
         store.dispatch(actionsCreators.setPendingRequests(obj.pending));
       });
@@ -116,19 +120,19 @@ const init = (store) => {
         console.log('server error', message);
       });
 
+      /**
+       * on new chat messages
+       */
+      socket.on('update-chat', function (obj) {
+        store.dispatch(actionsCreators.addMessage(obj.chatId, obj.username, obj.message));
+      });
+
       // EventEmitter
       /**
        * Send message to the current chatroom
        */
       webchatEmitter.on('send-chat-message', (message) => {
         socket.emit('send-chat-message', message);
-      });
-
-      /**
-       * Joins a chatroom
-       */
-      webchatEmitter.on('join-chat-room', (username) => {
-        socket.emit('join-chat-room', username);
       });
 
       /**
