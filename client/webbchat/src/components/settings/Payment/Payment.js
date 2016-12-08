@@ -43,11 +43,11 @@ class Payment extends Component {
     if(buyPremium){
       return (
         <div>
-          <p id="premiumText">Do you want premium?</p>
-          <Button id="premiumButtonAccept" raised colored ripple type='button'
+          <p>Do you want premium?</p>
+          <Button id="settingsbuttonAccept" raised colored ripple type='button'
             onClick={() => this.giveUserPremium(username, isPremium)}>Yes
           </Button>
-          <Button id="premiumButtonDecline" raised accent ripple type='button'
+          <Button id="settingsbuttonDecline" raised accent ripple type='button'
             onClick={() => this.closeBuyPremium()}>No
           </Button>
         </div>
