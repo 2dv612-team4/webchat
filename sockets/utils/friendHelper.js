@@ -89,7 +89,7 @@ const acceptFriendRequest =
 
     const senderUser = yield userHandler.findWithId(id);
     const {friends: userToAcceptFriends, socketId: receiverSocketId} = yield userHandler.findFriendsWithUsername(senderUser.username);
-
+    
     return { 
       receiverSocketId, 
       senderFriends: userToAcceptFriends, 
@@ -140,9 +140,9 @@ const removeFriend =
       ];
 
     return {
-      requesterFriends: requesterFriends, 
+      requesterFriends, 
       receiverSocketId: userToRemove.socketId, 
-      reciverFriends: reciverFriends,
+      reciverFriends, 
     };
   });
 
