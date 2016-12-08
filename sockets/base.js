@@ -6,8 +6,6 @@ const emitToSpecificUser = (io, socketId, channel, data) => {
   io.to(socketId).emit(channel, data);
 };
 
-var rooms = ['room1', 'room2', 'room3'];
-
 module.exports = (io) => {
   io.on('connection', function (socket) {
     /**
@@ -74,7 +72,7 @@ module.exports = (io) => {
 
           emitToSpecificUser(io, receiverSocketId, 'pending', {
             message: `User: ${username}, sent you a friend request.`,
-            pending: friendrequests
+            pending: friendrequests,
           });
 
           emitToSpecificUser(io, socketid, 'friend-request-response',
@@ -89,11 +87,11 @@ module.exports = (io) => {
       friendHelper.acceptFriendRequest(username, id)
         .then(({ receiverSocketId, senderFriends, accepterFriends, accepterPending }) => {
           emitToSpecificUser(io, receiverSocketId, 'friend-request-accepted', {
-            message: `${username} accepted your friend request`, friends: senderFriends
+            message: `${username} accepted your friend request`, friends: senderFriends,
           });
 
           emitToSpecificUser(io, socketid, 'accept-friend-request-response', {
-            message: '', friends: accepterFriends, pending: accepterPending
+            message: '', friends: accepterFriends, pending: accepterPending,
           });
         })
         .catch((e) => emitToSpecificUser(io, socketid, 'servererror', e.message)));
@@ -105,7 +103,7 @@ module.exports = (io) => {
       friendHelper.rejectFriendRequest(username, id)
         .then((pending) =>
           emitToSpecificUser(io, socketid, 'rejected-friend-request-response', {
-            pending, message: 'Friend request rejected'
+            pending, message: 'Friend request rejected',
           })
         )
         .catch((e) => emitToSpecificUser(io, socketid, 'servererror', e.message)));
@@ -129,7 +127,7 @@ module.exports = (io) => {
     socket.on('update-premium', (username) => {
       if (isPremium) {
         emitToSpecificUser(io, socketid, 'update-premium-response-fail', {
-          message: 'You already have premium!'
+          message: 'You already have premium!',
         });
       } else {
         let today = new Date();
@@ -139,7 +137,7 @@ module.exports = (io) => {
         userHandler.updatePremiumExpirationDate(username, endDate)
           .then(() => {
             emitToSpecificUser(io, socketid, 'update-premium-response-success', {
-              message: 'You have updated to premium!', isPremium: true
+              message: 'You have updated to premium!', isPremium: true,
             });
           })
           .catch((e) => emitToSpecificUser(io, socketid, 'servererror', e.message));
@@ -168,17 +166,17 @@ module.exports = (io) => {
       userHandler.findWithUsername(username).then((user) => {
         bcrypt.compare(oldpassword, user.password, function (err, isPasswordCorrect) {
           if (isPasswordCorrect) {
-             const hash = bcrypt.hash(newPassword, null, null, (err, hash) => {
+            bcrypt.hash(newPassword, null, null, (err, hash) => {
               userHandler.changePassword(username, hash).then(() => {
                 emitToSpecificUser(io, socketid, 'update-password-response-success', {
-                  message: 'You have updated your password!'
+                  message: 'You have updated your password!',
                 });
               }).catch((e) => emitToSpecificUser(io, socketid, 'servererror', e.message));
             });
 
           } else {
             emitToSpecificUser(io, socketid, 'update-password-response-fail', {
-              message: 'Wrong old password!'
+              message: 'Wrong old password!',
             });
           }
         });
