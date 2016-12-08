@@ -62,6 +62,4 @@ export default connect((state) => ({
   isPremium: state.isPremium,
   buyPremium: state.buyPremium,
   updateSnackbar: state.updateSnackbar,
-}), Payment);;
-
-//export default Payment;
+}), Payment);

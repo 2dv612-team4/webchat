@@ -54,3 +54,10 @@ export const buyAdPremium = (buyPremium) => {
     buyPremium,
   };
 };
+
+export const changeUserPassword = (changePassword) => {
+  return {
+    type: 'CHANGE_PASSWORD',
+    changePassword,
+  };
+};
