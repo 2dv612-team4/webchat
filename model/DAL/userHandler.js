@@ -65,7 +65,7 @@ const findFriendsWithUsername = (username) => findFriendsWith({ username });
 const findFriendsWithId = (_id) => findFriendsWith({ _id });
 
 const findWithPartialUsername = (username) => User.find({'username': {'$regex': '^'+username+'.*'}}).exec();
-const changePassword = (_id, newPassword) => User.update({_id}, {$set: {$password: newPassword}}).exec();
+const changePassword = (username, password) => User.update({username}, {$set: {password}}).exec();
 
 /**
  * updates socketId of user

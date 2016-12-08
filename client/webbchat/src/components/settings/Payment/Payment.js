@@ -44,10 +44,10 @@ class Payment extends Component {
       return (
         <div>
           <p>Do you want premium?</p>
-          <Button raised colored ripple type='button'
+          <Button id="settingsbuttonAccept" raised colored ripple type='button'
             onClick={() => this.giveUserPremium(username, isPremium)}>Yes
           </Button>
-          <Button raised accent ripple type='button'
+          <Button id="settingsbuttonDecline" raised ripple type='button'
             onClick={() => this.closeBuyPremium()}>No
           </Button>
         </div>
@@ -62,6 +62,4 @@ export default connect((state) => ({
   isPremium: state.isPremium,
   buyPremium: state.buyPremium,
   updateSnackbar: state.updateSnackbar,
-}), Payment);;
-
-//export default Payment;
+}), Payment);

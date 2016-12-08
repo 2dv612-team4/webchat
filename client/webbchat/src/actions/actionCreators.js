@@ -87,3 +87,10 @@ export const setChatOpen = (chatId) => {
 };
 
 
+export const changeUserPassword = (changePassword) => {
+  return {
+    type: 'CHANGE_PASSWORD',
+    changePassword,
+  };
+};
+

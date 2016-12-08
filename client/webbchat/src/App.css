@@ -1,3 +1,4 @@
+/*React generated CSS <------------->*/
 .App {
   text-align: center;
 }
@@ -22,26 +23,81 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+/*React generated CSS <------------->*/
 
-#logout {
-  background-color: rgb(63,110,190);
+/*Prevents scroll*/
+#contentArea{
+  overflow: hidden;
 }
 
+/*Overall font color change to the grey used in the loginpage*/
+p,h1,h2,h3,h4,span,ul,li,button,select{
+  color: #424242 !important;
+}
+/*Changes label color to grey from default mdl red/pink*/
+label{
+  color: #424242 !important;
+}
+/*register form bottom border fix to match custom stylesheet instead of default red(only when not focused)*/
+.mdl-textfield__input{
+  border-color: none !important;
+}
+
+/*Correct color for loginpage, Refactoring where header and buttons will be changed incoming someday.*/
+#header{
+  background-color: #BBDEFB;
+}
+/*Field used for searching for other users*/
+#searchField{
+  width: 200px;
+  margin-top: -6.5%;
+}
+
+/*Logoutbutton*/
+#logout {
+  background-color: rgb(147, 196, 237)!important;
+  margin-left: 10%;
+}
+
+
+
+/*div where the adverisement on desktop page is placed.*/
 #advert{
   height: calc(100vh - 62px);
 }
-
+/*Used to size the ad on desktoppage*/
 #verticalAd {
   width: 100%;
   height: 100%;
 }
-
+/*Used to place mobile ad at the bottom of the page*/
 #mobileAd{
   position: fixed;
   width: 100%;
   bottom: 0;
 }
-
-#contentArea{
-  overflow: hidden;
+/*Windows for usersettings, changing password and applying for premium*/
+#premiumConfirm,#passwordChange{
+  position: absolute;
+    text-align: center;
+    background: #FAFAFA;
+    right: 0;
+}
+/*Styling on the buttons in the usersettings*/
+#settingsbuttonAccept,#settingsbuttonDecline{
+  margin-bottom:5%;
+  margin-left: 2%;
+  margin-right: 2%;
+}
+#passwordContainer{
+  padding-left: 5%;
+  padding-right: 5%;
+}
+/*Color on the YES buttons*/
+#settingsbuttonAccept{
+  background-color: rgb(147, 196, 237);
+}
+/*Color on the NO buttons*/
+#settingsbuttonDecline{
+  background-color: rgb(182,210,233);
 }

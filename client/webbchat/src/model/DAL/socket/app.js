@@ -183,6 +183,24 @@ const init = (store) => {
         store.dispatch(actionsCreators.buyAdPremium(wantToBuy));
       });
 
+      /*
+      * Password stuff
+      */
+      webchatEmitter.on('change-password-settings', (wantToChangePassword) => {
+        store.dispatch(actionsCreators.changeUserPassword(wantToChangePassword));
+      });
+
+      webchatEmitter.on('update-password', (username, oldPassword, newPassword) => {
+        socket.emit('update-password', username, oldPassword, newPassword);
+      });
+
+      socket.on('update-password-response-fail', function(obj){
+        webchatEmitter.emit('update-password-response-fail-snackbar', obj.message);
+      });
+
+      socket.on('update-password-response-success', function(obj){
+        webchatEmitter.emit('update-password-response-success-snackbar', obj.message);
+      });
     });
 };
 

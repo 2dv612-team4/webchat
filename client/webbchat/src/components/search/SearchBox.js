@@ -7,7 +7,6 @@ const SearchBox = ({ onInput, onSubmit }) => (
       onKeyPress={(event) => onSubmit(event)}
       label="Search for users"
       floatingLabel
-      style={{width: '200px'}}
     />
 );
 
@@ -17,4 +16,3 @@ SearchBox.propTypes = {
 }
 
 export default SearchBox;
-
