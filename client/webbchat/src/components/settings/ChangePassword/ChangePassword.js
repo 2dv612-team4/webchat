@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Textfield } from 'react-mdl';
+import { Button } from 'react-mdl';
 import webchatEmitter from '../../../model/emitter';
 import connect from '../../../connect/connect';
 import PasswordField from './PasswordField';
@@ -38,7 +38,7 @@ class ChangePassword extends Component {
 
     if(oldPassword !== "" && newPassword !== "" && repeatNewPassword !== "" &&
       oldPassword !== newPassword &&
-      newPassword == repeatNewPassword){
+      newPassword === repeatNewPassword){
         webchatEmitter.emit('update-password', username, oldPassword, newPassword);
         this.closeChangePassword();
         return;
