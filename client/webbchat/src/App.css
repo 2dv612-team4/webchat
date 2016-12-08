@@ -59,10 +59,6 @@ label{
   margin-left: 10%;
 }
 
-button[name="SettingsButton"]
-{
-  background-color: rgb(182,210,233) !important;
-}
 
 
 /*div where the adverisement on desktop page is placed.*/
@@ -93,10 +89,9 @@ button[name="SettingsButton"]
   margin-left: 2%;
   margin-right: 2%;
 }
-/*CSS for the inputfields when changing password*/
-#changePasswordField{
-  width: 175px;
-  margin-left:
+#passwordContainer{
+  padding-left: 5%;
+  padding-right: 5%;
 }
 /*Color on the YES buttons*/
 #settingsbuttonAccept{

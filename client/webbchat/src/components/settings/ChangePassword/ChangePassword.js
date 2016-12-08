@@ -69,7 +69,7 @@ class ChangePassword extends Component {
     const changePassword = this.props.changePassword;
     if(changePassword){
       return (
-        <div>
+        <div id="passwordContainer">
           <p>Change password?</p>
 
           <PasswordField onInput={this.oldPasswordInput.bind(this)} passwordlabel='Old Password'  />
@@ -80,7 +80,7 @@ class ChangePassword extends Component {
             onClick={() => this.acceptChangePassword()}>Accept
           </Button>
 
-          <Button id="settingsbuttonDecline" raised accent ripple type='button'
+          <Button id="settingsbuttonDecline" raised ripple type='button'
             onClick={() => this.closeChangePassword()}>No
           </Button>
         </div>

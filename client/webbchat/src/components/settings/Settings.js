@@ -18,7 +18,7 @@ class Settings extends Component {
     const username = this.props.username;
     return (
       <div>
-        <Button raised accent name="SettingsButton" id={`menu_iconbutton_id_${username}`}>{username}</Button>
+        <Button raised name="SettingsButton" id={`menu_iconbutton_id_${username}`}>{username}</Button>
         <Menu align='right' target={`menu_iconbutton_id_${username}`} >
           <MenuItem
             onClick={() => this.payment()}

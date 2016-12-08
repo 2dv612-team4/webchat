@@ -47,7 +47,7 @@ class Payment extends Component {
           <Button id="settingsbuttonAccept" raised colored ripple type='button'
             onClick={() => this.giveUserPremium(username, isPremium)}>Yes
           </Button>
-          <Button id="settingsbuttonDecline" raised accent ripple type='button'
+          <Button id="settingsbuttonDecline" raised ripple type='button'
             onClick={() => this.closeBuyPremium()}>No
           </Button>
         </div>
