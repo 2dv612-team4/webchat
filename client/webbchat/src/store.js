@@ -26,12 +26,9 @@ const defaultState = {
   snackbar,
   isPremium: false,
   buyPremium: false,
-<<<<<<< HEAD
   chat,
   chatOpen: '',
-=======
   changePassword: false,
->>>>>>> master
 };
 
 const store = createStore(rootReducer, defaultState);
