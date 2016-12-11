@@ -21,4 +21,3 @@ let roomSchema = new Schema({
 let Model = mongoose.model('room', roomSchema);
 
 module.exports = Model;
-
