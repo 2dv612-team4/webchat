@@ -9,6 +9,15 @@ const addMessageToRoom =
   });
 
 
+const removeAllMessagesFromChatRoom = 
+  co.wrap(function*(chatId){
+    yield roomHandler.removeAllMessages(chatId);
+    const chat = yield roomHandler.findRoomWithId(chatId);
+    return chat.name;
+
+  })
+
 module.exports = {
   addMessageToRoom,
+  removeAllMessagesFromChatRoom,
 };
