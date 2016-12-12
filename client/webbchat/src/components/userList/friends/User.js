@@ -1,18 +1,21 @@
 import React, { PropTypes } from 'react';
 import { ListItem, IconButton, Menu, MenuItem, ListItemAction, ListItemContent } from 'react-mdl';
 
-const User = ({ openChat, removeFriend, user: {username}, chat: {_id} }) => (
+const User = ({ openChat, removeFriend, clearChatHistory, user: {username}, chat: {_id: chatId} }) => (
   <ListItem icon="person" > 
     <ListItemContent
-      onClick={() => openChat(_id)}>{username}</ListItemContent>
+      onClick={() => openChat(chatId)}>{username}</ListItemContent>
     <ListItemAction>
       <IconButton name="more_vert" id={`menu_iconbutton_id_${username}`}/>
       <Menu align="right" target={`menu_iconbutton_id_${username}`}>
         <MenuItem     
-          onClick={() => openChat(_id)}>Open chat
+          onClick={() => openChat(chatId)}>Open chat
         </MenuItem>
         <MenuItem 
-          onClick={() => removeFriend(username, _id)}>Remove friend
+          onClick={() => removeFriend(username, chatId)}>Remove friend
+        </MenuItem>
+        <MenuItem 
+          onClick={() => clearChatHistory(chatId)}>Clear chat history
         </MenuItem>
       </Menu>
     </ListItemAction>
@@ -25,6 +28,7 @@ User.propTypes = {
   chat: PropTypes.object,
   openChat: PropTypes.func,
   removeFriend: PropTypes.func,
+  clearChatHistory: PropTypes.func,
 }
 
 export default User;
