@@ -94,3 +94,7 @@ export const changeUserPassword = (changePassword) => {
   };
 };
 
+export const clearAllMessages = (chatId) => ({
+  type: 'CLEAR_ALL_MESSAGES',
+  chatId,
+});
