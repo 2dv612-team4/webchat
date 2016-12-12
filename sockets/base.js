@@ -155,7 +155,7 @@ module.exports = (io) => {
           .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'update-premium'}));
       }
     });
-
+    
     socket.on('send-chat-message', (obj) =>
       chatHelper.addMessageToRoom(obj.chatId, username, obj.message)
       .then(() => {
@@ -163,6 +163,14 @@ module.exports = (io) => {
       })
       .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'send-chat-message'})));
 
+
+    socket.on('clear-chat-history', (chatId) => 
+      chatHelper.removeAllMessagesFromChatRoom(chatId)
+        .then((chatname) => {
+          console.log('chat', chatname);
+          io.sockets.in(chatId).emit('clear-chat', {chatId, chatname});
+        })
+        .catch(e => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'clear-chat-history'})));
 
     /*
     * If user wants to Update Password

@@ -127,6 +127,13 @@ const init = (store) => {
         store.dispatch(actionsCreators.addMessage(obj.chatId, obj.username, obj.message));
       });
 
+      /**
+       * on clear chat
+       */
+      socket.on('clear-chat', function (chat) {
+        store.dispatch(actionsCreators.clearAllMessages(chat.chatId));
+      });
+
       // EventEmitter
       /**
        * Send message to the current chatroom
