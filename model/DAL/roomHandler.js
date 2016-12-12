@@ -46,7 +46,9 @@ const findAllRoomsWithUser = (userId) => Room.find({users: { $in: [userId ]}})
  * @param {[String]} message [message]
  * @return {[promise]} [returns promise]
  */
-const addMessage = (_id, userId, message) => Room.update({_id}, {$push: {messages: {user: userId, message}}}).exec();
+let date = new Date();
+const addMessage = (_id, userId, message) => Room.update({_id}, {$push: {messages: {user: userId, message,
+  expireAt: date.setTime( date.getTime() + 30 * 86400000)}}}).exec();
 
 module.exports = {
   add,
