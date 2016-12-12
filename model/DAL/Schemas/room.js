@@ -6,8 +6,10 @@ let messageSchema = new Schema({
   user: {type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true},
   message: {type: String, required: true},
   timestamp: {type: Date, default: Date.now, required: true},
-  createdAt: {type: Date, default: Date.now, expires: '30d'}
+  expireAt: { type: Date, default: undefined }
 });
+
+messageSchema.ensureIndex({ "expireAt": 1 }, { expireAfterSeconds: 0 });
 
 let roomSchema = new Schema({
   name: {type: String, required: true},
