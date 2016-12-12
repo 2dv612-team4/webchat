@@ -164,6 +164,13 @@ const init = (store) => {
       });
 
       /**
+       * sends event to clear chat history
+       */
+      webchatEmitter.on('clear-chat-history', (chatId) => {
+        socket.emit('clear-chat-history', chatId);
+      });
+
+      /**
        * Add premium
        */
       webchatEmitter.on('update-premium', (username) => {
