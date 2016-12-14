@@ -184,6 +184,13 @@ module.exports = (io) => {
       .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'send-chat-message'}))
     );
 
+    socket.on('upload-file', (obj, filename) => 
+    chatHelper.addFileToRoom(obj.chatId, username, obj.file, filename)
+      .then(() => {
+        console.log('base:',filename);
+        io.sockets.in(obj.chatId).emit('update-chat', {username, message: filename, chatId: obj.chatId}); //does not add a download link yet
+      }).catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'upload-file'})));
+    
     /**
      * [clears chat history]
      * @param  {String} chatId [id of chat to clear]

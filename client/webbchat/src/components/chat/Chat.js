@@ -5,6 +5,8 @@ import ChatMessages from './ChatMessages';
 import connect from '../../connect/connect';
 import ChatHeader from './ChatHeader';
 
+import Dropzone from 'react-dropzone';
+
 class Chat extends Component {
 
   onInputBoxEnter(event){
@@ -26,6 +28,12 @@ class Chat extends Component {
     webchatEmitter.emit('send-chat-message', {message, chatId: this.props.chatOpen} );
   }
 
+  onDrop(files) {
+      files.forEach((file)=> {
+          webchatEmitter.emit('upload-file', {file, chatId: this.props.chatOpen} );
+      });
+  }
+
   render() {
     const chat = this.props.chat.find(a => a.id === this.props.chatOpen)
     if(!chat || !chat.messages){
@@ -43,6 +51,9 @@ class Chat extends Component {
           label="Enter message"
           rows={1}
         />
+        <Dropzone onDrop={this.onDrop.bind(this)} multiple={false}>
+          <div>Drop or click to upload file</div>
+        </Dropzone>
       </div>
     );
   }
@@ -54,4 +65,5 @@ export default connect((state) => ({
   setChatOpen: state.setChatOpen,
   addMessage: state.addMessage,
   username: state.username,
+  addFile: state.addFile,
 }), Chat);
