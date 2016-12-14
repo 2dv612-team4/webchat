@@ -113,3 +113,9 @@ body {
   margin-left: 16px;
   margin-right: 16px;
 }
+
+.chatHeader{
+  /*padding: 16px;*/
+  padding-left: 16px;
+  background-color: #b5d6f2;
+}
