@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 let roomSchema = new Schema({
   name: {type: String, required: true},
+  isGroupChat: {type: Boolean, default: false},
+
   users: [
     { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
   ],

@@ -43,7 +43,21 @@ const findFriendsWith = (type) =>
           if(err){
             return reject(err);
           }
-          resolve(user);
+
+          User.populate(user, {
+            path: 'friends.chat.users',
+            model: 'user',
+            select: 'username -_id',
+          }, function(err, user){
+            if(err){
+              return reject(err);
+            }
+            resolve(user);
+          });
+
+
+
+          //resolve(user);
         });
       });
     });
@@ -132,7 +146,7 @@ module.exports = {
   findAllUsers,
   findWithPartialUsername,
   getFriendRequests,
+  changePassword,
   setSocketId,
   updatePremiumExpirationDate,
-  changePassword,
 };

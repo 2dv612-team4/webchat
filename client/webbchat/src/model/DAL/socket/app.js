@@ -127,6 +127,58 @@ const init = (store) => {
         store.dispatch(actionsCreators.addMessage(obj.chatId, obj.username, obj.message));
       });
 
+      /**
+       * on clear chat
+       */
+      socket.on('clear-chat', function (chat) {
+        store.dispatch(actionsCreators.clearAllMessages(chat.chatId));
+      });
+
+      /** 
+       * sets inital groupchats 
+       * */
+      socket.on('onload-groupchats', function(groupchats){
+        groupchats.forEach((chat) =>
+          store.dispatch(actionsCreators.addChat(chat)));
+      });
+
+      /**
+       * on new groupchat
+       */
+      socket.on('new-groupchat', function(obj){
+        socket.emit('join-chat-rooms');
+        store.dispatch(actionsCreators.addChat(obj.chat));
+
+        store.dispatch(actionsCreators.updateSnackbar({
+          display: true,
+          text: obj.message, 
+        }));
+      });
+
+      /**
+       * on leave groupchat
+       * friends array
+       */
+      socket.on('remove-groupchat', function (chatId) {
+        store.dispatch(actionsCreators.removeChat(chatId));
+      });
+
+      /**
+       * on groupchat update ex somone leaves chat 
+       * obj
+       *  chat
+       *  message
+       */
+      socket.on('update-groupchat', function(obj){
+        store.dispatch(actionsCreators.updateChat(obj.chat));
+        store.dispatch(actionsCreators.updateSnackbar({
+          display: true,
+          text: obj.message, 
+        }));
+      });
+
+      
+
       // EventEmitter
       /**
        * Send message to the current chatroom
@@ -161,6 +213,29 @@ const init = (store) => {
        */
       webchatEmitter.on('remove-friend', (obj) => {
         socket.emit('remove-friend', { username: obj.username, chatId: obj.chatId});
+      });
+
+      /**
+       * sends event to clear chat history
+       */
+      webchatEmitter.on('clear-chat-history', (chatId) => {
+        socket.emit('clear-chat-history', chatId);
+      });
+
+      /**
+       * groupchat
+       */
+      webchatEmitter.on('leave-groupchat', (chatId) => {
+        socket.emit('leave-groupchat', chatId);
+      });
+
+      webchatEmitter.on('create-new-group-chat-from-friend-chat', ({chatId, usersToAdd}) => {
+        socket.emit('create-new-group-chat-from-friend-chat', {chatId, usersToAdd});
+      });
+
+      webchatEmitter.on('add-user-to-group-chat', ({chatId, usersToAdd}) => {
+        console.log('add-user-to-group-chat', chatId, usersToAdd);
+        //socket.emit('create-new-group-chat-from-friend-chat', {chatId, usersToAdd});
       });
 
       /**

@@ -3,11 +3,17 @@ import { Textfield } from 'react-mdl';
 import webchatEmitter from '../../model/emitter';
 import ChatMessages from './ChatMessages';
 import connect from '../../connect/connect';
+import ChatHeader from './ChatHeader';
 
 class Chat extends Component {
 
   onInputBoxEnter(event){
+    if(event.key === 'Enter' && event.shiftKey){
+      return; 
+    }
+
     if(event.key === 'Enter'){
+      event.preventDefault();
       this.onChatMessage(event.target.value);
       event.target.value = null;
     }
@@ -23,15 +29,15 @@ class Chat extends Component {
   render() {
     const chat = this.props.chat.find(a => a.id === this.props.chatOpen)
     if(!chat || !chat.messages){
-      // TODO: return component saying chat is empty
       return null; 
     }
     const messages = chat.messages;
-
     return (
       <div>
+        <ChatHeader chat={chat}/>
         <ChatMessages messages={messages} loggedInUsername={this.props.username} />
         <Textfield
+          className='inputChatMessage'
           onChange={() => {}}
           onKeyPress={event => this.onInputBoxEnter(event)}
           label="Enter message"
