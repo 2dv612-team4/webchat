@@ -1,11 +1,13 @@
 const userHandler = require('../model/DAL/userHandler.js');
 const friendHelper = require('./utils/friendHelper');
+const chatHelper = require('./utils/chatHelper');
+const bcrypt = require('bcrypt-nodejs');
 
-const emitToSpecificUser = (io, socketId, channel, data) => {
+const emitToSpecificUser = (io, socketId, channel, data) =>
   io.to(socketId).emit(channel, data);
-};
 
-var rooms = ['room1','room2','room3'];
+const joinSocketRoomForFriend = (socket, friend) => 
+  socket.join(friend.chat._id.toString());
 
 module.exports = (io) => {
   io.on('connection', function (socket) {
@@ -38,13 +40,15 @@ module.exports = (io) => {
 
     /**
      * sends inital friends and pending data
+     * joins socket rooms from every friend
      */
     friendHelper.getFriendsAndPending(username)
       .then(({pending, friends}) => {
+        friends.forEach(friend => joinSocketRoomForFriend(socket, friend));
         emitToSpecificUser(io, socketid, 'onload-pending', pending);
         emitToSpecificUser(io, socketid, 'onload-friends', friends);
       })
-      .catch((e) => emitToSpecificUser(io, socketid, 'servererror', e.message));
+      .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'getFriendsAndPending'}));
 
     /**
      * removes socket id on client disconnect
@@ -54,31 +58,38 @@ module.exports = (io) => {
         .then(() => console.log('socketId set to null'))
         .catch(() => console.log('error while setting socket id')));
 
+    socket.on('join-chat-rooms', () => 
+      friendHelper.getFriendsAndPending(username)
+        .then(({friends}) => 
+          friends.forEach(friend => joinSocketRoomForFriend(socket, friend)))
+      .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'join-chat-rooms'})));
+
     /**
      * On user wants to send friend request
      */
     socket.on('friend-request', (receiverUsername) =>
       friendHelper.sendFriendRequest(username, receiverUsername)
         .then(({ receiverSocketId, friendrequests, isFriendRequestAlreadyInbound, isFriendRequestAlreadySent, isAlreadyFriend }) => {
-          if(isFriendRequestAlreadySent){
+          if (isFriendRequestAlreadySent) {
             return emitToSpecificUser(io, socketid, 'friend-request-error',
               'Friend request already sent!');
-          }else if(isFriendRequestAlreadyInbound){
+          } else if (isFriendRequestAlreadyInbound) {
             return emitToSpecificUser(io, socketid, 'friend-request-error',
               `You already have a pending request from ${receiverUsername}`);
-          }else if(isAlreadyFriend){
+          } else if (isAlreadyFriend) {
             return emitToSpecificUser(io, socketid, 'friend-request-error',
               `You are already friends with ${receiverUsername}`);
           }
 
           emitToSpecificUser(io, receiverSocketId, 'pending', {
             message: `User: ${username}, sent you a friend request.`,
-            pending: friendrequests });
+            pending: friendrequests,
+          });
 
           emitToSpecificUser(io, socketid, 'friend-request-response',
             `Friend request sent to ${receiverUsername}`);
         })
-        .catch((e) => emitToSpecificUser(io, socketid, 'servererror', e.message)));
+        .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'friend-request'})));
 
     /**
      * On user wants to accsept friend request
@@ -87,12 +98,14 @@ module.exports = (io) => {
       friendHelper.acceptFriendRequest(username, id)
         .then(({ receiverSocketId, senderFriends, accepterFriends, accepterPending }) => {
           emitToSpecificUser(io, receiverSocketId, 'friend-request-accepted', {
-            message: `${username} accepted your friend request`, friends: senderFriends });
+            message: `${username} accepted your friend request`, friends: senderFriends,
+          });
 
           emitToSpecificUser(io, socketid, 'accept-friend-request-response', {
-            message: '', friends: accepterFriends, pending: accepterPending });
+            message: '', friends: accepterFriends, pending: accepterPending,
+          });
         })
-      .catch((e) => emitToSpecificUser(io, socketid, 'servererror', e.message)));
+      .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'accept-friend-request'})));
 
     /**
      * On user wants to reject friend request
@@ -101,9 +114,10 @@ module.exports = (io) => {
       friendHelper.rejectFriendRequest(username, id)
         .then((pending) =>
           emitToSpecificUser(io, socketid, 'rejected-friend-request-response', {
-            pending, message: 'Friend request rejected' })
+            pending, message: 'Friend request rejected',
+          })
         )
-        .catch((e) => emitToSpecificUser(io, socketid, 'servererror', e.message)));
+        .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'reject-friend-request'})));
 
     /**
      * removes friend based in username of friend
@@ -111,20 +125,22 @@ module.exports = (io) => {
     socket.on('remove-friend', (obj) =>
       friendHelper.removeFriend(username, obj)
         .then(({requesterFriends, receiverSocketId, reciverFriends}) => {
-          emitToSpecificUser(io, receiverSocketId, 'friends',
-            { message: '', friends: reciverFriends });
-          emitToSpecificUser(io, socketid, 'friends',
-            { message: '', friends: requesterFriends });
+          emitToSpecificUser(io, receiverSocketId, 'remove-friend',
+            { message: '', friends: reciverFriends, chatId: obj.chatId });
+
+          emitToSpecificUser(io, socketid, 'remove-friend',
+            { message: '', friends: requesterFriends, chatId: obj.chatId });
         })
-        .catch((e) => emitToSpecificUser(io, socketid, 'servererror', e.message)));
+        .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'remove-friend'})));
 
     /**
      * If user wants to update premium
      */
     socket.on('update-premium', (username) => {
-      if(isPremium){
+      if (isPremium) {
         emitToSpecificUser(io, socketid, 'update-premium-response-fail', {
-          message: 'You already have premium!' });
+          message: 'You already have premium!',
+        });
       } else {
         let today = new Date();
         let endDate = new Date();
@@ -133,24 +149,43 @@ module.exports = (io) => {
         userHandler.updatePremiumExpirationDate(username, endDate)
           .then(() => {
             emitToSpecificUser(io, socketid, 'update-premium-response-success', {
-              message: 'You have updated to premium!', isPremium: true });
+              message: 'You have updated to premium!', isPremium: true,
+            });
           })
-          .catch((e) => emitToSpecificUser(io, socketid, 'servererror', e.message));
+          .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'update-premium'}));
       }
     });
 
-    socket.on('join-chat-room', (friendToChatWith) => {
-      console.log(username + ' joining room1');
-      console.log('With: ' + friendToChatWith);
-      socket.join('room1');
-      socket.room = 'room1';
-      socket.emit('update-chat', 'SERVER', 'you have connected to room1');
-      socket.broadcast.to('room1').emit('update-chat', 'SERVER', username + ' has connected to this room');
-    });
+    socket.on('send-chat-message', (obj) =>
+      chatHelper.addMessageToRoom(obj.chatId, username, obj.message)
+      .then(() => {
+        io.sockets.in(obj.chatId).emit('update-chat', {username, message: obj.message, chatId: obj.chatId});
+      })
+      .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'send-chat-message'})));
 
-    socket.on('send-chat-message', function (message) {
-      console.log('send chat message to all users in room');
-      io.sockets.in(socket.room).emit('update-chat', username, message);
+
+    /*
+    * If user wants to Update Password
+    */
+    socket.on('update-password', (username, oldpassword, newPassword) => {
+      userHandler.findWithUsername(username).then((user) => {
+        bcrypt.compare(oldpassword, user.password, function (err, isPasswordCorrect) {
+          if (isPasswordCorrect) {
+            bcrypt.hash(newPassword, null, null, (err, hash) => {
+              userHandler.changePassword(username, hash).then(() => {
+                emitToSpecificUser(io, socketid, 'update-password-response-success', {
+                  message: 'You have updated your password!',
+                });
+              }).catch((e) => emitToSpecificUser(io, socketid, 'servererror', e.message));
+            });
+
+          } else {
+            emitToSpecificUser(io, socketid, 'update-password-response-fail', {
+              message: 'Wrong old password!',
+            });
+          }
+        });
+      });
     });
 
   });
