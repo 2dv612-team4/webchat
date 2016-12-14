@@ -103,11 +103,28 @@ const addMessages = (_id, messages) =>
  */
 const addMessage = (_id, userId, message) => Room.update({_id}, {$push: {messages: {user: userId, message}}}).exec();
 
+/**
+ * [removes all messages from chat]
+ * @param  {Object} _id [id of chat]
+ */
 const removeAllMessages = (_id) => 
   Room.update({_id}, { $set: { messages: [] }}).exec();
  
+/**
+ * [removes user from chat]
+ * @param  {Object} _id [id of chat]
+ * @param  {Object} userId [id of user]
+ */
 const leaveChat = (_id, userId) => 
   Room.update({_id}, {$pull: {users: userId }}).exec();
+  
+/**
+ * [Updates chat name]
+ * @param  {Object} _id [id of chat]
+ * @param  {String} name [new name of chat]
+ */
+const updateChatName = (_id, name) => 
+  Room.update({ _id }, { name }).exec();
 
 const addFile = (_id, userId, filepath) => Room.update({_id}, {$push: {files: {user: userId, filepath}}}).exec();
 
@@ -122,5 +139,9 @@ module.exports = {
   addMessages,
   findRoomWithIdAndPopulateAll,
   leaveChat,
+<<<<<<< HEAD
   addFile,
+=======
+  updateChatName,
+>>>>>>> dd7022c9f9f3dc78cb4dc981041233e61fc6905e
 };

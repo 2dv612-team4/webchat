@@ -173,7 +173,11 @@ module.exports = (io) => {
       })
       .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'send-chat-message'})));
 
-
+    
+    /**
+     * [clears chat history]
+     * @param  {String} chatId [id of chat to clear]
+     */
     socket.on('clear-chat-history', (chatId) => 
       chatHelper.removeAllMessagesFromChatRoom(chatId)
         .then((chatname) => {
@@ -190,7 +194,6 @@ module.exports = (io) => {
     socket.on('create-new-group-chat-from-friend-chat', (obj) => 
       chatHelper.createNewGroupChatFromFriendChat(obj.chatId, obj.usersToAdd)
         .then((chat) => {
-          console.log(JSON.stringify(chat, null, 2));
           chat.users.forEach(user => 
             emitToSpecificUser(io, user.socketId, 'new-groupchat', {
               message: `You joined groupchat ${chat.name}`,
@@ -198,6 +201,24 @@ module.exports = (io) => {
             }));
         })
         .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'create-new-group-chat-from-friend-chat'})));
+
+    socket.on('add-user-to-group-chat', (obj) => 
+      chatHelper.addUserToGroupchat(obj.chatId, obj.usersToAdd)
+        .then(({addedUsers, groupChat: chat, oldParticipants}) => {
+          console.log(JSON.stringify(chat, null, 2));
+          addedUsers.forEach(user => 
+            emitToSpecificUser(io, user.socketId, 'new-groupchat', {
+              message: `You joined groupchat ${chat.name}`,
+              chat,
+            }));
+
+          oldParticipants.forEach(user => 
+            emitToSpecificUser(io, user.socketId, 'update-groupchat', {
+              message: `New people joined ${chat.name}`,
+              chat,
+            }));
+        })
+        .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'add-user-to-group-chat'})));
 
     /**
      * Leave groupchat
@@ -209,8 +230,8 @@ module.exports = (io) => {
           emitToSpecificUser(io, socketid, 'remove-groupchat', chatId);
 
           chat.users.forEach(user => 
-            emitToSpecificUser(io, user.socketid, 'update-groupchat', {
-              message: 'User ${username} left ${chat.name}',
+            emitToSpecificUser(io, user.socketId, 'update-groupchat', {
+              message: `User ${username} left ${chat.name}`,
               chat,
             }));
 
