@@ -2,6 +2,14 @@ const userHandler = require('../../model/DAL/userHandler.js');
 const roomHandler = require('../../model/DAL/roomHandler.js');
 const co = require('co');
 
+const createChatName = (users) => {
+  const participants = users
+    .map(({username}) => username)
+    .join(', ');
+
+  return `Chat with ${participants}`;
+}; 
+
 const addMessageToRoom = 
   co.wrap(function*(roomId, username, message){
     const user = yield userHandler.findWithUsername(username);
@@ -22,12 +30,9 @@ const createNewGroupChatFromFriendChat =
     const oldChatParticipants = yield Promise.all(users.map(user => userHandler.findWithId(user)));
     const userToAddObjects = yield Promise.all(usersToAdd.map(user => userHandler.findWithId(user)));
 
-    const chatParticipants = 
-      oldChatParticipants.concat(userToAddObjects)
-      .map(({username}) => username)
-      .join(', ');
+    const chatName = createChatName(oldChatParticipants.concat(userToAddObjects))
 
-    const groupChat = yield roomHandler.add(`Chat with ${chatParticipants}`, true);
+    const groupChat = yield roomHandler.add(chatName, true);
 
     yield Promise.all(users.map(user => roomHandler.addUser(groupChat._id, user._id)));
     yield Promise.all(usersToAdd.map(user => roomHandler.addUser(groupChat._id, user)));
@@ -38,11 +43,38 @@ const createNewGroupChatFromFriendChat =
     return roomHandler.findRoomWithIdAndPopulateAll(groupChat._id);
   });
 
+
 const leavGroupChat = 
   co.wrap(function*(username, chatId){
     const user = yield userHandler.findWithUsername(username);
     yield roomHandler.leaveChat(chatId, user._id);
+    
+    const chat = yield roomHandler.findRoomWithIdAndPopulateAll(chatId);
+    const chatName = createChatName(chat.users);
+
+    yield roomHandler.updateChatName(chatId, chatName);
+
     return roomHandler.findRoomWithIdAndPopulateAll(chatId);
+  });
+
+const addUserToGroupchat =
+  co.wrap(function*(chatId, usersToAdd){
+    const { users: oldParticipants } = yield roomHandler.findRoomWithIdAndPopulateAll(chatId);
+    yield Promise.all(usersToAdd.map(user => roomHandler.addUser(chatId, user)));
+
+    const chat = yield roomHandler.findRoomWithIdAndPopulateAll(chatId);
+    const chatName = createChatName(chat.users);
+    yield roomHandler.updateChatName(chatId, chatName);
+
+    const addedUsers = yield Promise.all(usersToAdd.map(user => userHandler.findWithId(user))); 
+    const groupChat = yield roomHandler.findRoomWithIdAndPopulateAll(chatId);
+
+    return {
+      addedUsers,
+      oldParticipants,
+      groupChat,
+    };
+      
   });
 
 module.exports = {
@@ -50,4 +82,5 @@ module.exports = {
   removeAllMessagesFromChatRoom,
   createNewGroupChatFromFriendChat,
   leavGroupChat,
+  addUserToGroupchat,
 };
