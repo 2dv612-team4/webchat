@@ -1,4 +1,5 @@
 const userHandler = require('../model/DAL/userHandler.js');
+const roomHandler = require('../model/DAL/roomHandler.js');
 const friendHelper = require('./utils/friendHelper');
 const chatHelper = require('./utils/chatHelper');
 const bcrypt = require('bcrypt-nodejs');
@@ -6,7 +7,7 @@ const bcrypt = require('bcrypt-nodejs');
 const emitToSpecificUser = (io, socketId, channel, data) =>
   io.to(socketId).emit(channel, data);
 
-const joinSocketRoomForFriend = (socket, friend) => 
+const joinSocketRoomForFriend = (socket, friend) =>
   socket.join(friend.chat._id.toString());
 
 module.exports = (io) => {
@@ -46,6 +47,23 @@ module.exports = (io) => {
       .then(({pending, friends}) => {
         friends.forEach(friend => joinSocketRoomForFriend(socket, friend));
         emitToSpecificUser(io, socketid, 'onload-pending', pending);
+
+        /*
+        * Remove messages over 30 days old on autenticate
+        */
+        const startdate = new Date();
+        let messagesToRemove = [];
+        //Loop each friend
+        friends.forEach(function(specificFriend){
+          //Loop each message
+          specificFriend.chat.messages.forEach(function(specificMessage){
+            if(specificMessage.timestamp.getTime() < startdate.setDate(startdate.getDate() - 30)){
+              messagesToRemove.push(roomHandler.removeSpecificMessage(specificFriend.chat._id, specificMessage._id));
+            }
+          });
+        });
+        Promise.all(messagesToRemove);
+
         emitToSpecificUser(io, socketid, 'onload-friends', friends);
       })
       .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'getFriendsAndPending'}));
@@ -58,9 +76,9 @@ module.exports = (io) => {
         .then(() => console.log('socketId set to null'))
         .catch(() => console.log('error while setting socket id')));
 
-    socket.on('join-chat-rooms', () => 
+    socket.on('join-chat-rooms', () =>
       friendHelper.getFriendsAndPending(username)
-        .then(({friends}) => 
+        .then(({friends}) =>
           friends.forEach(friend => joinSocketRoomForFriend(socket, friend)))
       .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'join-chat-rooms'})));
 
@@ -155,7 +173,7 @@ module.exports = (io) => {
           .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'update-premium'}));
       }
     });
-    
+
     socket.on('send-chat-message', (obj) =>
       chatHelper.addMessageToRoom(obj.chatId, username, obj.message)
       .then(() => {
@@ -164,7 +182,7 @@ module.exports = (io) => {
       .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'send-chat-message'})));
 
 
-    socket.on('clear-chat-history', (chatId) => 
+    socket.on('clear-chat-history', (chatId) =>
       chatHelper.removeAllMessagesFromChatRoom(chatId)
         .then((chatname) => {
           console.log('chat', chatname);
