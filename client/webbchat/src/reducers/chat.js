@@ -14,7 +14,11 @@ const chat = (state = [], action) => {
 
     return [...state, {
       id: action.chatId,
-      messages: messages,
+      messages,
+      isGroupChat: action.isGroupChat,
+      timestamp: action.timestamp,
+      users: action.users,
+      name: action.name,
     }];
   case 'ADD_MESSAGE':
     return state.map(chat => {
@@ -29,7 +33,20 @@ const chat = (state = [], action) => {
       });
       
     });
-
+  case 'UPDATE_CHAT': 
+    return state.map(chat => {
+      if(chat.id !== action.chatId){
+        return chat;
+      }
+      return Object.assign({}, chat, {
+        id: action.chatId,
+        messages: action.messages,
+        isGroupChat: action.isGroupChat,
+        timestamp: action.timestamp,
+        users: action.users,
+        name: action.name,
+      });
+    });
   case 'CLEAR_ALL_MESSAGES':
     return state.map(chat => {
       if(chat.id !== action.chatId){
