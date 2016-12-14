@@ -3,6 +3,7 @@ import { Textfield } from 'react-mdl';
 import webchatEmitter from '../../model/emitter';
 import ChatMessages from './ChatMessages';
 import connect from '../../connect/connect';
+import ChatHeader from './ChatHeader';
 
 class Chat extends Component {
 
@@ -31,13 +32,10 @@ class Chat extends Component {
       return null; 
     }
     const messages = chat.messages;
-
     return (
       <div>
-        <div>
-          <ChatMessages messages={messages} loggedInUsername={this.props.username} />
-        </div>
-        
+        <ChatHeader chat={chat}/>
+        <ChatMessages messages={messages} loggedInUsername={this.props.username} />
         <Textfield
           className='inputChatMessage'
           onChange={() => {}}
