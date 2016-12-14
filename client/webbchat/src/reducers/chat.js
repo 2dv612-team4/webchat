@@ -1,3 +1,5 @@
+// TODO: clean this
+
 const chat = (state = [], action) => {
   switch (action.type) {
   case 'REMOVE_CHAT':
@@ -38,9 +40,15 @@ const chat = (state = [], action) => {
       if(chat.id !== action.chatId){
         return chat;
       }
+
+      const messages = action.messages.map(({message, user: {username}}) => ({
+        message,
+        username,
+      }));
+
       return Object.assign({}, chat, {
         id: action.chatId,
-        messages: action.messages,
+        messages,
         isGroupChat: action.isGroupChat,
         timestamp: action.timestamp,
         users: action.users,

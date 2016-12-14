@@ -235,7 +235,7 @@ const init = (store) => {
 
       webchatEmitter.on('add-user-to-group-chat', ({chatId, usersToAdd}) => {
         console.log('add-user-to-group-chat', chatId, usersToAdd);
-        //socket.emit('create-new-group-chat-from-friend-chat', {chatId, usersToAdd});
+        socket.emit('add-user-to-group-chat', {chatId, usersToAdd});
       });
 
       /**
