@@ -109,6 +109,8 @@ const removeAllMessages = (_id) =>
 const leaveChat = (_id, userId) => 
   Room.update({_id}, {$pull: {users: userId }}).exec();
 
+const addFile = (_id, userId, filepath) => Room.update({_id}, {$push: {files: {user: userId, filepath}}}).exec();
+
 module.exports = {
   add,
   findRoomWithId,
@@ -120,4 +122,5 @@ module.exports = {
   addMessages,
   findRoomWithIdAndPopulateAll,
   leaveChat,
+  addFile,
 };
