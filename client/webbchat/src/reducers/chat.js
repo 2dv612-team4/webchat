@@ -33,7 +33,7 @@ const chat = (state = [], action) => {
           username: action.username,
         }],
       });
-      
+
     });
   case 'UPDATE_CHAT': 
     return state.map(chat => {
