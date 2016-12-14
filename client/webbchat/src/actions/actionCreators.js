@@ -64,13 +64,27 @@ export const addMessage = (chatId, username, message) => {
   };
 };
 
-export const addChat = ({ _id, messages}) => {
+export const addChat = ({ _id, messages, isGroupChat, timestamp, users, name }) => {
   return {
     type: 'ADD_CHAT',
     chatId: _id,
     messages,
+    isGroupChat,
+    timestamp,
+    users,
+    name,
   };
 };
+
+export const updateChat = ({ _id, messages, isGroupChat, timestamp, users, name }) => ({
+  type: 'UPDATE_CHAT',
+    chatId: _id,
+    messages,
+    isGroupChat,
+    timestamp,
+    users,
+    name,
+})
 
 export const removeChat = (chatId) => {
   return {

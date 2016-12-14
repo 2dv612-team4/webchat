@@ -8,16 +8,46 @@ const addMessageToRoom =
     return yield roomHandler.addMessage(roomId, user._id, message);
   });
 
-
 const removeAllMessagesFromChatRoom = 
   co.wrap(function*(chatId){
     yield roomHandler.removeAllMessages(chatId);
     const chat = yield roomHandler.findRoomWithId(chatId);
     return chat.name;
+  });
 
-  })
+const createNewGroupChatFromFriendChat = 
+  co.wrap(function*(friendChatId, usersToAdd){
+    const { users, messages } = yield roomHandler.findRoomWithId(friendChatId);
+
+    const oldChatParticipants = yield Promise.all(users.map(user => userHandler.findWithId(user)));
+    const userToAddObjects = yield Promise.all(usersToAdd.map(user => userHandler.findWithId(user)));
+
+    const chatParticipants = 
+      oldChatParticipants.concat(userToAddObjects)
+      .map(({username}) => username)
+      .join(', ');
+
+    const groupChat = yield roomHandler.add(`Chat with ${chatParticipants}`, true);
+
+    yield Promise.all(users.map(user => roomHandler.addUser(groupChat._id, user._id)));
+    yield Promise.all(usersToAdd.map(user => roomHandler.addUser(groupChat._id, user)));
+    yield Promise.all(oldChatParticipants.map(user => roomHandler.addUser(groupChat._id, user)));
+    
+    yield roomHandler.addMessages(groupChat._id, messages);
+
+    return roomHandler.findRoomWithIdAndPopulateAll(groupChat._id);
+  });
+
+const leavGroupChat = 
+  co.wrap(function*(username, chatId){
+    const user = yield userHandler.findWithUsername(username);
+    yield roomHandler.leaveChat(chatId, user._id);
+    return roomHandler.findRoomWithIdAndPopulateAll(chatId);
+  });
 
 module.exports = {
   addMessageToRoom,
   removeAllMessagesFromChatRoom,
+  createNewGroupChatFromFriendChat,
+  leavGroupChat,
 };
