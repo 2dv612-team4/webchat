@@ -29,6 +29,18 @@ const chat = (state = [], action) => {
       });
       
     });
+
+  case 'CLEAR_ALL_MESSAGES':
+    return state.map(chat => {
+      if(chat.id !== action.chatId){
+        return chat;
+      }
+
+      return Object.assign({}, chat, {
+        messages: [],
+      });
+    });
+
   default:
     return state;
   }

@@ -15,6 +15,10 @@ class Users extends Component {
     webchatEmitter.emit('remove-friend', {username, chatId});
   }
 
+  clearChatHistory(chatId){
+    webchatEmitter.emit('clear-chat-history', chatId);
+  }
+
   render() {
     return (
       <List>
@@ -24,7 +28,8 @@ class Users extends Component {
                 .map((friend, i) => 
                   <User 
                     openChat={this.openChat.bind(this)}
-                    removeFriend={this.removeFriend.bind(this)} 
+                    removeFriend={this.removeFriend.bind(this)}
+                    clearChatHistory={this.clearChatHistory.bind(this)} 
                     user={friend.user}
                     chat={friend.chat} 
                     key={friend.user.username}/>)}

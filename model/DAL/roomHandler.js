@@ -48,10 +48,15 @@ const findAllRoomsWithUser = (userId) => Room.find({users: { $in: [userId ]}})
  */
 const addMessage = (_id, userId, message) => Room.update({_id}, {$push: {messages: {user: userId, message}}}).exec();
 
+const removeAllMessages = (_id) => 
+  Room.update({_id}, { $set: { messages: [] }}).exec();
+ 
+
 module.exports = {
   add,
   findRoomWithId,
   findAllRoomsWithUser,
   addUser,
   addMessage,
+  removeAllMessages,
 };
