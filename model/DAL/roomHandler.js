@@ -9,13 +9,12 @@ const Room = require(__dirname + '/Schemas/room.js');
  */
 const add = (name, isGroupChat = false) => new Room({name, isGroupChat}).save();
 
-
 /**
  * [gets room by id]
  * @param  {[Object]} _id [room to find]
  * @return {[Promise]}     [Promise resolves to object of room]
  */
-const findRoomWithId = (_id) => 
+const findRoomWithId = (_id) =>
   Room.findOne({ _id })
   .exec();
 
@@ -24,7 +23,7 @@ const findRoomWithId = (_id) =>
  * @param  {[Object]} _id [room to find]
  * @return {[Promise]}     [Promise resolves to object of room]
  */
-const findRoomWithIdAndPopulateAll = (_id) => 
+const findRoomWithIdAndPopulateAll = (_id) =>
   Room.findOne({ _id })
   .populate({
     path: 'users',
@@ -38,16 +37,14 @@ const findRoomWithIdAndPopulateAll = (_id) =>
   })
   .exec();
 
-
 /**
  * [adds user to room]
  * @param {[Object]} _id    [room to add to]
  * @param {[Object]} userId [user to add to room]
  * @return {[Promise]} [promise]
  */
-const addUser = (_id, userId) => 
+const addUser = (_id, userId) =>
   Room.update({_id}, {$push: {users: userId }}).exec();
-
 
 /**
  * [get all rooms that contains user]
@@ -88,9 +85,9 @@ const findAllGroupChatsWithUser = (userId) =>
  * @param  {String} _id [id of chat]
  * @param  {Array} messages [array of messages objects]
  */
-const addMessages = (_id, messages) => 
+const addMessages = (_id, messages) =>
   Room.update(
-    {_id}, 
+    {_id},
     {$pushAll: {messages: messages}})
     .exec();
 
@@ -103,27 +100,29 @@ const addMessages = (_id, messages) =>
  */
 const addMessage = (_id, userId, message) => Room.update({_id}, {$push: {messages: {user: userId, message}}}).exec();
 
+const removeSpecificMessage = (_id, messageId) => Room.update({_id}, {$pull: {messages: {_id: messageId}}}).exec();
+
 /**
  * [removes all messages from chat]
  * @param  {Object} _id [id of chat]
  */
-const removeAllMessages = (_id) => 
+const removeAllMessages = (_id) =>
   Room.update({_id}, { $set: { messages: [] }}).exec();
- 
+
 /**
  * [removes user from chat]
  * @param  {Object} _id [id of chat]
  * @param  {Object} userId [id of user]
  */
-const leaveChat = (_id, userId) => 
+const leaveChat = (_id, userId) =>
   Room.update({_id}, {$pull: {users: userId }}).exec();
-  
+
 /**
  * [Updates chat name]
  * @param  {Object} _id [id of chat]
  * @param  {String} name [new name of chat]
  */
-const updateChatName = (_id, name) => 
+const updateChatName = (_id, name) =>
   Room.update({ _id }, { name }).exec();
 
 module.exports = {
@@ -133,6 +132,7 @@ module.exports = {
   addUser,
   addMessage,
   removeAllMessages,
+  removeSpecificMessage,
   findAllGroupChatsWithUser,
   addMessages,
   findRoomWithIdAndPopulateAll,
