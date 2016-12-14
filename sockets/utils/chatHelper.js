@@ -17,11 +17,13 @@ const removeAllMessagesFromChatRoom =
 
 const createNewGroupChatFromFriendChat = 
   co.wrap(function*(friendChatId, usersToAdd){
-    const { users, messages } = yield roomHandler.findRoomWithId(friendChatId); // old chat
+    const { users, messages } = yield roomHandler.findRoomWithId(friendChatId);
 
-    const usersObjects = yield Promise.all(users.map(user => userHandler.findWithId(user))); // all users in old chat
+    const oldChatParticipants = yield Promise.all(users.map(user => userHandler.findWithId(user)));
+    const userToAddObjects = yield Promise.all(usersToAdd.map(user => userHandler.findWithId(user)));
 
-    const chatParticipants = usersObjects
+    const chatParticipants = 
+      oldChatParticipants.concat(userToAddObjects)
       .map(({username}) => username)
       .join(', ');
 
@@ -29,7 +31,7 @@ const createNewGroupChatFromFriendChat =
 
     yield Promise.all(users.map(user => roomHandler.addUser(groupChat._id, user._id)));
     yield Promise.all(usersToAdd.map(user => roomHandler.addUser(groupChat._id, user)));
-    yield Promise.all(usersObjects.map(user => roomHandler.addUser(groupChat._id, user)));
+    yield Promise.all(oldChatParticipants.map(user => roomHandler.addUser(groupChat._id, user)));
     
     yield roomHandler.addMessages(groupChat._id, messages);
 

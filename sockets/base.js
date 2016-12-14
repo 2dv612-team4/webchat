@@ -70,7 +70,7 @@ module.exports = (io) => {
       friendHelper.getFriendsPendingAndGroupChats(username)
         .then(({friends, groupchats}) =>{
           friends.forEach(friend => joinSocketRoomForFriend(socket, friend));
-          groupchats.forEach(groupchat => joinSocketRoomForGroupChat(socket, groupchat._id));
+          groupchats.forEach(groupchat => joinSocketRoomForGroupChat(socket, groupchat));
         })
         .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'join-chat-rooms'})));
 
