@@ -5,6 +5,8 @@ import ChatMessages from './ChatMessages';
 import connect from '../../connect/connect';
 import ChatHeader from './ChatHeader';
 
+import DropZone from 'react-dropzone';
+
 class Chat extends Component {
 
   onInputBoxEnter(event){
@@ -43,6 +45,9 @@ class Chat extends Component {
           label="Enter message"
           rows={1}
         />
+        <Dropzone onDrop={this.onDrop}>
+          <div>Try dropping some files here, or click to select files to upload.</div>
+        </Dropzone>
       </div>
     );
   }
