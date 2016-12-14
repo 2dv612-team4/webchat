@@ -15,26 +15,26 @@ const createChatName = (users) => {
 };
 
 const addMessageToRoom =
-  co.wrap(function* (roomId, username, message) {
+  co.wrap(function*(roomId, username, message){
     const user = yield userHandler.findWithUsername(username);
     return yield roomHandler.addMessage(roomId, user._id, message);
   });
 
 const removeAllMessagesFromChatRoom =
-  co.wrap(function* (chatId) {
+  co.wrap(function*(chatId){
     yield roomHandler.removeAllMessages(chatId);
     const chat = yield roomHandler.findRoomWithId(chatId);
     return chat.name;
   });
 
 const createNewGroupChatFromFriendChat =
-  co.wrap(function* (friendChatId, usersToAdd) {
+  co.wrap(function*(friendChatId, usersToAdd){
     const { users, messages } = yield roomHandler.findRoomWithId(friendChatId);
 
     const oldChatParticipants = yield Promise.all(users.map(user => userHandler.findWithId(user)));
     const userToAddObjects = yield Promise.all(usersToAdd.map(user => userHandler.findWithId(user)));
 
-    const chatName = createChatName(oldChatParticipants.concat(userToAddObjects))
+    const chatName = createChatName(oldChatParticipants.concat(userToAddObjects));
 
     const groupChat = yield roomHandler.add(chatName, true);
 
@@ -47,9 +47,8 @@ const createNewGroupChatFromFriendChat =
     return roomHandler.findRoomWithIdAndPopulateAll(groupChat._id);
   });
 
-
 const leavGroupChat =
-  co.wrap(function* (username, chatId) {
+  co.wrap(function*(username, chatId){
     const user = yield userHandler.findWithUsername(username);
     yield roomHandler.leaveChat(chatId, user._id);
 
@@ -92,6 +91,21 @@ const addFileToRoom =
     return yield roomHandler.addFile(roomId, user._id, dir, filename);
   });
 
+const removeSpecificMessages = (rooms) => {
+  const startdate = new Date();
+  let messagesToRemove = [];
+  //Loop each friend
+  rooms.forEach(function(specificRoom){
+    //Loop each message
+    specificRoom.messages.forEach(function(specificMessage){
+      if(specificMessage.timestamp.getTime() < startdate.setDate(startdate.getDate() - 30)){
+        messagesToRemove.push(roomHandler.removeSpecificMessage(specificRoom._id, specificMessage._id));
+      }
+    });
+  });
+  Promise.all(messagesToRemove);
+};
+
 module.exports = {
   addMessageToRoom,
   removeAllMessagesFromChatRoom,
@@ -99,4 +113,5 @@ module.exports = {
   leavGroupChat,
   addUserToGroupchat,
   addFileToRoom,
+  removeSpecificMessages,
 };
