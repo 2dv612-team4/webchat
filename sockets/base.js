@@ -9,6 +9,9 @@ const emitToSpecificUser = (io, socketId, channel, data) =>
 const joinSocketRoomForFriend = (socket, friend) => 
   socket.join(friend.chat._id.toString());
 
+const joinSocketRoomForGroupChat = (socket, groupchat) => 
+  socket.join(groupchat._id.toString());
+
 module.exports = (io) => {
   io.on('connection', function (socket) {
     /**
@@ -42,13 +45,18 @@ module.exports = (io) => {
      * sends inital friends and pending data
      * joins socket rooms from every friend
      */
-    friendHelper.getFriendsAndPending(username)
-      .then(({pending, friends}) => {
+    friendHelper.getFriendsPendingAndGroupChats(username)
+      .then(({pending, friends, groupchats}) => {
+        groupchats.forEach(groupchat => joinSocketRoomForGroupChat(socket, groupchat));
         friends.forEach(friend => joinSocketRoomForFriend(socket, friend));
+
+        
+
         emitToSpecificUser(io, socketid, 'onload-pending', pending);
         emitToSpecificUser(io, socketid, 'onload-friends', friends);
+        emitToSpecificUser(io, socketid, 'onload-groupchats', groupchats);
       })
-      .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'getFriendsAndPending'}));
+      .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'getFriendsPendingAndGroupChats'}));
 
     /**
      * removes socket id on client disconnect
@@ -59,10 +67,12 @@ module.exports = (io) => {
         .catch(() => console.log('error while setting socket id')));
 
     socket.on('join-chat-rooms', () => 
-      friendHelper.getFriendsAndPending(username)
-        .then(({friends}) => 
-          friends.forEach(friend => joinSocketRoomForFriend(socket, friend)))
-      .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'join-chat-rooms'})));
+      friendHelper.getFriendsPendingAndGroupChats(username)
+        .then(({friends, groupchats}) =>{
+          friends.forEach(friend => joinSocketRoomForFriend(socket, friend));
+          groupchats.forEach(groupchat => joinSocketRoomForGroupChat(socket, groupchat._id));
+        })
+        .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'join-chat-rooms'})));
 
     /**
      * On user wants to send friend request
@@ -167,10 +177,45 @@ module.exports = (io) => {
     socket.on('clear-chat-history', (chatId) => 
       chatHelper.removeAllMessagesFromChatRoom(chatId)
         .then((chatname) => {
-          console.log('chat', chatname);
           io.sockets.in(chatId).emit('clear-chat', {chatId, chatname});
         })
         .catch(e => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'clear-chat-history'})));
+
+    /**
+     * Creates new group chat with messages from friends chat
+     * obj
+     *  chatId: string 
+     *  usersToAdd: array
+     */
+    socket.on('create-new-group-chat-from-friend-chat', (obj) => 
+      chatHelper.createNewGroupChatFromFriendChat(obj.chatId, obj.usersToAdd)
+        .then((chat) => {
+          console.log(JSON.stringify(chat, null, 2));
+          chat.users.forEach(user => 
+            emitToSpecificUser(io, user.socketId, 'new-groupchat', {
+              message: `You joined groupchat ${chat.name}`,
+              chat,
+            }));
+        })
+        .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'create-new-group-chat-from-friend-chat'})));
+
+    /**
+     * Leave groupchat
+     */
+    socket.on('leave-groupchat', (chatId) => 
+      chatHelper.leavGroupChat(username, chatId)
+        .then((chat) => {
+          socket.leave(chatId);
+          emitToSpecificUser(io, socketid, 'remove-groupchat', chatId);
+
+          chat.users.forEach(user => 
+            emitToSpecificUser(io, user.socketid, 'update-groupchat', {
+              message: 'User ${username} left ${chat.name}',
+              chat,
+            }));
+
+        })
+        .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'leave-groupchat'})));
 
     /*
     * If user wants to Update Password
