@@ -84,17 +84,15 @@ const addFileToRoom =
   co.wrap(function* (roomId, username, file, filename) {
     let sharedfilespath = path.join(__dirname, '../../public/sharedfiles/');
     let dir = path.join(__dirname, '../../public/sharedfiles/', uuid());
-    yield fs.exists(sharedfilespath).then((exists) => {
-      if(!exists){
-        fs.mkdir(sharedfilespath);
-      }
-    });
-    yield fs.writeFile(dir, file, (err) => {
-      if (err) throw err;
-      console.log('File saved!');
-    });
+    const exists = yield fs.exists(sharedfilespath);
+    if(!exists) {
+      yield fs.mkdir(sharedfilespath);
+    }
+    const err = yield fs.writeFile(dir, file);
+    if(err) throw err;
+    console.log('File saved!');
     const user = yield userHandler.findWithUsername(username);
-    return yield roomHandler.addFile(roomId, user._id, dir, filename);
+    return roomHandler.addFile(roomId, user._id, dir, filename);
   });
 
 
