@@ -43,7 +43,10 @@ class Chat extends Component {
     return (
       <div>
         <ChatHeader chat={chat}/>
+        <div id="messagesAndInput">
+        <div id="chatwindow">
         <ChatMessages messages={messages} loggedInUsername={this.props.username} />
+        </div>
         <div id="chatInput">
         <Textfield
           className='inputChatMessage'
@@ -55,6 +58,7 @@ class Chat extends Component {
         <Dropzone onDrop={this.onDrop.bind(this)} multiple={false} id="fileUpload">
           <div>Drop or click to upload file</div>
         </Dropzone>
+        </div>
         </div>
       </div>
     );
