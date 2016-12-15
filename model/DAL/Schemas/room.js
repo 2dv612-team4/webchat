@@ -14,19 +14,11 @@ let roomSchema = new Schema({
       message: {type: String, required: true},
       timestamp: {type: Date, default: Date.now, required: true},
       attachment: {
-        filename: {type: String, required: true},
-        filepath: {type: String, required: true, unique: true},
+        originalfilename: {type: String, required: true},
+        uniquefilename: {type: String, required: true},
       },
     },
   ],
-  /*files: [
-    {
-      user: {type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true},
-      filename: {type: String, required: true},
-      filepath: {type: String, required: true, unique: true},
-      timestamp: {type: Date, default: Date.now, required: true},
-    },
-  ],*/
   timestamp: {type: Date, default: Date.now, required: true},
 });
 

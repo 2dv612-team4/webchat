@@ -9,9 +9,10 @@ const chat = (state = [], action) => {
     if(state.find(chat => chat.id === action.chatId)){
       return state;
     }
-    const messages = action.messages.map(({message, user: {username}}) => ({
+    const messages = action.messages.map(({message, user: {username}, attachment}) => ({
       message,
       username,
+      attachment,
     }));
 
     return [...state, {
@@ -31,6 +32,7 @@ const chat = (state = [], action) => {
         messages: [...chat.messages, {
           message: action.message,
           username: action.username,
+          attachment: action.attachment,
         }],
       });
 
@@ -41,9 +43,10 @@ const chat = (state = [], action) => {
         return chat;
       }
 
-      const messages = action.messages.map(({message, user: {username}}) => ({
+      const messages = action.messages.map(({message, user: {username}, attachment}) => ({
         message,
         username,
+        attachment,
       }));
 
       return Object.assign({}, chat, {
