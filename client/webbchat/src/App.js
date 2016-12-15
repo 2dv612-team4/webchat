@@ -11,7 +11,7 @@ import Advertisement from './components/advertisements/Advertisement'
 import MobileAd from './components/advertisements/AdvertisementMobile'
 import Chat from './components/chat/Chat'
 import { Layout, Header, Content, Drawer, Navigation, Grid, Cell} from 'react-mdl';
-import './App.css';
+//import './App.css';
 
 class App extends Component {
 
@@ -37,7 +37,7 @@ class App extends Component {
                   <ChangePassword />
                 </Cell>
                 <Grid noSpacing={true}>
-                    <Cell id="willbechat" col={10} phone={12}>
+                    <Cell id="Chat" col={10} phone={12}>
                       <Chat />
                     </Cell>
                   <Cell id="advert" col={2} hidePhone={true}>
