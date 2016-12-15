@@ -125,7 +125,7 @@ const leaveChat = (_id, userId) =>
 const updateChatName = (_id, name) =>
   Room.update({ _id }, { name }).exec();
 
-const addFile = (_id, userId, fpath, fname) => Room.update({_id}, {$push: {files: {user: userId, filename: fname, filepath: fpath}}}).exec();
+const addFile = (_id, userId, fpath, fname) => Room.update({_id}, {$push: {messages: {user: userId, message: fname, attachment: {filename: fname, filepath: fpath}}}}).exec();
 
 module.exports = {
   add,
