@@ -1,6 +1,7 @@
 'use strict';
 
 const User = require(__dirname + '/Schemas/user.js');
+const Room = require(__dirname + '/Schemas/room.js');
 const co = require('co');
 
 const add = (username, password) => new User({username, password}).save();
@@ -14,16 +15,53 @@ const findAllUsers = () => User.find({}).select('username').exec();
  * @param  {[Objet]} type [gets user by type]
  * @return {[Promise]}          [resolves to user object]
  */
-const findFriendsWith = (type) => User.findOne(type)
-  .populate({
-    path: 'friends.user',
-    model: 'user',
-  })
-  .populate({
-    path: 'friends.chat',
-    model: 'room',
-  })
-  .exec();
+const findFriendsWith = (type) => 
+  new Promise((resolve, reject) => {
+    User.findOne(type)
+    .populate({
+      path: 'friends.user',
+      model: 'user',
+      select: 'username _id',
+    })
+    .exec(function(err, user){
+      if(err){
+        return reject(err);
+      }
+      Room.populate(user, {
+        path: 'friends.chat',
+        model: 'room',
+        select: '-__v',
+      }, function(err, user){
+        if(err){
+          return reject(err);
+        }
+        User.populate(user, {
+          path: 'friends.chat.messages.user',
+          model: 'user',
+          select: 'username -_id',
+        }, function(err, user){
+          if(err){
+            return reject(err);
+          }
+
+          User.populate(user, {
+            path: 'friends.chat.users',
+            model: 'user',
+            select: 'username -_id',
+          }, function(err, user){
+            if(err){
+              return reject(err);
+            }
+            resolve(user);
+          });
+
+
+
+          //resolve(user);
+        });
+      });
+    });
+  });
 
 /**
  * [gets user object with friends array containing users]
@@ -31,6 +69,7 @@ const findFriendsWith = (type) => User.findOne(type)
  * @return {[Promise]}          [resolves to user object]
  */
 const findFriendsWithUsername = (username) => findFriendsWith({ username });
+
 
 /**
  * [gets user object with friends array containing users]
@@ -107,7 +146,7 @@ module.exports = {
   findAllUsers,
   findWithPartialUsername,
   getFriendRequests,
+  changePassword,
   setSocketId,
   updatePremiumExpirationDate,
-  changePassword,
 };
