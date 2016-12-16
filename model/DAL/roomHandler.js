@@ -126,11 +126,14 @@ const leaveChat = (_id, userId) =>
 const updateChatName = (_id, name) =>
   Room.update({ _id }, { name }).exec();
 
-const addFileRef = (_id, userId, fname, uid) => {
+const addFileRef = (_id, userId, fname, uid) => new Promise((resolve, reject) => {
   co(function*(){
-    yield Room.update({_id}, {$push: {messages: {user: userId, message: fname, attachment: {filename: fname, uid: uid}}}}).exec();
-  });
-};
+    const res = yield Room.update({_id}, {$push: {messages: {user: userId, message: fname, attachment: {filename: fname, uid: uid}}}}).exec();
+    if(res){
+      resolve(true);
+    }
+  }).catch(() => reject(false));
+});
   
 module.exports = {
   add,

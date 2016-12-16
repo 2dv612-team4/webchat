@@ -85,11 +85,9 @@ router.get('/download/:id', function(req, res) {
       yield fsys.mkdir(dir);
     }
     const file = yield filesHandler.findWithUID(req.params.id);
-    yield fsys.writeFile(dir+file.filename, file.buffer, (err) => {
-      if(err) throw err;
-      res.download(path.join(dir, file.filename));
-    });
-  });
+    yield fsys.writeFile(dir+file.filename, file.buffer);
+    res.download(path.join(dir, file.filename));
+  }).catch(() => res.send('Failed to get file'));
 });		
 
 module.exports = router;
