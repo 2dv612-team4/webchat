@@ -1,5 +1,6 @@
 const userHandler = require('../../model/DAL/userHandler.js');
 const roomHandler = require('../../model/DAL/roomHandler.js');
+const filesHandler = require('../../model/DAL/filesHandler.js');
 const co = require('co');
 const fs = require('fs-promise');
 const path = require('path');
@@ -82,17 +83,10 @@ const addUserToGroupchat =
 
 const addFileToRoom =
   co.wrap(function* (roomId, username, file, filename) {
-    let sharedfilespath = path.join(__dirname, '../../public/sharedfiles/');
-    let dir = path.join(__dirname, '../../public/sharedfiles/', uuid());
-    const exists = yield fs.exists(sharedfilespath);
-    if(!exists) {
-      yield fs.mkdir(sharedfilespath);
-    }
-    const err = yield fs.writeFile(dir, file);
-    if(err) throw err;
-    console.log('File saved!');
+    let unique = uuid();
     const user = yield userHandler.findWithUsername(username);
-    return roomHandler.addFile(roomId, user._id, dir, filename);
+    yield filesHandler.add(file, filename, unique);
+    return roomHandler.addFileRef(roomId, user._id, filename, unique);
   });
 
 

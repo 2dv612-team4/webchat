@@ -3,6 +3,10 @@ const express = require('express');
 const router = express.Router();
 const user = require('../model/DAL/userHandler.js');
 const bcrypt = require('bcrypt-nodejs');
+const filesHandler = require('../model/DAL/filesHandler.js');
+const fsys = require('fs-promise');	
+const path = require('path');
+const co = require('co');
 
 /* GET start page. */
 router.get('/', function(req, res){
@@ -72,5 +76,18 @@ router.get('/logout', function(req, res){
     }
   });
 });
+
+router.get('/download/:id', function(req, res) {
+  co(function*(){
+    const dir = path.join(__dirname, '../public/tmpfiles/');	
+    const exists = yield fsys.exists(dir);
+    if(!exists) {
+      yield fsys.mkdir(dir);
+    }
+    const file = yield filesHandler.findWithUID(req.params.id);
+    yield fsys.writeFile(dir+file.filename, file.buffer);
+    res.download(path.join(dir, file.filename));
+  }).catch(() => res.send('Failed to get file'));
+});		
 
 module.exports = router;

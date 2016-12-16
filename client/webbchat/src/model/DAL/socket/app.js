@@ -31,7 +31,6 @@ const init = (store) => {
        * loads inital friends
        * */
       socket.on('onload-friends', function (friends) {
-        
         friends.forEach(({chat}) =>
           store.dispatch(actionsCreators.addChat(chat)));
 
