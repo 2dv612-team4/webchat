@@ -284,7 +284,7 @@ module.exports = (io) => {
      */
     socket.on('delete-account', (username) => {
         userHandler.deleteUserAccount(username).then(() => {
-          console.log(username + 'Account deleted');
+          console.log('Account ' + username + ' deleted');
           emitToSpecificUser(io, socketid, 'delete-account-success', {
             message: 'You deleted your account!',
           });
