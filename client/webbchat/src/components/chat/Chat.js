@@ -4,7 +4,6 @@ import webchatEmitter from '../../model/emitter';
 import ChatMessages from './ChatMessages';
 import connect from '../../connect/connect';
 import ChatHeader from './ChatHeader';
-import DropZone from 'react-dropzone';
 
 class Chat extends Component {
 
@@ -44,9 +43,6 @@ class Chat extends Component {
           label="Enter message"
           rows={1}
         />
-        <DropZone onDrop={this.onDrop}>
-          <div>Drop files or click to upload.</div>
-        </DropZone>
       </div>
     );
   }

@@ -139,9 +139,6 @@ module.exports = {
   addMessages,
   findRoomWithIdAndPopulateAll,
   leaveChat,
-<<<<<<< HEAD
   addFile,
-=======
   updateChatName,
->>>>>>> dd7022c9f9f3dc78cb4dc981041233e61fc6905e
 };
