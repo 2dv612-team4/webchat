@@ -78,13 +78,13 @@ export const addChat = ({ _id, messages, isGroupChat, timestamp, users, name }) 
 
 export const updateChat = ({ _id, messages, isGroupChat, timestamp, users, name }) => ({
   type: 'UPDATE_CHAT',
-    chatId: _id,
-    messages,
-    isGroupChat,
-    timestamp,
-    users,
-    name,
-})
+  chatId: _id,
+  messages,
+  isGroupChat,
+  timestamp,
+  users,
+  name,
+});
 
 export const removeChat = (chatId) => {
   return {

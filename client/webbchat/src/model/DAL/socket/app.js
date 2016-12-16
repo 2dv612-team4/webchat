@@ -223,6 +223,13 @@ const init = (store) => {
       });
 
       /**
+       * Send file to the current chatroom
+       */
+      webchatEmitter.on('upload-file', (obj) => {
+        socket.emit('upload-file', obj, obj.file.name);
+      });
+
+      /**
        * groupchat
        */
       webchatEmitter.on('leave-groupchat', (chatId) => {
