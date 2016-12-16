@@ -184,12 +184,12 @@ module.exports = (io) => {
       .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'send-chat-message'}))
     );
 
-    socket.on('upload-file', (obj, filename) => 
+    socket.on('upload-file', (obj, filename) =>
     chatHelper.addFileToRoom(obj.chatId, username, obj.file, filename)
       .then(() => {
         io.sockets.in(obj.chatId).emit('update-chat', {username, message: filename, chatId: obj.chatId}); //does not add a download link yet
       }).catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'upload-file'})));
-    
+
     /**
      * [clears chat history]
      * @param  {String} chatId [id of chat to clear]
@@ -278,5 +278,16 @@ module.exports = (io) => {
       });
     });
 
-  });
+    /*
+     * If user wants to Delete account
+     */
+    socket.on('delete-account', (username) => {
+        userHandler.deleteUserAccount(username).then(() => {
+          console.log('Account ' + username + ' deleted');
+          emitToSpecificUser(io, socketid, 'delete-account-success', {
+            message: 'You deleted your account!',
+          });
+        }).catch((e) => emitToSpecificUser(io, socketid, 'servererror', e.message));
+      });
+    });
 };

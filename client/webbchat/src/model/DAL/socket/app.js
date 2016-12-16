@@ -14,7 +14,7 @@ const init = (store) => {
       });
 
       /**
-       * loads initail username... 
+       * loads initial username...
        */
       socket.on('onload-username', function (username) {
         store.dispatch(actionsCreators.setUsernameRequests(username));
@@ -90,7 +90,7 @@ const init = (store) => {
        */
       socket.on('accept-friend-request-response', function(obj){
         socket.emit('join-chat-rooms');
-        
+
         obj.friends.forEach(({chat}) =>
           store.dispatch(actionsCreators.addChat(chat)));
 
@@ -133,8 +133,8 @@ const init = (store) => {
         store.dispatch(actionsCreators.clearAllMessages(chat.chatId));
       });
 
-      /** 
-       * sets inital groupchats 
+      /**
+       * sets inital groupchats
        * */
       socket.on('onload-groupchats', function(groupchats){
         groupchats.forEach((chat) =>
@@ -150,7 +150,7 @@ const init = (store) => {
 
         store.dispatch(actionsCreators.updateSnackbar({
           display: true,
-          text: obj.message, 
+          text: obj.message,
         }));
       });
 
@@ -163,7 +163,7 @@ const init = (store) => {
       });
 
       /**
-       * on groupchat update ex somone leaves chat 
+       * on groupchat update ex somone leaves chat
        * obj
        *  chat
        *  message
@@ -172,11 +172,11 @@ const init = (store) => {
         store.dispatch(actionsCreators.updateChat(obj.chat));
         store.dispatch(actionsCreators.updateSnackbar({
           display: true,
-          text: obj.message, 
+          text: obj.message,
         }));
       });
 
-      
+
 
       // EventEmitter
       /**
@@ -281,6 +281,18 @@ const init = (store) => {
 
       socket.on('update-password-response-success', function(obj){
         webchatEmitter.emit('update-password-response-success-snackbar', obj.message);
+      });
+
+      /*
+       * Delete account stuff
+       */
+      webchatEmitter.on('delete-account', (wantToDeleteAccount) => {
+        socket.emit('delete-account', wantToDeleteAccount);
+      });
+      socket.on('delete-account-success', (obj) => {
+        console.log('redirecting to logout');
+        // Route to /logout here
+        console.log(obj.message);
       });
     });
 };
