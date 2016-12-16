@@ -55,12 +55,13 @@ export const buyAdPremium = (buyPremium) => {
   };
 };
 
-export const addMessage = (chatId, username, message) => {
+export const addMessage = (chatId, username, message, attachment) => {
   return {
     type: 'ADD_MESSAGE',
     chatId, 
     message, 
     username,
+    attachment,
   };
 };
 
