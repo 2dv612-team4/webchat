@@ -104,15 +104,18 @@ const acceptFriendRequest =
  * @param  {String} username
  * @return {Promise}
  */
-const getFriendsAndPending =  
+const getFriendsPendingAndGroupChats =  
   co.wrap(function*(username){
-    const [{friendrequests: pending}, { friends } ] =  yield [
+    const user = yield userHandler.findWithUsername(username);
+    const [{friendrequests: pending}, { friends }, groupchats ] =  yield [
       userHandler.getFriendRequests(username),
       userHandler.findFriendsWithUsername(username),
+      roomHandler.findAllGroupChatsWithUser(user._id),
     ];
     return { 
-      pending: pending, 
-      friends: friends, 
+      pending, 
+      friends, 
+      groupchats,
     };
   }); 
 
@@ -149,7 +152,7 @@ const removeFriend =
 module.exports = {
   rejectFriendRequest,
   acceptFriendRequest,
-  getFriendsAndPending,
+  getFriendsPendingAndGroupChats,
   sendFriendRequest,
   removeFriend,
 };

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { List } from 'react-mdl';
-import User from './User';
+import GroupChat from './GroupChat';
 import webchatEmitter from '../../../model/emitter';
 import connect from '../../../connect/connect'
 
@@ -11,8 +11,8 @@ class Users extends Component {
     this.props.setChatOpen(chatId);
   }
 
-  removeFriend(username, chatId){
-    webchatEmitter.emit('remove-friend', {username, chatId});
+  leaveChat(chatId){
+    webchatEmitter.emit('leave-groupchat', chatId);
   }
 
   clearChatHistory(chatId){
@@ -22,24 +22,24 @@ class Users extends Component {
   render() {
     return (
       <List>
-        {this.props.friends
-            .filter((friend) => 
-              friend.user.username.toLowerCase().match('^'+this.props.filterQuery.toLowerCase()+'.*'))
-                .map((friend, i) => 
-                  <User 
+        {this.props.chats
+            .filter(chat => chat.isGroupChat)
+            .filter(chat =>
+              chat.name.toLowerCase().match('^'+this.props.filterQuery.toLowerCase()+'.*'))
+                .map((chat, i) => 
+                  <GroupChat 
                     openChat={this.openChat.bind(this)}
-                    removeFriend={this.removeFriend.bind(this)}
+                    leaveChat={this.leaveChat.bind(this)}
                     clearChatHistory={this.clearChatHistory.bind(this)} 
-                    user={friend.user}
-                    chat={friend.chat} 
-                    key={friend.user.username}/>)}
+                    chat={chat} 
+                    key={chat.id}/>)}
       </List>
     )
   }
 }
 
 export default connect((state) => ({
-  friends: state.friends,
   filterQuery: state.userSearchQuery,
   setChatOpen: state.setChatOpen,
+  chats: state.chat,
 }), Users)

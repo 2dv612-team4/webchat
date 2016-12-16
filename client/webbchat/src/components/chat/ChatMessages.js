@@ -1,18 +1,21 @@
 import React, { PropTypes } from 'react';
-import { List, ListItem, ListItemContent } from 'react-mdl';
 
 const ChatMessages = ({ messages, loggedInUsername }) => (
-  <List className='chatMessagesWindow'>
+  <div className='chatMessagesWindow chatContainer'>
     {
       messages.map(({message, username}, i) => {
-        const messageColor = username === loggedInUsername ? 'chatmessageLoggedIn' : 'chatmessage';
+        const messageColor = username === loggedInUsername ? 'bubble right' : 'bubble left';
         return (
-          <ListItem key={i} className={messageColor} twoLine>
-            <ListItemContent subtitle={username}>{message}</ListItemContent>
-          </ListItem>)
+          <div key={i} className={messageColor}>
+            <p>{message} 
+              <br/>
+              <i>{username}</i>
+            </p>
+            
+          </div>)
       })
     }
-  </List>
+  </div>
 );
 
 ChatMessages.propTypes = {

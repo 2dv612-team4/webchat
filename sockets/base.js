@@ -6,8 +6,11 @@ const bcrypt = require('bcrypt-nodejs');
 const emitToSpecificUser = (io, socketId, channel, data) =>
   io.to(socketId).emit(channel, data);
 
-const joinSocketRoomForFriend = (socket, friend) => 
+const joinSocketRoomForFriend = (socket, friend) =>
   socket.join(friend.chat._id.toString());
+
+const joinSocketRoomForGroupChat = (socket, groupchat) =>
+  socket.join(groupchat._id.toString());
 
 module.exports = (io) => {
   io.on('connection', function (socket) {
@@ -42,13 +45,26 @@ module.exports = (io) => {
      * sends inital friends and pending data
      * joins socket rooms from every friend
      */
-    friendHelper.getFriendsAndPending(username)
-      .then(({pending, friends}) => {
+    friendHelper.getFriendsPendingAndGroupChats(username)
+      .then(({pending, friends, groupchats}) => {
+        groupchats.forEach(groupchat => joinSocketRoomForGroupChat(socket, groupchat));
         friends.forEach(friend => joinSocketRoomForFriend(socket, friend));
         emitToSpecificUser(io, socketid, 'onload-pending', pending);
+
+        /*
+        * Remove messages over 30 days old on autenticate
+        */
+        let friendArray = [];
+        friends.forEach(function(friend){
+          friendArray.push(friend.chat);
+        });
+        chatHelper.removeSpecificMessages(groupchats);
+        chatHelper.removeSpecificMessages(friendArray);
+
         emitToSpecificUser(io, socketid, 'onload-friends', friends);
+        emitToSpecificUser(io, socketid, 'onload-groupchats', groupchats);
       })
-      .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'getFriendsAndPending'}));
+      .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'getFriendsPendingAndGroupChats'}));
 
     /**
      * removes socket id on client disconnect
@@ -56,13 +72,17 @@ module.exports = (io) => {
     socket.on('disconnect', () =>
       userHandler.setSocketId(userId, null)
         .then(() => console.log('socketId set to null'))
-        .catch(() => console.log('error while setting socket id')));
+        .catch(() => console.log('error while setting socket id'))
+    );
 
-    socket.on('join-chat-rooms', () => 
-      friendHelper.getFriendsAndPending(username)
-        .then(({friends}) => 
-          friends.forEach(friend => joinSocketRoomForFriend(socket, friend)))
-      .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'join-chat-rooms'})));
+    socket.on('join-chat-rooms', () =>
+      friendHelper.getFriendsPendingAndGroupChats(username)
+        .then(({friends, groupchats}) =>{
+          friends.forEach(friend => joinSocketRoomForFriend(socket, friend));
+          groupchats.forEach(groupchat => joinSocketRoomForGroupChat(socket, groupchat));
+        })
+        .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'join-chat-rooms'}))
+    );
 
     /**
      * On user wants to send friend request
@@ -161,8 +181,79 @@ module.exports = (io) => {
       .then(() => {
         io.sockets.in(obj.chatId).emit('update-chat', {username, message: obj.message, chatId: obj.chatId});
       })
-      .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'send-chat-message'})));
+      .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'send-chat-message'}))
+    );
 
+    socket.on('upload-file', (obj, filename) => 
+    chatHelper.addFileToRoom(obj.chatId, username, obj.file, filename)
+      .then(() => {
+        console.log('base:',filename);
+        io.sockets.in(obj.chatId).emit('update-chat', {username, message: filename, chatId: obj.chatId}); //does not add a download link yet
+      }).catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'upload-file'})));
+    
+    /**
+     * [clears chat history]
+     * @param  {String} chatId [id of chat to clear]
+     */
+    socket.on('clear-chat-history', (chatId) =>
+      chatHelper.removeAllMessagesFromChatRoom(chatId)
+        .then((chatname) => {
+          io.sockets.in(chatId).emit('clear-chat', {chatId, chatname});
+        })
+        .catch(e => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'clear-chat-history'})));
+
+    /**
+     * Creates new group chat with messages from friends chat
+     * obj
+     *  chatId: string
+     *  usersToAdd: array
+     */
+    socket.on('create-new-group-chat-from-friend-chat', (obj) =>
+      chatHelper.createNewGroupChatFromFriendChat(obj.chatId, obj.usersToAdd)
+        .then((chat) => {
+          chat.users.forEach(user =>
+            emitToSpecificUser(io, user.socketId, 'new-groupchat', {
+              message: `You joined groupchat ${chat.name}`,
+              chat,
+            }));
+        })
+        .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'create-new-group-chat-from-friend-chat'})));
+
+    socket.on('add-user-to-group-chat', (obj) =>
+      chatHelper.addUserToGroupchat(obj.chatId, obj.usersToAdd)
+        .then(({addedUsers, groupChat: chat, oldParticipants}) => {
+          console.log(JSON.stringify(chat, null, 2));
+          addedUsers.forEach(user =>
+            emitToSpecificUser(io, user.socketId, 'new-groupchat', {
+              message: `You joined groupchat ${chat.name}`,
+              chat,
+            }));
+
+          oldParticipants.forEach(user =>
+            emitToSpecificUser(io, user.socketId, 'update-groupchat', {
+              message: `New people joined ${chat.name}`,
+              chat,
+            }));
+        })
+        .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'add-user-to-group-chat'})));
+
+    /**
+     * Leave groupchat
+     */
+    socket.on('leave-groupchat', (chatId) =>
+      chatHelper.leavGroupChat(username, chatId)
+        .then((chat) => {
+          socket.leave(chatId);
+          emitToSpecificUser(io, socketid, 'remove-groupchat', chatId);
+
+          chat.users.forEach(user =>
+            emitToSpecificUser(io, user.socketId, 'update-groupchat', {
+              message: `User ${username} left ${chat.name}`,
+              chat,
+            }));
+
+        })
+        .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'leave-groupchat'})));
 
     /*
     * If user wants to Update Password
