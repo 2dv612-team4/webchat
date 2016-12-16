@@ -11,7 +11,7 @@ class Chat extends Component {
 
   onInputBoxEnter(event){
     if(event.key === 'Enter' && event.shiftKey){
-      return; 
+      return;
     }
 
     if(event.key === 'Enter'){
@@ -37,13 +37,17 @@ class Chat extends Component {
   render() {
     const chat = this.props.chat.find(a => a.id === this.props.chatOpen)
     if(!chat || !chat.messages){
-      return null; 
+      return null;
     }
     const messages = chat.messages;
     return (
       <div>
         <ChatHeader chat={chat}/>
+        <div id="messagesAndInput">
+        <div id="chatwindow">
         <ChatMessages messages={messages} loggedInUsername={this.props.username} />
+        </div>
+        <div id="chatInput">
         <Textfield
           className='inputChatMessage'
           onChange={() => {}}
@@ -51,9 +55,11 @@ class Chat extends Component {
           label="Enter message"
           rows={1}
         />
-        <Dropzone onDrop={this.onDrop.bind(this)} multiple={false}>
+        <Dropzone onDrop={this.onDrop.bind(this)} multiple={false} id="fileUpload">
           <div>Drop or click to upload file</div>
         </Dropzone>
+        </div>
+        </div>
       </div>
     );
   }
