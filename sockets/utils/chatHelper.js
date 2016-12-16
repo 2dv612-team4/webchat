@@ -82,8 +82,10 @@ const addUserToGroupchat =
 
 const addFileToRoom =
   co.wrap(function* (roomId, username, file, filename) {
+    //shared files path should probably be in a config file instead.
+    let uniquename = uuid();
     let sharedfilespath = path.join(__dirname, '../../public/sharedfiles/');
-    let dir = path.join(__dirname, '../../public/sharedfiles/', uuid());
+    let dir = path.join(__dirname, '../../public/sharedfiles/', uniquename);
     const exists = yield fs.exists(sharedfilespath);
     if(!exists) {
       yield fs.mkdir(sharedfilespath);
@@ -92,7 +94,7 @@ const addFileToRoom =
     if(err) throw err;
     console.log('File saved!');
     const user = yield userHandler.findWithUsername(username);
-    return roomHandler.addFile(roomId, user._id, dir, filename);
+    return roomHandler.addFile(roomId, user._id, uniquename, filename);
   });
 
 

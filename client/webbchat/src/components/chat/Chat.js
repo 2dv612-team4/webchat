@@ -43,7 +43,7 @@ class Chat extends Component {
     return (
       <div>
         <ChatHeader chat={chat}/>
-        <ChatMessages messages={messages} loggedInUsername={this.props.username} />
+        <ChatMessages messages={messages} loggedInUsername={this.props.username}/>
         <Textfield
           className='inputChatMessage'
           onChange={() => {}}
