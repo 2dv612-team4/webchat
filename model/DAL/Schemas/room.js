@@ -15,7 +15,7 @@ let roomSchema = new Schema({
       timestamp: {type: Date, default: Date.now, required: true},
       attachment: {
         filename: {type: String, required: true},
-        uid: {type: String, required: true, unique: true},
+        uid: {type: String, required: true},
       },
     },
   ],
