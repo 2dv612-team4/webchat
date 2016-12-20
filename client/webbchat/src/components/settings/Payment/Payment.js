@@ -49,7 +49,7 @@ class Payment extends Component {
     const premium = this.props.premium;
     return (
       <div>
-      <Button colored onClick={() => this.handleOpenDialog()} raised ripple>Show Dialog</Button>
+        <Button colored onClick={() => this.handleOpenDialog()} raised ripple>Show Dialog</Button>
         <Dialog open={this.state.openDialog}>
           <DialogTitle>Premium</DialogTitle>
           <DialogContent>

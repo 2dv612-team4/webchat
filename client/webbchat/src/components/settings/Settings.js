@@ -5,8 +5,17 @@ import connect from '../../connect/connect'
 
 class Settings extends Component {
 
-  payment(username){
+  constructor(props) {
+    super(props);
+    this.state = {
+      showComponent: false,
+    };
+  }
 
+  payment(){
+    this.setState({
+      showComponent: true,
+    });
   }
 
   other(username){
@@ -15,17 +24,20 @@ class Settings extends Component {
   }
 
   render() {
+    //<Payment name={username} premium={isPremium} update={updateSnackbar}/>
     const username = this.props.username;
     const isPremium = this.props.isPremium;
     const updateSnackbar = this.props.updateSnackbar;
     return (
       <div>
-      <Payment name={username} premium={isPremium} update={updateSnackbar}/>
         <Button raised accent name="SettingsButton" id={`menu_iconbutton_id_${username}`}>{username}</Button>
         <Menu align='right' target={`menu_iconbutton_id_${username}`} >
           <MenuItem
-            onClick={() => this.payment(username)}
-            >Pay For Premium To Remove Adds
+            onClick={() => this.payment()}
+            >{this.state.showComponent ?
+              <Payment name={username} premium={isPremium} update={updateSnackbar}/>:
+              null}
+
           </MenuItem>
           <MenuItem
             onClick={() => this.other(username)}
@@ -42,4 +54,3 @@ export default connect((state) => ({
   isPremium: state.isPremium,
   updateSnackbar: state.updateSnackbar,
 }), Settings);
-
