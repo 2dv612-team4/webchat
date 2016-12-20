@@ -282,12 +282,12 @@ module.exports = (io) => {
      * If user wants to Delete account
      */
     socket.on('delete-account', (username) => {
-        userHandler.deleteUserAccount(username).then(() => {
-          console.log('Account ' + username + ' deleted');
-          emitToSpecificUser(io, socketid, 'delete-account-success', {
-            message: 'You deleted your account!',
-          });
-        }).catch((e) => emitToSpecificUser(io, socketid, 'servererror', e.message));
-      });
+      userHandler.deleteUserAccount(username).then(() => {
+        console.log('Account ' + username + ' deleted');
+        emitToSpecificUser(io, socketid, 'delete-account-success', {
+          message: 'You deleted your account!',
+        });
+      }).catch((e) => emitToSpecificUser(io, socketid, 'servererror', e.message));
     });
+  });
 };

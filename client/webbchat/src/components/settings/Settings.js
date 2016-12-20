@@ -34,7 +34,9 @@ class Settings extends Component {
           </MenuItem>
           <MenuItem
             onClick={() => this.deleteAccount(username)}
-            >Delete Account
+            ><form action="/logout" name="logout" method="get">
+              <Button type="submit">Logout</Button>
+            </form>
           </MenuItem>
         </Menu>
       </div>

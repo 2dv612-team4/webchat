@@ -289,11 +289,6 @@ const init = (store) => {
       webchatEmitter.on('delete-account', (wantToDeleteAccount) => {
         socket.emit('delete-account', wantToDeleteAccount);
       });
-      socket.on('delete-account-success', (obj) => {
-        console.log('redirecting to logout');
-        // Route to /logout here
-        console.log(obj.message);
-      });
     });
 };
 
