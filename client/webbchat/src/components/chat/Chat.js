@@ -30,7 +30,11 @@ class Chat extends Component {
 
   onDrop(files) {
       files.forEach((file)=> {
-          webchatEmitter.emit('upload-file', {file, chatId: this.props.chatOpen} );
+        if(file.size > 1000000) {
+          alert('Size of file is too big');
+          return;
+        }
+        webchatEmitter.emit('upload-file', {file, chatId: this.props.chatOpen} );
       });
   }
 
@@ -56,7 +60,7 @@ class Chat extends Component {
           rows={1}
         />
         <Dropzone onDrop={this.onDrop.bind(this)} multiple={false} id="fileUpload">
-          <div>Drop or click to upload file</div>
+          <div>Drop or click to upload file(max size: 1mb)</div>
         </Dropzone>
         </div>
         </div>

@@ -123,7 +123,7 @@ const init = (store) => {
        * on new chat messages
        */
       socket.on('update-chat', function (obj) {
-        store.dispatch(actionsCreators.addMessage(obj.chatId, obj.username, obj.message));
+        store.dispatch(actionsCreators.addMessage(obj.chatId, obj.username, obj.message, obj.attachment));
       });
 
       /**
