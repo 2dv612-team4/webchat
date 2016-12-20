@@ -5,36 +5,13 @@ import connect from '../../../connect/connect'
 
 class Payment extends Component {
 
-<<<<<<< HEAD
-  constructor(props) {
-    super(props);
-    this.state = {
-      openDialog: false,
-    };
-  }
-
-  handleOpenDialog() {
-    this.setState({
-      openDialog: true
-    });
-  }
-
-  handleCloseDialog() {
-    this.setState({
-      openDialog: false
-    });
-  }
-
-  componentWillMount(){
-=======
-  componentWillMount(){
+componentWillMount(){
     webchatEmitter.on('update-premium-response-fail-snackbar', (message) => {
       this.props.updateSnackbar({
         display: true,
         text: message,
       });
     });
->>>>>>> 8515d43aa12798acbb65605192df7c96227222b8
     webchatEmitter.on('update-premium-response-success-snackbar', (message) => {
       this.props.updateSnackbar({
         display: true,
@@ -43,18 +20,6 @@ class Payment extends Component {
     });
   }
 
-<<<<<<< HEAD
-  giveUserPremium(username, premium) {
-    this.handleCloseDialog();
-    if(premium){
-      this.props.update({
-        display: true,
-        text: "You already have premium!",
-      });
-      return;
-    }
-    webchatEmitter.emit('update-premium', username);
-=======
   giveUserPremium(username, isPremium) {
     if(isPremium){
       this.props.updateSnackbar({
@@ -66,32 +31,12 @@ class Payment extends Component {
     }
     webchatEmitter.emit('update-premium', username);
     this.closeBuyPremium();
->>>>>>> 8515d43aa12798acbb65605192df7c96227222b8
   }
 
   closeBuyPremium() {
     webchatEmitter.emit('buy-premium', false);
   }
   render() {
-<<<<<<< HEAD
-    const username = this.props.name;
-    const premium = this.props.premium;
-    return (
-      <div>
-        <Button colored onClick={() => this.handleOpenDialog()} raised ripple>Show Dialog</Button>
-        <Dialog open={this.state.openDialog}>
-          <DialogTitle>Premium</DialogTitle>
-          <DialogContent>
-            <p>Do you want to buy premium!</p>
-          </DialogContent>
-          <DialogActions>
-            <Button type='button' onClick={() => this.giveUserPremium(username, premium)}>Yes</Button>
-            <Button type='button' onClick={() => this.handleCloseDialog()}>No</Button>
-          </DialogActions>
-        </Dialog>
-      </div>
-    );
-=======
     const username = this.props.username;
     const isPremium = this.props.isPremium;
     const buyPremium = this.props.buyPremium;
@@ -109,7 +54,6 @@ class Payment extends Component {
       );
     }
     return null;
->>>>>>> 8515d43aa12798acbb65605192df7c96227222b8
   }
 }
 
