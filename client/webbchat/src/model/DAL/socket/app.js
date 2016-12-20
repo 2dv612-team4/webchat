@@ -14,7 +14,7 @@ const init = (store) => {
       });
 
       /**
-       * loads initail username... 
+       * loads initial username...
        */
       socket.on('onload-username', function (username) {
         store.dispatch(actionsCreators.setUsernameRequests(username));
@@ -31,7 +31,6 @@ const init = (store) => {
        * loads inital friends
        * */
       socket.on('onload-friends', function (friends) {
-        
         friends.forEach(({chat}) =>
           store.dispatch(actionsCreators.addChat(chat)));
 
@@ -91,7 +90,7 @@ const init = (store) => {
        */
       socket.on('accept-friend-request-response', function(obj){
         socket.emit('join-chat-rooms');
-        
+
         obj.friends.forEach(({chat}) =>
           store.dispatch(actionsCreators.addChat(chat)));
 
@@ -134,8 +133,8 @@ const init = (store) => {
         store.dispatch(actionsCreators.clearAllMessages(chat.chatId));
       });
 
-      /** 
-       * sets inital groupchats 
+      /**
+       * sets inital groupchats
        * */
       socket.on('onload-groupchats', function(groupchats){
         groupchats.forEach((chat) =>
@@ -151,7 +150,7 @@ const init = (store) => {
 
         store.dispatch(actionsCreators.updateSnackbar({
           display: true,
-          text: obj.message, 
+          text: obj.message,
         }));
       });
 
@@ -164,7 +163,7 @@ const init = (store) => {
       });
 
       /**
-       * on groupchat update ex somone leaves chat 
+       * on groupchat update ex somone leaves chat
        * obj
        *  chat
        *  message
@@ -173,11 +172,11 @@ const init = (store) => {
         store.dispatch(actionsCreators.updateChat(obj.chat));
         store.dispatch(actionsCreators.updateSnackbar({
           display: true,
-          text: obj.message, 
+          text: obj.message,
         }));
       });
 
-      
+
 
       // EventEmitter
       /**
@@ -226,7 +225,6 @@ const init = (store) => {
        * Send file to the current chatroom
        */
       webchatEmitter.on('upload-file', (obj) => {
-        console.log('app.js server side:::..::..::.', obj);
         socket.emit('upload-file', obj, obj.file.name);
       });
 
@@ -283,6 +281,13 @@ const init = (store) => {
 
       socket.on('update-password-response-success', function(obj){
         webchatEmitter.emit('update-password-response-success-snackbar', obj.message);
+      });
+
+      /*
+       * Delete account stuff
+       */
+      webchatEmitter.on('delete-account', (wantToDeleteAccount) => {
+        socket.emit('delete-account', wantToDeleteAccount);
       });
     });
 };

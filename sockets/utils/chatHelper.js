@@ -1,7 +1,8 @@
 const userHandler = require('../../model/DAL/userHandler.js');
 const roomHandler = require('../../model/DAL/roomHandler.js');
+const filesHandler = require('../../model/DAL/filesHandler.js');
 const co = require('co');
-const fs = require('fs');
+const fs = require('fs-promise');
 const path = require('path');
 const uuid = require('uuid/v1');
 
@@ -82,14 +83,12 @@ const addUserToGroupchat =
 
 const addFileToRoom =
   co.wrap(function* (roomId, username, file, filename) {
-    let dir = path.join(__dirname, '../../public/sharedfiles/', uuid());
-    fs.writeFile(dir, file, (err) => {
-      if (err) throw err;
-      console.log('File saved!');
-    });
+    let unique = uuid();
     const user = yield userHandler.findWithUsername(username);
-    return yield roomHandler.addFile(roomId, user._id, dir, filename);
+    yield filesHandler.add(file, filename, unique);
+    return roomHandler.addFileRef(roomId, user._id, filename, unique);
   });
+
 
 const removeSpecificMessages = (rooms) => {
   const startdate = new Date();
