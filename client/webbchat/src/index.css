@@ -11,3 +11,227 @@ body {
 .mdl-layout__drawer .mdl-navigation .mdl-navigation__link:hover {
     background-color: initial;
 }
+
+.chatmessageLoggedIn {
+  border-bottom-left-radius: 44px;
+  border-top-left-radius: 44px;
+  border-top-right-radius:  44px;
+  background-color: #3F6EBE;
+  text-align: right;
+
+  margin-top: 6px;
+}
+
+.chatmessage {
+  border-bottom-right-radius: 44px;
+  border-top-left-radius: 44px;
+  border-top-right-radius:  44px;
+
+  background-color: #e0e0e0;
+  margin-top: 6px;
+}
+
+.chatMessagesWindow{
+  overflow-y: auto;
+  padding: 16px;
+  max-height: calc(80vh - 62px);
+}
+
+.chatContainer{
+  flex: 1 1 90%;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  flex: 1 1 90%;
+  display: flex;
+  flex-direction: column;
+  background-color: #eee;
+  border: 1px solid #ccc;
+  overflow: auto;
+}
+
+.bubble {
+  flex: 1 1 auto;
+  clear: both;
+}
+.bubble p {
+  border-radius: 5px;
+  padding: 8px; margin: 4px 12px;
+  max-width: 60%;
+  position: relative;
+  word-wrap: break-word;
+}
+
+.left p {
+  background-color: #eee;
+  float: left;
+}
+
+.right p {
+  background-color: #BBDEFB;
+  color: #fff;
+  float: right;
+}
+
+.left i {
+  font-size: 11px;
+}
+
+.right i {
+  font-size: 11px;
+}
+
+/*
+  Arrows
+*/
+.left p::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    left: -8px;
+    top: 8px;
+    border-top: 4px solid transparent;
+    border-right: 8px solid #eee;
+    border-bottom: 4px solid transparent;
+}
+.right p::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    right: -8px;
+    bottom: 8px;
+    border-top: 4px solid transparent;
+    border-left: 8px solid #BBDEFB;
+    border-bottom: 4px solid transparent;
+}
+
+.inputChatMessage{
+  width: 85%;
+  margin-left: 16px;
+  margin-right: 16px;
+}
+
+.chatHeader{
+  /*padding: 16px;*/
+  padding-left: 16px;
+  background-color: #b5d6f2;
+}
+
+/*React generated CSS <------------->*/
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+/*React generated CSS <------------->*/
+
+/*Prevents scroll*/
+#contentArea{
+  overflow: hidden;
+}
+
+/*Overall font color change to the grey used in the loginpage*/
+p,h1,h2,h3,h4,span,ul,li,button,select{
+  color: #424242 !important;
+}
+/*Changes label color to grey from default mdl red/pink*/
+label{
+  color: #424242 !important;
+}
+/*register form bottom border fix to match custom stylesheet instead of default red(only when not focused)*/
+.mdl-textfield__input{
+  border-color: none !important;
+}
+
+/*Correct color for loginpage, Refactoring where header and buttons will be changed incoming someday.*/
+#header{
+  background-color: #BBDEFB;
+}
+/*Field used for searching for other users*/
+#searchField{
+  width: 200px;
+  margin-top: -6.5%;
+}
+
+/*Logoutbutton*/
+#logout {
+  background-color: rgb(147, 196, 237)!important;
+  margin-left: 10%;
+}
+
+
+
+/*div where the adverisement on desktop page is placed.*/
+#advert{
+  height: calc(100vh - 62px);
+}
+/*Used to size the ad on desktoppage*/
+#verticalAd {
+  width: 100%;
+  height: 100%;
+}
+/*Used to place mobile ad at the bottom of the page*/
+#mobileAd{
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+}
+/*Windows for usersettings, changing password and applying for premium*/
+#premiumConfirm,#passwordChange{
+  position: absolute;
+    text-align: center;
+    background: #FAFAFA;
+    right: 0;
+}
+/*Styling on the buttons in the usersettings*/
+#settingsbuttonAccept,#settingsbuttonDecline{
+  margin-bottom:5%;
+  margin-left: 2%;
+  margin-right: 2%;
+}
+#passwordContainer{
+  padding-left: 5%;
+  padding-right: 5%;
+}
+/*Color on the YES buttons*/
+#settingsbuttonAccept{
+  background-color: rgb(147, 196, 237);
+}
+/*Color on the NO buttons*/
+#settingsbuttonDecline{
+  background-color: rgb(182,210,233);
+}
+#chatInput{
+  display: flex;
+}
+
+#fileUpload{
+  margin:16px;
+  height: 5.5vh !important;
+  border: 2px solid #BBDEFB !important;
+  text-align: center;
+  line-height: 5.5vh;
+}

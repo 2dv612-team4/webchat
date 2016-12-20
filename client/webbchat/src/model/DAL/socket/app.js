@@ -7,41 +7,42 @@ import webchatEmitter from '../../emitter';
 const init = (store) => {
 
   getSocketsToken()
-    .then(responce => responce.json())
+    .then(response => response.json())
     .then((obj) => {
-      const server = io('', {
+      const socket = io('', {
         query: 'token=' + obj.token,
       });
-      /*server.on('connect', function (socket) {
-      });*/
-      // Sockets
 
       /**
-       *
+       * loads initial username...
        */
-      server.on('onload-username', function (username) {
+      socket.on('onload-username', function (username) {
         store.dispatch(actionsCreators.setUsernameRequests(username));
       });
 
       /**
        * loads initial pending requests
        */
-      server.on('onload-pending', function (pending) {
+      socket.on('onload-pending', function (pending) {
         store.dispatch(actionsCreators.setPendingRequests(pending));
       });
 
       /**
        * loads inital friends
        * */
-      server.on('onload-friends', function (friends) {
+      socket.on('onload-friends', function (friends) {
+        friends.forEach(({chat}) =>
+          store.dispatch(actionsCreators.addChat(chat)));
+
         store.dispatch(actionsCreators.setInitialFriends(friends));
       });
 
       /**
-       * updated friends array
+       * on friend remove
        * friends array
        */
-      server.on('friends', function (obj) {
+      socket.on('remove-friend', function (obj) {
+        store.dispatch(actionsCreators.removeChat(obj.chatId));
         store.dispatch(actionsCreators.setInitialFriends(obj.friends));
       });
 
@@ -49,7 +50,7 @@ const init = (store) => {
        * recives new pending requests
        * and messages
        */
-      server.on('pending', function (obj) {
+      socket.on('pending', function (obj) {
         webchatEmitter.emit('new-pending', obj.message);
         store.dispatch(actionsCreators.setPendingRequests(obj.pending));
       });
@@ -57,7 +58,7 @@ const init = (store) => {
       /**
        * recives message after friend request is sent
        */
-      server.on('friend-request-response', function(message){
+      socket.on('friend-request-response', function(message){
         webchatEmitter.emit('friend-request-success', message);
       });
 
@@ -66,7 +67,10 @@ const init = (store) => {
        * friends array
        * message
        */
-      server.on('friend-request-accepted', function(obj) {
+      socket.on('friend-request-accepted', function(obj) {
+        socket.emit('join-chat-rooms');
+        obj.friends.forEach(({chat}) =>
+          store.dispatch(actionsCreators.addChat(chat)));
         webchatEmitter.emit('friend-request-success', obj.message);
         store.dispatch(actionsCreators.setInitialFriends(obj.friends));
       });
@@ -74,7 +78,7 @@ const init = (store) => {
       /**
       pending array * recives error messages from sent failed friend requests
        */
-      server.on('friend-request-error', function(message){
+      socket.on('friend-request-error', function(message){
         webchatEmitter.emit('friend-request-error', message);
       });
 
@@ -84,8 +88,12 @@ const init = (store) => {
        * friends array
        * pending array
        */
-      server.on('accept-friend-request-response', function(obj){
-        //webchatEmitter.emit('friend-request-accepted', obj.message);
+      socket.on('accept-friend-request-response', function(obj){
+        socket.emit('join-chat-rooms');
+
+        obj.friends.forEach(({chat}) =>
+          store.dispatch(actionsCreators.addChat(chat)));
+
         store.dispatch(actionsCreators.setInitialFriends(obj.friends));
         store.dispatch(actionsCreators.setPendingRequests(obj.pending));
       });
@@ -95,7 +103,7 @@ const init = (store) => {
        * recives message
        * pending array
        */
-      server.on('rejected-friend-request-response', function(obj){
+      socket.on('rejected-friend-request-response', function(obj){
         //webchatEmitter.emit('friend-request-rejected', obj.message);
         store.dispatch(actionsCreators.setPendingRequests(obj.pending));
       });
@@ -103,58 +111,184 @@ const init = (store) => {
       /**
        * set premium state
        */
-      server.on('set-is-premium', function (isPremium) {
+      socket.on('set-is-premium', function (isPremium) {
         store.dispatch(actionsCreators.setIsPremium(isPremium));
       });
 
-      server.on('servererror', function(message){
+      socket.on('servererror', function(message){
         console.log('server error', message);
       });
 
+      /**
+       * on new chat messages
+       */
+      socket.on('update-chat', function (obj) {
+        store.dispatch(actionsCreators.addMessage(obj.chatId, obj.username, obj.message, obj.attachment));
+      });
+
+      /**
+       * on clear chat
+       */
+      socket.on('clear-chat', function (chat) {
+        store.dispatch(actionsCreators.clearAllMessages(chat.chatId));
+      });
+
+      /**
+       * sets inital groupchats
+       * */
+      socket.on('onload-groupchats', function(groupchats){
+        groupchats.forEach((chat) =>
+          store.dispatch(actionsCreators.addChat(chat)));
+      });
+
+      /**
+       * on new groupchat
+       */
+      socket.on('new-groupchat', function(obj){
+        socket.emit('join-chat-rooms');
+        store.dispatch(actionsCreators.addChat(obj.chat));
+
+        store.dispatch(actionsCreators.updateSnackbar({
+          display: true,
+          text: obj.message,
+        }));
+      });
+
+      /**
+       * on leave groupchat
+       * friends array
+       */
+      socket.on('remove-groupchat', function (chatId) {
+        store.dispatch(actionsCreators.removeChat(chatId));
+      });
+
+      /**
+       * on groupchat update ex somone leaves chat
+       * obj
+       *  chat
+       *  message
+       */
+      socket.on('update-groupchat', function(obj){
+        store.dispatch(actionsCreators.updateChat(obj.chat));
+        store.dispatch(actionsCreators.updateSnackbar({
+          display: true,
+          text: obj.message,
+        }));
+      });
+
+
+
       // EventEmitter
+      /**
+       * Send message to the current chatroom
+       */
+      webchatEmitter.on('send-chat-message', (message) => {
+        socket.emit('send-chat-message', message);
+      });
+
       /**
        * Sends friend request user with username
        */
       webchatEmitter.on('friend-request', (username) => {
-        server.emit('friend-request', username);
+        socket.emit('friend-request', username);
       });
 
       /**
        * Accsepts friend request from user with id
        */
       webchatEmitter.on('accept-friend-request', (id) => {
-        server.emit('accept-friend-request', id);
+        socket.emit('accept-friend-request', id);
       });
 
       /**
        * rejects freind request from user with id
        */
       webchatEmitter.on('reject-friend-request', (id) => {
-        server.emit('reject-friend-request', id);
+        socket.emit('reject-friend-request', id);
       });
 
       /**
        * removes friend with username
        */
-      webchatEmitter.on('remove-friend', (username) => {
-        server.emit('remove-friend', username);
+      webchatEmitter.on('remove-friend', (obj) => {
+        socket.emit('remove-friend', { username: obj.username, chatId: obj.chatId});
+      });
+
+      /**
+       * sends event to clear chat history
+       */
+      webchatEmitter.on('clear-chat-history', (chatId) => {
+        socket.emit('clear-chat-history', chatId);
+      });
+
+      /**
+       * Send file to the current chatroom
+       */
+      webchatEmitter.on('upload-file', (obj) => {
+        socket.emit('upload-file', obj, obj.file.name);
+      });
+
+      /**
+       * groupchat
+       */
+      webchatEmitter.on('leave-groupchat', (chatId) => {
+        socket.emit('leave-groupchat', chatId);
+      });
+
+      webchatEmitter.on('create-new-group-chat-from-friend-chat', ({chatId, usersToAdd}) => {
+        socket.emit('create-new-group-chat-from-friend-chat', {chatId, usersToAdd});
+      });
+
+      webchatEmitter.on('add-user-to-group-chat', ({chatId, usersToAdd}) => {
+        console.log('add-user-to-group-chat', chatId, usersToAdd);
+        socket.emit('add-user-to-group-chat', {chatId, usersToAdd});
       });
 
       /**
        * Add premium
        */
       webchatEmitter.on('update-premium', (username) => {
-        server.emit('update-premium', username);
+        socket.emit('update-premium', username);
       });
 
-      server.on('update-premium-response-success', function(obj){
-        console.log(obj.isPremium);
+      socket.on('update-premium-response-fail', function(obj){
+        webchatEmitter.emit('update-premium-response-fail-snackbar', obj.message);
+      });
+
+      socket.on('update-premium-response-success', function(obj){
         store.dispatch(actionsCreators.setIsPremium(obj.isPremium));
         webchatEmitter.emit('update-premium-response-success-snackbar', obj.message);
       });
 
+      webchatEmitter.on('buy-premium', (wantToBuy) => {
+        store.dispatch(actionsCreators.buyAdPremium(wantToBuy));
+      });
 
+      /*
+      * Password stuff
+      */
+      webchatEmitter.on('change-password-settings', (wantToChangePassword) => {
+        store.dispatch(actionsCreators.changeUserPassword(wantToChangePassword));
+      });
 
+      webchatEmitter.on('update-password', (username, oldPassword, newPassword) => {
+        socket.emit('update-password', username, oldPassword, newPassword);
+      });
+
+      socket.on('update-password-response-fail', function(obj){
+        webchatEmitter.emit('update-password-response-fail-snackbar', obj.message);
+      });
+
+      socket.on('update-password-response-success', function(obj){
+        webchatEmitter.emit('update-password-response-success-snackbar', obj.message);
+      });
+
+      /*
+       * Delete account stuff
+       */
+      webchatEmitter.on('delete-account', (wantToDeleteAccount) => {
+        socket.emit('delete-account', wantToDeleteAccount);
+      });
     });
 };
 

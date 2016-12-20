@@ -47,3 +47,69 @@ export const setIsPremium = (isPremium) => {
     isPremium,
   };
 };
+
+export const buyAdPremium = (buyPremium) => {
+  return {
+    type: 'BUY_PREMIUM',
+    buyPremium,
+  };
+};
+
+export const addMessage = (chatId, username, message, attachment) => {
+  return {
+    type: 'ADD_MESSAGE',
+    chatId, 
+    message, 
+    username,
+    attachment,
+  };
+};
+
+export const addChat = ({ _id, messages, isGroupChat, timestamp, users, name }) => {
+  return {
+    type: 'ADD_CHAT',
+    chatId: _id,
+    messages,
+    isGroupChat,
+    timestamp,
+    users,
+    name,
+  };
+};
+
+export const updateChat = ({ _id, messages, isGroupChat, timestamp, users, name }) => ({
+  type: 'UPDATE_CHAT',
+  chatId: _id,
+  messages,
+  isGroupChat,
+  timestamp,
+  users,
+  name,
+});
+
+export const removeChat = (chatId) => {
+  return {
+    type: 'REMOVE_CHAT',
+    chatId,
+  };
+};
+
+export const setChatOpen = (chatId) => {
+  return {
+    type: 'SET_CHAT_OPEN',
+    chatId,
+  };
+};
+
+
+export const changeUserPassword = (changePassword) => {
+  return {
+    type: 'CHANGE_PASSWORD',
+    changePassword,
+  };
+};
+
+export const clearAllMessages = (chatId) => ({
+  type: 'CLEAR_ALL_MESSAGES',
+  chatId,
+});

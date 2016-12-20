@@ -1,47 +1,42 @@
 import React, { Component } from 'react';
 import { Button, Menu, MenuItem } from 'react-mdl';
-import Payment from './Payment/Payment';
-import connect from '../../connect/connect'
+import connect from '../../connect/connect';
+import webchatEmitter from '../../model/emitter';
+
 
 class Settings extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      showComponent: false,
-    };
-  }
-
   payment(){
-    this.setState({
-      showComponent: true,
-    });
+    webchatEmitter.emit('buy-premium', true);
   }
 
-  other(username){
-    console.log('Some other setting function:', username);
-    // TODO: Implement other function, like password change
+  changePassword(username){
+    webchatEmitter.emit('change-password-settings', true);
+  }
+
+  deleteAccount(username){
+    webchatEmitter.emit('delete-account', username);
   }
 
   render() {
-    //<Payment name={username} premium={isPremium} update={updateSnackbar}/>
     const username = this.props.username;
-    const isPremium = this.props.isPremium;
-    const updateSnackbar = this.props.updateSnackbar;
     return (
       <div>
-        <Button raised accent name="SettingsButton" id={`menu_iconbutton_id_${username}`}>{username}</Button>
+        <Button raised name="SettingsButton" id={`menu_iconbutton_id_${username}`}>{username}</Button>
         <Menu align='right' target={`menu_iconbutton_id_${username}`} >
           <MenuItem
             onClick={() => this.payment()}
-            >{this.state.showComponent ?
-              <Payment name={username} premium={isPremium} update={updateSnackbar}/>:
-              null}
-
+            >Pay For Premium To Remove Adds
           </MenuItem>
           <MenuItem
-            onClick={() => this.other(username)}
-            >Some Other Option
+            onClick={() => this.changePassword(username)}
+            >Change Password
+          </MenuItem>
+          <MenuItem
+            onClick={() => this.deleteAccount(username)}
+            ><form action="/logout" name="logout" method="get">
+              <Button type="submit">Logout</Button>
+            </form>
           </MenuItem>
         </Menu>
       </div>
@@ -51,6 +46,4 @@ class Settings extends Component {
 
 export default connect((state) => ({
   username: state.username,
-  isPremium: state.isPremium,
-  updateSnackbar: state.updateSnackbar,
 }), Settings);

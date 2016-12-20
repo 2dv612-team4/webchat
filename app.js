@@ -9,6 +9,7 @@ const sessions = require('express-session');
 const mongoose = require('mongoose');
 mongoose.Promise = Promise;
 require('./model/DAL/helper.js');
+//require('./model/DAL/seeed.js');
 
 const app = express();
 

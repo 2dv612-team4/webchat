@@ -36,5 +36,5 @@ h3 {
   border-color: rgba(0,0,0,.26) !important;
 }
 #Username,#Password,#RepeatPassword{
-  text-align: center !important;
+  text-align: center;
 }

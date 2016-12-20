@@ -9,11 +9,13 @@ const friends = [];
 const otherUsers = [];
 
 const pending = [];
+
 const snackbar = {
   display: false,
   text: '',
 };
 
+const chat = [];
 
 const defaultState = {
   friends,
@@ -23,6 +25,10 @@ const defaultState = {
   username: '',
   snackbar,
   isPremium: false,
+  buyPremium: false,
+  chat,
+  chatOpen: '',
+  changePassword: false,
 };
 
 const store = createStore(rootReducer, defaultState);
