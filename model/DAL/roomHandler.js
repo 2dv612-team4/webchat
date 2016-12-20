@@ -1,4 +1,5 @@
 const Room = require(__dirname + '/Schemas/room.js');
+const co = require('co');
 
 /**
  * [creates new room]
@@ -125,9 +126,15 @@ const leaveChat = (_id, userId) =>
 const updateChatName = (_id, name) =>
   Room.update({ _id }, { name }).exec();
 
-const addFile = (_id, userId, uniquefname, fname) => 
-  Room.update({_id}, {$push: {messages: {user: userId, message: fname, attachment: {originalfilename: fname, uniquefilename: uniquefname}}}}).exec();
-
+const addFileRef = (_id, userId, fname, uid) => new Promise((resolve, reject) => {
+  co(function*(){
+    const res = yield Room.update({_id}, {$push: {messages: {user: userId, message: fname, attachment: {filename: fname, uid: uid}}}}).exec();
+    if(res){
+      resolve(true);
+    }
+  }).catch(() => reject(false));
+});
+  
 module.exports = {
   add,
   findRoomWithId,
@@ -140,7 +147,7 @@ module.exports = {
   addMessages,
   findRoomWithIdAndPopulateAll,
   leaveChat,
-  addFile,
+  addFileRef,
   updateChatName,
 };
 

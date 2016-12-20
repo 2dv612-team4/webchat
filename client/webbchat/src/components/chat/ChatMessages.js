@@ -14,13 +14,12 @@ const ChatMessages = ({ messages, loggedInUsername}) => (
             </p>
             
           </div>)}
-        else{//The following will be changed. It should not be a href but a button or something that downloads the file
+        else{
+          const link = '/download/'+attachment.uid;
           return (
           <div key={i} className={messageColor}>
           <p>
-            {attachment.originalfilename}
-            <br />
-            {attachment.uniquefilename}
+            <a href={link}>{attachment.filename}</ a>
             <br/>
             <i>{username}</i>
           </p>  
