@@ -9,13 +9,14 @@ const findWithUsername = (username) => User.findOne({ username }).exec();
 const findWithId = (_id) => User.findOne({_id}).exec();
 const getFriendRequests = (username) => User.findOne({username}).populate('friendrequests').exec();
 const findAllUsers = () => User.find({}).select('username').exec();
+const deleteUserAccount = (username) => User.find({username}).remove().exec();
 
 /**
  * [gets user object with friends array containing users]
  * @param  {[Objet]} type [gets user by type]
  * @return {[Promise]}          [resolves to user object]
  */
-const findFriendsWith = (type) => 
+const findFriendsWith = (type) =>
   new Promise((resolve, reject) => {
     User.findOne(type)
     .populate({
@@ -135,6 +136,7 @@ const updatePremiumExpirationDate = (username, premiumExpirationDate) => User.up
 
 module.exports = {
   add,
+  deleteUserAccount,
   findWithUsername,
   findWithId,
   addFriendRequest,
