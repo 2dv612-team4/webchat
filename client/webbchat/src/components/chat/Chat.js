@@ -33,6 +33,13 @@ class Chat extends Component {
           webchatEmitter.emit('upload-file', {file, chatId: this.props.chatOpen} );
       });
   }
+  /*WIP FOR AUTOSCROLL http://stackoverflow.com/questions/26556436/react-after-render-code , http://stackoverflow.com/questions/270612/scroll-to-bottom-of-div*/
+  componentDidMount(){
+    let objDiv = document.getElementById("allChatMessages");
+    if(objDiv != null){
+      objDiv.scrollTop = objDiv.scrollHeight;
+    }
+  }
 
   render() {
     const chat = this.props.chat.find(a => a.id === this.props.chatOpen)
@@ -41,25 +48,22 @@ class Chat extends Component {
     }
     const messages = chat.messages;
     return (
-      <div>
+      <div id="chatContent">
         <ChatHeader chat={chat}/>
-        <div id="messagesAndInput">
-        <div id="chatwindow">
-        <ChatMessages messages={messages} loggedInUsername={this.props.username} />
-        </div>
-        <div id="chatInput">
-        <Textfield
-          className='inputChatMessage'
-          onChange={() => {}}
-          onKeyPress={event => this.onInputBoxEnter(event)}
-          label="Enter message"
-          rows={1}
-        />
-        <Dropzone onDrop={this.onDrop.bind(this)} multiple={false} id="fileUpload">
-          <div>Drop or click to upload file</div>
-        </Dropzone>
-        </div>
-        </div>
+            <div id="chatWindow">
+              <ChatMessages messages={messages} loggedInUsername={this.props.username} />
+            </div>
+            <div id="chatInput">
+              <Textfield
+                className='inputChatMessage'
+                label="Enter message"
+                onChange={() => {}}
+                onKeyPress={event => this.onInputBoxEnter(event)}
+              />
+              <Dropzone onDrop={this.onDrop.bind(this)} multiple={false} id="fileUpload">
+                <div>Drop or click to upload file</div>
+              </Dropzone>
+          </div>
       </div>
     );
   }

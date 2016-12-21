@@ -235,3 +235,11 @@ label{
   text-align: center;
   line-height: 5.5vh;
 }
+
+#chatContent{
+  height: calc(100vh - 62px);
+}
+
+#chatWindow{
+  height: calc(100vh - 217.25px);
+}
