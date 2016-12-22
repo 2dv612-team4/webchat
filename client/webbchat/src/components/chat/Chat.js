@@ -31,7 +31,11 @@ class Chat extends Component {
 
   onDrop(files) {
       files.forEach((file)=> {
-          webchatEmitter.emit('upload-file', {file, chatId: this.props.chatOpen} );
+        if(file.size > 1000000) {
+          alert('Size of file is too big');
+          return;
+        }
+        webchatEmitter.emit('upload-file', {file, chatId: this.props.chatOpen} );
       });
   }
   //Autoscrolls when message is sent http://stackoverflow.com/questions/26556436/react-after-render-code , http://stackoverflow.com/questions/270612/scroll-to-bottom-of-div*/
@@ -69,6 +73,24 @@ class Chat extends Component {
               </Dropzone>
             </Cell>
       </Grid>
+        <div id="messagesAndInput">
+        <div id="chatwindow">
+        <ChatMessages messages={messages} loggedInUsername={this.props.username} />
+        </div>
+        <div id="chatInput">
+        <Textfield
+          className='inputChatMessage'
+          onChange={() => {}}
+          onKeyPress={event => this.onInputBoxEnter(event)}
+          label="Enter message"
+          rows={1}
+        />
+        <Dropzone onDrop={this.onDrop.bind(this)} multiple={false} id="fileUpload">
+          <div>Drop or click to upload file(max size: 1mb)</div>
+        </Dropzone>
+        </div>
+        </div>
+      </div>
     );
   }
 }

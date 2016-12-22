@@ -81,12 +81,17 @@ const addUserToGroupchat =
 
   });
 
+/**
+ * adds the file and returns the attachment object.
+ */
 const addFileToRoom =
   co.wrap(function* (roomId, username, file, filename) {
     let unique = uuid();
+    let attachment = {filename: filename, uid: unique};
     const user = yield userHandler.findWithUsername(username);
     yield filesHandler.add(file, filename, unique);
-    return roomHandler.addFileRef(roomId, user._id, filename, unique);
+    yield roomHandler.addFileRef(roomId, user._id, filename, attachment);
+    return attachment;
   });
 
 
