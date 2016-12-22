@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import connect from '../../connect/connect';
 import webchatEmitter from '../../model/emitter';
-import { Textfield, Menu, MenuItem, List, ListItem, Tooltip, IconButton, ListItemAction, ListItemContent } from 'react-mdl';
+import { Textfield, Menu, MenuItem, List, ListItem, Tooltip, IconButton, ListItemAction, ListItemContent,Cell} from 'react-mdl';
 
 // TODO: clean this!
 
@@ -26,7 +26,7 @@ class ChatHeader extends Component {
   render() {
     const chat = this.props.chat;
     return (
-      <div className='chatHeader'>
+      <Cell col={12} className='chatHeader'>
         <IconButton name="person" id={`userInChat_iconbutton_${chat.id}`}/>
         <Menu align="right" target={`userInChat_iconbutton_${chat.id}`}>
           { chat.users.map(user => (
@@ -64,7 +64,7 @@ class ChatHeader extends Component {
             </List>) :
             null
         }
-      </div>
+      </Cell>
     );
   }
 }

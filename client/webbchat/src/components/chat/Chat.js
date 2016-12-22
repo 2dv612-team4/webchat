@@ -6,6 +6,7 @@ import connect from '../../connect/connect';
 import ChatHeader from './ChatHeader';
 
 import Dropzone from 'react-dropzone';
+import {Grid, Cell} from 'react-mdl';
 
 class Chat extends Component {
 
@@ -48,23 +49,26 @@ class Chat extends Component {
     }
     const messages = chat.messages;
     return (
-      <div id="chatContent">
+      <Grid noSpacing={true} id="chatContent">
         <ChatHeader chat={chat}/>
-            <div id="chatWindow">
+            <Cell col={12} id="chatWindow">
               <ChatMessages messages={messages} loggedInUsername={this.props.username} />
-            </div>
-            <div id="chatInput">
+            </Cell>
+            <Cell col={10} phone={7} id="chatInput">
               <Textfield
-                className='inputChatMessage'
+                className='inputChatMessage '
                 label="Enter message"
                 onChange={() => {}}
                 onKeyPress={event => this.onInputBoxEnter(event)}
+                rows={1}
               />
+            </Cell>
+            <Cell col={2} phone={6}>
               <Dropzone onDrop={this.onDrop.bind(this)} multiple={false} id="fileUpload">
-                <div>Drop or click to upload file</div>
+                <div>Upload file</div>
               </Dropzone>
-          </div>
-      </div>
+            </Cell>
+      </Grid>
     );
   }
 }

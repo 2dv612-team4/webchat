@@ -108,11 +108,10 @@ body {
     border-left: 8px solid #BBDEFB;
     border-bottom: 4px solid transparent;
 }
-
+/*Where the user inputs a message for the chat*/
 .inputChatMessage{
-  width: 85%;
-  margin-left: 16px;
-  margin-right: 16px;
+  width: 95%;
+  margin-left: 2%;
 }
 
 .chatHeader{
@@ -224,12 +223,10 @@ label{
 #settingsbuttonDecline{
   background-color: rgb(182,210,233);
 }
-#chatInput{
-  display: flex;
-}
-
+/*Inputfield for uploading a file.*/
 #fileUpload{
-  margin:16px;
+  margin-top: 2%;
+  margin-left: 2%;
   height: 5.5vh !important;
   border: 2px solid #BBDEFB !important;
   text-align: center;
