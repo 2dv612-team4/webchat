@@ -69,28 +69,11 @@ class Chat extends Component {
             </Cell>
             <Cell col={2} phone={6}>
               <Dropzone onDrop={this.onDrop.bind(this)} multiple={false} id="fileUpload">
-                <div>Upload file</div>
+                <span id="uploadText">Drop or click to upload file</span>
+                <span id="uploadText">(max size: 1mb)</span>
               </Dropzone>
             </Cell>
       </Grid>
-        <div id="messagesAndInput">
-        <div id="chatwindow">
-        <ChatMessages messages={messages} loggedInUsername={this.props.username} />
-        </div>
-        <div id="chatInput">
-        <Textfield
-          className='inputChatMessage'
-          onChange={() => {}}
-          onKeyPress={event => this.onInputBoxEnter(event)}
-          label="Enter message"
-          rows={1}
-        />
-        <Dropzone onDrop={this.onDrop.bind(this)} multiple={false} id="fileUpload">
-          <div>Drop or click to upload file(max size: 1mb)</div>
-        </Dropzone>
-        </div>
-        </div>
-      </div>
     );
   }
 }

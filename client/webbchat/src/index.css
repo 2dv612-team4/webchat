@@ -234,7 +234,11 @@ label{
   height: 5.5vh !important;
   border: 2px solid #BBDEFB !important;
   text-align: center;
-  line-height: 5.5vh;
+  line-height: 2.5vh;
+}
+
+#uploadText{
+  display: inline-block;
 }
 
 #chatContent{
