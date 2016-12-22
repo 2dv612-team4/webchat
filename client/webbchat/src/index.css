@@ -165,9 +165,13 @@ label{
   border-color: none !important;
 }
 
-/*Correct color for loginpage, Refactoring where header and buttons will be changed incoming someday.*/
+/*Change header color to match loginpage.*/
 #header{
   background-color: #BBDEFB;
+}
+/*Changes font color of title to a more readable black. White on blue was hard to read. If you want white just remove this snippet*/
+.mdl-layout-title{
+  color: #424242 !important
 }
 /*Field used for searching for other users*/
 #searchField{

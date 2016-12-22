@@ -28,12 +28,12 @@ class ChatHeader extends Component {
     return (
       <Cell col={10} phone={12} className='chatHeader' id="chatHeader">
         <IconButton name="person" id={`userInChat_iconbutton_${chat.id}`}/>
-        <Menu align="right" target={`userInChat_iconbutton_${chat.id}`}>
+        <Menu align="left" target={`userInChat_iconbutton_${chat.id}`}>
+          <MenuItem>{'Members'}</MenuItem>
           { chat.users.map(user => (
               <MenuItem key={`chatMenuKey_${user.username}`}>{user.username}</MenuItem>
             )) }
         </Menu>
-          <IconButton name="person_add" disabled={true}/>
 
         <Textfield
           id="addUserToChatSearch"
