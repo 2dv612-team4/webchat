@@ -1,18 +1,18 @@
 import React, { PropTypes } from 'react';
 
 const ChatMessages = ({ messages, loggedInUsername}) => (
-  <div className='chatMessagesWindow chatContainer'>
+  <div className='chatMessagesWindow chatContainer' id='allChatMessages'>
     {
       messages.map(({message, username, attachment}, i) => {
         const messageColor = username === loggedInUsername ? 'bubble right' : 'bubble left';
         if(!attachment){
         return (
           <div key={i} className={messageColor}>
-            <p>{message} 
+            <p>{message}
               <br/>
               <i>{username}</i>
             </p>
-            
+
           </div>)}
         else{
           const link = '/download/'+attachment.uid;
@@ -22,7 +22,7 @@ const ChatMessages = ({ messages, loggedInUsername}) => (
             <a href={link}>{attachment.filename}</ a>
             <br/>
             <i>{username}</i>
-          </p>  
+          </p>
           </div>)}
       })
     }
