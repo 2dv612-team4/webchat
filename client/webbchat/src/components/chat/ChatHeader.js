@@ -26,7 +26,7 @@ class ChatHeader extends Component {
   render() {
     const chat = this.props.chat;
     return (
-      <Cell col={12} className='chatHeader'>
+      <Cell col={10} phone={12} className='chatHeader' id="chatHeader">
         <IconButton name="person" id={`userInChat_iconbutton_${chat.id}`}/>
         <Menu align="right" target={`userInChat_iconbutton_${chat.id}`}>
           { chat.users.map(user => (
