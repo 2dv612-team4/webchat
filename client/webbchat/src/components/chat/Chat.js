@@ -34,8 +34,8 @@ class Chat extends Component {
           webchatEmitter.emit('upload-file', {file, chatId: this.props.chatOpen} );
       });
   }
-  /*WIP FOR AUTOSCROLL http://stackoverflow.com/questions/26556436/react-after-render-code , http://stackoverflow.com/questions/270612/scroll-to-bottom-of-div*/
-  componentDidMount(){
+  //Autoscrolls when message is sent http://stackoverflow.com/questions/26556436/react-after-render-code , http://stackoverflow.com/questions/270612/scroll-to-bottom-of-div*/
+  componentDidUpdate(){
     let objDiv = document.getElementById("allChatMessages");
     if(objDiv != null){
       objDiv.scrollTop = objDiv.scrollHeight;
