@@ -55,12 +55,13 @@ export const buyAdPremium = (buyPremium) => {
   };
 };
 
-export const addMessage = (chatId, username, message) => {
+export const addMessage = (chatId, username, message, attachment) => {
   return {
     type: 'ADD_MESSAGE',
     chatId, 
     message, 
     username,
+    attachment,
   };
 };
 
@@ -78,13 +79,13 @@ export const addChat = ({ _id, messages, isGroupChat, timestamp, users, name }) 
 
 export const updateChat = ({ _id, messages, isGroupChat, timestamp, users, name }) => ({
   type: 'UPDATE_CHAT',
-    chatId: _id,
-    messages,
-    isGroupChat,
-    timestamp,
-    users,
-    name,
-})
+  chatId: _id,
+  messages,
+  isGroupChat,
+  timestamp,
+  users,
+  name,
+});
 
 export const removeChat = (chatId) => {
   return {

@@ -5,11 +5,13 @@ import ChatMessages from './ChatMessages';
 import connect from '../../connect/connect';
 import ChatHeader from './ChatHeader';
 
+import Dropzone from 'react-dropzone';
+
 class Chat extends Component {
 
   onInputBoxEnter(event){
     if(event.key === 'Enter' && event.shiftKey){
-      return; 
+      return;
     }
 
     if(event.key === 'Enter'){
@@ -26,16 +28,30 @@ class Chat extends Component {
     webchatEmitter.emit('send-chat-message', {message, chatId: this.props.chatOpen} );
   }
 
+  onDrop(files) {
+      files.forEach((file)=> {
+        if(file.size > 1000000) {
+          alert('Size of file is too big');
+          return;
+        }
+        webchatEmitter.emit('upload-file', {file, chatId: this.props.chatOpen} );
+      });
+  }
+
   render() {
     const chat = this.props.chat.find(a => a.id === this.props.chatOpen)
     if(!chat || !chat.messages){
-      return null; 
+      return null;
     }
     const messages = chat.messages;
     return (
       <div>
         <ChatHeader chat={chat}/>
+        <div id="messagesAndInput">
+        <div id="chatwindow">
         <ChatMessages messages={messages} loggedInUsername={this.props.username} />
+        </div>
+        <div id="chatInput">
         <Textfield
           className='inputChatMessage'
           onChange={() => {}}
@@ -43,6 +59,11 @@ class Chat extends Component {
           label="Enter message"
           rows={1}
         />
+        <Dropzone onDrop={this.onDrop.bind(this)} multiple={false} id="fileUpload">
+          <div>Drop or click to upload file(max size: 1mb)</div>
+        </Dropzone>
+        </div>
+        </div>
       </div>
     );
   }
@@ -54,4 +75,5 @@ export default connect((state) => ({
   setChatOpen: state.setChatOpen,
   addMessage: state.addMessage,
   username: state.username,
+  addFile: state.addFile,
 }), Chat);

@@ -13,6 +13,10 @@ let roomSchema = new Schema({
       user: {type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true},
       message: {type: String, required: true},
       timestamp: {type: Date, default: Date.now, required: true},
+      attachment: {
+        filename: {type: String, required: true},
+        uid: {type: String, required: true},
+      },
     },
   ],
   timestamp: {type: Date, default: Date.now, required: true},

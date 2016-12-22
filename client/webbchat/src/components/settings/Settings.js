@@ -14,6 +14,10 @@ class Settings extends Component {
     webchatEmitter.emit('change-password-settings', true);
   }
 
+  deleteAccount(username){
+    webchatEmitter.emit('delete-account', username);
+  }
+
   render() {
     const username = this.props.username;
     return (
@@ -27,6 +31,12 @@ class Settings extends Component {
           <MenuItem
             onClick={() => this.changePassword(username)}
             >Change Password
+          </MenuItem>
+          <MenuItem
+            onClick={() => this.deleteAccount(username)}
+            ><form action="/logout" name="logout" method="get">
+              <Button type="submit">Logout</Button>
+            </form>
           </MenuItem>
         </Menu>
       </div>
