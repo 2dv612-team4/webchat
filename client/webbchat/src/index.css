@@ -108,11 +108,10 @@ body {
     border-left: 8px solid #BBDEFB;
     border-bottom: 4px solid transparent;
 }
-
+/*Where the user inputs a message for the chat*/
 .inputChatMessage{
-  width: 85%;
-  margin-left: 16px;
-  margin-right: 16px;
+  width: 95%;
+  margin-left: 2%;
 }
 
 .chatHeader{
@@ -154,7 +153,7 @@ body {
 }
 
 /*Overall font color change to the grey used in the loginpage*/
-p,h1,h2,h3,h4,span,ul,li,button,select{
+p,h1,h2,h3,h4,ul,li,button,select{
   color: #424242 !important;
 }
 /*Changes label color to grey from default mdl red/pink*/
@@ -166,9 +165,13 @@ label{
   border-color: none !important;
 }
 
-/*Correct color for loginpage, Refactoring where header and buttons will be changed incoming someday.*/
+/*Change header color to match loginpage.*/
 #header{
   background-color: #BBDEFB;
+}
+/*Changes font color of title to a more readable black. White on blue was hard to read. If you want white just remove this snippet*/
+.mdl-layout-title{
+  color: #424242 !important
 }
 /*Field used for searching for other users*/
 #searchField{
@@ -224,14 +227,30 @@ label{
 #settingsbuttonDecline{
   background-color: rgb(182,210,233);
 }
-#chatInput{
-  display: flex;
-}
-
+/*Inputfield for uploading a file.*/
 #fileUpload{
-  margin:16px;
+  margin-top: 2%;
+  margin-left: 2%;
   height: 5.5vh !important;
   border: 2px solid #BBDEFB !important;
   text-align: center;
-  line-height: 5.5vh;
+  line-height: 2.5vh;
+}
+
+#uploadText{
+  display: inline-block;
+}
+
+#chatContent{
+  height: calc(100vh - 62px);
+}
+
+#chatWindow{
+  height: calc(100vh - 217.25px);
+  margin-top: 67px;
+}
+
+#chatHeader{
+  position: absolute;
+  z-index: 2;
 }
