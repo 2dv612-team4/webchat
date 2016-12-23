@@ -218,6 +218,21 @@ module.exports = (io) => {
         })
         .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'create-new-group-chat-from-friend-chat'})));
 
+    
+    /**
+     * @param  {} users [users to add to chat]
+     */
+    socket.on('create-new-group-chat', (users) => 
+      chatHelper.createNewGroupChat(users, username)
+        .then((chat) => {
+          chat.users.forEach(user =>
+            emitToSpecificUser(io, user.socketId, 'new-groupchat', {
+              message: `You joined groupchat ${chat.name}`,
+              chat,
+            }));
+        })
+        .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'create-new-group-chat'})));
+
     socket.on('add-user-to-group-chat', (obj) =>
       chatHelper.addUserToGroupchat(obj.chatId, obj.usersToAdd)
         .then(({addedUsers, groupChat: chat, oldParticipants}) => {
