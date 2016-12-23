@@ -244,6 +244,10 @@ const init = (store) => {
         socket.emit('add-user-to-group-chat', {chatId, usersToAdd});
       });
 
+      webchatEmitter.on('create-new-group-chat', (users) => {
+        socket.emit('create-new-group-chat', users);
+      });
+
       /**
        * Add premium
        */
