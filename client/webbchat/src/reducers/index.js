@@ -8,6 +8,7 @@ import snackbar from './snackbar';
 import isPremium from './isPremium';
 import changePassword from './changePassword';
 import buyPremium from './buyPremium';
+import newGroupChatList from './newGroupChatList';
 
 import chat from './chat';
 import chatOpen from './chatOpen';
@@ -24,6 +25,7 @@ const rootReducer = combineReducers({
   buyPremium,
   chat,
   chatOpen,
+  newGroupChatList,
 });
 
 export default rootReducer;
