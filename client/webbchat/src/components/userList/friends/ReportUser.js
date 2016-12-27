@@ -41,7 +41,7 @@ class ReportUser extends Component {
     if(reportUser){
       return (
         <div id="reportContainer">
-          <p>Report user?</p>
+          <p>Report user: {reportUser}?</p>
 
           <Textfield id="reasonForReportField"
             label='State the reason for the report'

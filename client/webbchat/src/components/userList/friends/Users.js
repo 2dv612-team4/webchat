@@ -20,7 +20,7 @@ class Users extends Component {
   }
 
   reportUser(username){
-    webchatEmitter.emit('report-user-settings', true);
+    webchatEmitter.emit('report-user-settings', username);
   }
 
   render() {

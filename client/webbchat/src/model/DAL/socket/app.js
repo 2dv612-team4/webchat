@@ -290,9 +290,8 @@ const init = (store) => {
       /**
        * report user stuff
        */
-      webchatEmitter.on('report-user-settings', (wantToReportUser) => {
-        console.log(wantToReportUser);
-        store.dispatch(actionsCreators.reportUserMisconduct(wantToReportUser));
+      webchatEmitter.on('report-user-settings', (reportUser) => {
+        store.dispatch(actionsCreators.reportUserMisconduct(reportUser));
       });
 
       webchatEmitter.on('report-user', (reporteduser, reportedby, reason) => {
