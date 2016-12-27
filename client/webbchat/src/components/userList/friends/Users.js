@@ -19,6 +19,10 @@ class Users extends Component {
     webchatEmitter.emit('clear-chat-history', chatId);
   }
 
+  reportUser(username){
+    webchatEmitter.emit('report-user-settings', true);
+  }
+
   render() {
     return (
       <List>
@@ -30,6 +34,7 @@ class Users extends Component {
                     openChat={this.openChat.bind(this)}
                     removeFriend={this.removeFriend.bind(this)}
                     clearChatHistory={this.clearChatHistory.bind(this)} 
+                    reportUser={this.reportUser.bind(this)}
                     user={friend.user}
                     chat={friend.chat} 
                     key={friend.user.username}/>)}

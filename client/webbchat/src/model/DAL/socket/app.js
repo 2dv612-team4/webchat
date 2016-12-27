@@ -287,6 +287,26 @@ const init = (store) => {
         webchatEmitter.emit('update-password-response-success-snackbar', obj.message);
       });
 
+      /**
+       * report user stuff
+       */
+      webchatEmitter.on('report-user-settings', (wantToReportUser) => {
+        console.log(wantToReportUser);
+        store.dispatch(actionsCreators.reportUserMisconduct(wantToReportUser));
+      });
+
+      webchatEmitter.on('report-user', (reporteduser, reportedby, reason) => {
+        socket.emit('report-user', reporteduser, reportedby, reason);
+      });
+
+      socket.on('report-user-response-fail', function(obj){
+        webchatEmitter.emit('report-user-response-fail-snackbar', obj.message);
+      });
+
+      socket.on('report-user-response-success', function(obj){
+        webchatEmitter.emit('report-user-response-success-snackbar', obj.message);
+      });
+
       /*
        * Delete account stuff
        */
