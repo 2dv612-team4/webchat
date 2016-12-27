@@ -12,8 +12,16 @@ class ReportUser extends Component {
     };
   }
 
-  acceptReport() {
-    const reporteduser = this.state.reporteduser;
+  componentWillMount(){
+    webchatEmitter.on('report-user-response-success-snackbar', (message) => {
+      this.props.updateSnackbar({
+        display: true,
+        text: message,
+      });
+    });
+  }
+
+  acceptReport(reporteduser) {
     const reportedby = this.props.username;
     const reason = this.state.reason;
 
@@ -51,7 +59,7 @@ class ReportUser extends Component {
           />
 
           <Button id="settingsbuttonAccept" raised colored ripple type='button'
-            onClick={() => this.acceptReport()}>Accept
+            onClick={() => this.acceptReport(reportUser)}>Accept
           </Button>
 
           <Button id="settingsbuttonDecline" raised ripple type='button'

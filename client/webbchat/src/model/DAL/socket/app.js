@@ -298,10 +298,6 @@ const init = (store) => {
         socket.emit('report-user', reporteduser, reportedby, reason);
       });
 
-      socket.on('report-user-response-fail', function(obj){
-        webchatEmitter.emit('report-user-response-fail-snackbar', obj.message);
-      });
-
       socket.on('report-user-response-success', function(obj){
         webchatEmitter.emit('report-user-response-success-snackbar', obj.message);
       });
