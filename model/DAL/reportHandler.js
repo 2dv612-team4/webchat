@@ -7,7 +7,7 @@ const report = require(__dirname + '/Schemas/report.js');
  * @returns {[Promise]} [resolves to object of report]
  */
 const add = (reporteduser, reportedby, reason) => new report({reporteduser, reportedby, reason}).save();
-
+const findAll = () => report.find({}).exec();
 /**
  * [removes report from database using id]
  * {[String]} id [id of report to be removed]
@@ -22,6 +22,7 @@ const removeAllOfUser = (username) => report.find({reporteduser: username}).remo
   
 module.exports = {
   add,
+  findAll,
   remove,
   removeAllOfUser,
 };
