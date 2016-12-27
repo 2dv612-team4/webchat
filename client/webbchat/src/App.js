@@ -10,10 +10,26 @@ import Snackbar from './components/snackbar/Snackbar'
 import Advertisement from './components/advertisements/Advertisement'
 import MobileAd from './components/advertisements/AdvertisementMobile'
 import Chat from './components/chat/Chat'
+import NewGroupChat from './components/groupChatCreator/NewGroupChat'
+import GroupChatUser from './components/groupChatCreator/Users'
+
 import { Layout, Header, Content, Drawer, Navigation, Grid, Cell} from 'react-mdl';
 //import './App.css';
 
 class App extends Component {
+
+  constructor(props){
+    super(props);
+    this.state = {
+      createGroupChat: false,
+    }
+  }
+
+  createGroupChat(){
+    this.state.createGroupChat ? 
+      this.setState({createGroupChat: false}) :
+      this.setState({createGroupChat: true});
+  }
 
   render() {
     return (
@@ -25,8 +41,16 @@ class App extends Component {
               </Header>
               <Drawer>
               <Navigation>
+                <NewGroupChat onCreate={this.createGroupChat.bind(this)}/>
                 <span id="searchField"><Search/></span>
-                <span><UserList/></span>
+                {
+                  this.state.createGroupChat ? 
+                  (<GroupChatUser/>) : 
+                  (
+                    <span><UserList/></span>
+                  )
+                }
+                
               </Navigation>
               </Drawer>
                 <Content id="contentArea">
