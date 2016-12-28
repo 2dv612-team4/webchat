@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { ListItem, IconButton, Menu, MenuItem, ListItemAction, ListItemContent } from 'react-mdl';
 
-const User = ({ openChat, removeFriend, clearChatHistory, user: {username}, chat: {_id: chatId} }) => (
+const User = ({ openChat, removeFriend, clearChatHistory, user: {username}, chat: {_id: chatId}, reportUser }) => (
   <ListItem icon="person" > 
     <ListItemContent
       onClick={() => openChat(chatId)}>{username}</ListItemContent>
@@ -17,6 +17,9 @@ const User = ({ openChat, removeFriend, clearChatHistory, user: {username}, chat
         <MenuItem 
           onClick={() => clearChatHistory(chatId)}>Clear chat history
         </MenuItem>
+        <MenuItem 
+          onClick={() => reportUser(username)}>Report user
+        </MenuItem>
       </Menu>
     </ListItemAction>
     
@@ -29,6 +32,7 @@ User.propTypes = {
   openChat: PropTypes.func,
   removeFriend: PropTypes.func,
   clearChatHistory: PropTypes.func,
+  reportUser: PropTypes.func,
 }
 
 export default User;

@@ -12,6 +12,7 @@ import MobileAd from './components/advertisements/AdvertisementMobile'
 import Chat from './components/chat/Chat'
 import NewGroupChat from './components/groupChatCreator/NewGroupChat'
 import GroupChatUser from './components/groupChatCreator/Users'
+import ReportUser from './components/userList/friends/ReportUser'
 
 import { Layout, Header, Content, Drawer, Navigation, Grid, Cell} from 'react-mdl';
 //import './App.css';
@@ -59,6 +60,9 @@ class App extends Component {
                 </Cell>
                 <Cell id="passwordChange" col={2} shadow={2}>
                   <ChangePassword />
+                </Cell>
+                <Cell id="userReport" col={2} shadow={2}>
+                  <ReportUser />
                 </Cell>
                 <Grid noSpacing={true}>
                     <Cell id="Chat" col={10} phone={12}>
