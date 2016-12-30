@@ -9,7 +9,21 @@ const findWithUsername = (username) => User.findOne({ username }).exec();
 const findWithId = (_id) => User.findOne({_id}).exec();
 const getFriendRequests = (username) => User.findOne({username}).populate('friendrequests').exec();
 const findAllUsers = () => User.find({}).select('username').exec();
-const deleteUserAccount = (username) => User.find({username}).remove().exec();
+
+const deleteUserAccount = (username) => new Promise((resolve, reject) => {
+  co(function*(){
+    const promises = [];
+    const user = yield User.find({username});
+    const userId = user[0]._id;
+    const friends = user[0].friends;
+    for(let friend of friends) {
+      promises.push(removeFriend(friend.user, userId, friend.chat));
+    }
+    yield Promise.all(promises);
+    yield user.remove().exec();
+    resolve(true);
+  }).catch(() => reject(false));
+});
 
 /**
  * [gets user object with friends array containing users]
