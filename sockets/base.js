@@ -1,4 +1,5 @@
 const userHandler = require('../model/DAL/userHandler.js');
+const reportHandler = require('../model/DAL/reportHandler.js');
 const friendHelper = require('./utils/friendHelper');
 const chatHelper = require('./utils/chatHelper');
 const bcrypt = require('bcrypt-nodejs');
@@ -218,6 +219,21 @@ module.exports = (io) => {
         })
         .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'create-new-group-chat-from-friend-chat'})));
 
+    
+    /**
+     * @param  {} users [users to add to chat]
+     */
+    socket.on('create-new-group-chat', (users) => 
+      chatHelper.createNewGroupChat(users, username)
+        .then((chat) => {
+          chat.users.forEach(user =>
+            emitToSpecificUser(io, user.socketId, 'new-groupchat', {
+              message: `You joined groupchat ${chat.name}`,
+              chat,
+            }));
+        })
+        .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'create-new-group-chat'})));
+
     socket.on('add-user-to-group-chat', (obj) =>
       chatHelper.addUserToGroupchat(obj.chatId, obj.usersToAdd)
         .then(({addedUsers, groupChat: chat, oldParticipants}) => {
@@ -286,6 +302,17 @@ module.exports = (io) => {
         console.log('Account ' + username + ' deleted');
         emitToSpecificUser(io, socketid, 'delete-account-success', {
           message: 'You deleted your account!',
+        });
+      }).catch((e) => emitToSpecificUser(io, socketid, 'servererror', e.message));
+    });
+
+    /*
+     * If user wants to report a user
+     */
+    socket.on('report-user', (reporteduser, reportedby, reason) => {
+      reportHandler.add(reporteduser, reportedby, reason).then(() => {
+        emitToSpecificUser(io, socketid, 'report-user-response-success', {
+          message: `Reported user: \"${reporteduser}\"`,
         });
       }).catch((e) => emitToSpecificUser(io, socketid, 'servererror', e.message));
     });

@@ -109,7 +109,24 @@ export const changeUserPassword = (changePassword) => {
   };
 };
 
+export const reportUserMisconduct = (reportUser) => {
+  return {
+    type: 'REPORT_USER',
+    reportUser,
+  };
+};
+
 export const clearAllMessages = (chatId) => ({
   type: 'CLEAR_ALL_MESSAGES',
   chatId,
+});
+
+export const addToNewGroupchat = (username) => ({
+  type: 'ADD_TO_NEW_GROUPCHAT',
+  username,
+});
+
+export const removeFromNewGroupchat = (username) => ({
+  type: 'REMOVE_FROM_NEW_GROUPCHAT',
+  username,
 });
