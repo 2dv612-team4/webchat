@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Admin</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-blue.min.css">
+  <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body class="mdl-color--blue-100">
+  <div class="body-wrapper">
+    <div id="maincontent">
+      <div class="mdl-grid">
+
+        <h3 id="title" class="mdl-color-text--grey-800">Admin!</h3>
+        <div>
+
+          <table>
+            <thead>
+              <th>Reported User</th>
+              <th>Reported By</th>
+              <th>Reason</th>
+              <th>Time</th>
+            </thead>
+            <tbody>
+              {{#reports}}
+                <tr>
+                    <td>{{reporteduser}}</td>
+                    <td>{{reportedby}}</td>
+                    <td>{{reason}}</td>
+                    <td>{{timestamp}}</td>
+                    <td>
+                      <form action="/admin" method="post">
+                          <button name="BanUser" value={{reporteduser}}>Ban</button>
+                      </form>
+                    </td>
+
+                    <td>
+                      <form action="/admin" method="post">
+                          <button name="RemoveReport" value={{_id}}>Remove this report</button>
+                      </form>
+                    </td>
+
+                    <td>
+                      <form action="/admin" method="post">
+                          <button name="RemoveAllReports" value={{reporteduser}}>Remove all reports from this user</button>
+                      </form>
+                    </td>
+                </tr>
+            {{/reports}}
+          </tbody>
+      </table>
+
+      <table>
+        <thead>
+          <th>Banned Users</th>
+        </thead>
+        <tbody>
+          {{#bans}}
+            <tr>
+                <td>{{username}}</td>
+
+                <td>
+                  <form action="/admin" method="post">
+                      <button name="unBanUser" value={{username}}>Unban</button>
+                  </form>
+                </td>
+            </tr>
+        {{/bans}}
+      </tbody>
+  </table>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+  </body>
+</html>
