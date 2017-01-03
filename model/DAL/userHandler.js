@@ -37,7 +37,7 @@ const findFriendsWith = (type) =>
     .populate({
       path: 'friends.user',
       model: 'user',
-      select: 'username _id',
+      select: 'username _id banned',
     })
     .exec(function(err, user){
       if(err){

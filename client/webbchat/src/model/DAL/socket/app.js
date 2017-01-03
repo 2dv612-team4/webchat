@@ -33,7 +33,6 @@ const init = (store) => {
       socket.on('onload-friends', function (friends) {
         friends.forEach(({chat}) =>
           store.dispatch(actionsCreators.addChat(chat)));
-
         store.dispatch(actionsCreators.setInitialFriends(friends));
       });
 

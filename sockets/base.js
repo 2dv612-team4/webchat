@@ -48,21 +48,29 @@ module.exports = (io) => {
      */
     friendHelper.getFriendsPendingAndGroupChats(username)
       .then(({pending, friends, groupchats}) => {
+        let tempFiendsArray = [];
+        friends.forEach(function(friend){
+          if(!friend.user.banned){
+            tempFiendsArray.push(friend);
+          }
+        });
+
         groupchats.forEach(groupchat => joinSocketRoomForGroupChat(socket, groupchat));
-        friends.forEach(friend => joinSocketRoomForFriend(socket, friend));
+        tempFiendsArray.forEach(friend => joinSocketRoomForFriend(socket, friend));
         emitToSpecificUser(io, socketid, 'onload-pending', pending);
 
         /*
         * Remove messages over 30 days old on autenticate
         */
         let friendArray = [];
-        friends.forEach(function(friend){
+        tempFiendsArray.forEach(function(friend){
           friendArray.push(friend.chat);
         });
+
         chatHelper.removeSpecificMessages(groupchats);
         chatHelper.removeSpecificMessages(friendArray);
 
-        emitToSpecificUser(io, socketid, 'onload-friends', friends);
+        emitToSpecificUser(io, socketid, 'onload-friends', tempFiendsArray);
         emitToSpecificUser(io, socketid, 'onload-groupchats', groupchats);
       })
       .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'getFriendsPendingAndGroupChats'}));
@@ -187,7 +195,7 @@ module.exports = (io) => {
 
     socket.on('upload-file', (obj, filename) =>
     chatHelper.addFileToRoom(obj.chatId, username, obj.file, filename)
-      .then((attachment) => {   
+      .then((attachment) => {
         io.sockets.in(obj.chatId).emit('update-chat', {username, message: filename, chatId: obj.chatId, attachment}); //does not add a download link yet
       }).catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'upload-file'})));
 
@@ -219,11 +227,11 @@ module.exports = (io) => {
         })
         .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'create-new-group-chat-from-friend-chat'})));
 
-    
+
     /**
      * @param  {} users [users to add to chat]
      */
-    socket.on('create-new-group-chat', (users) => 
+    socket.on('create-new-group-chat', (users) =>
       chatHelper.createNewGroupChat(users, username)
         .then((chat) => {
           chat.users.forEach(user =>
