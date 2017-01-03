@@ -209,13 +209,22 @@ label{
     background: #FAFAFA;
     right: 0;
 }
+
+#userReport{
+    position: absolute;
+    text-align: center;
+    background: #FAFAFA;
+    z-index: 50;
+}
+
 /*Styling on the buttons in the usersettings*/
 #settingsbuttonAccept,#settingsbuttonDecline{
   margin-bottom:5%;
   margin-left: 2%;
   margin-right: 2%;
 }
-#passwordContainer{
+
+#passwordContainer,#reportContainer{
   padding-left: 5%;
   padding-right: 5%;
 }
