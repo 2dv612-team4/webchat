@@ -11,15 +11,16 @@
 
 <body class="mdl-color--blue-100">
   <div class="body-wrapper">
+    <h3 id="adminTitle" class="mdl-color-text--grey-800">Admin!</h3>
+
     <a href="/chatroom" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color-text--grey-800" id="chatroomButton">Go To Chat</a>
     <a href="/logout" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color-text--grey-800" id="logoutButton">Logout</a>
     <div id="maincontent">
       <div class="mdl-grid">
 
-        <h3 id="title" class="mdl-color-text--grey-800">Admin!</h3>
         <div>
 
-          <table>
+          <table class="adminTables">
             <thead>
               <th>Reported User</th>
               <th>Reported By</th>
@@ -31,23 +32,23 @@
                 <tr>
                     <td>{{reporteduser}}</td>
                     <td>{{reportedby}}</td>
-                    <td>{{reason}}</td>
+                    <td class="reportReason">{{reason}}</td>
                     <td>{{timestamp}}</td>
                     <td>
                       <form action="/admin" method="post">
-                          <button name="BanUser" value={{reporteduser}}>Ban</button>
+                          <button name="BanUser" class="adminButtons mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" value={{reporteduser}}>Ban</button>
                       </form>
                     </td>
 
                     <td>
                       <form action="/admin" method="post">
-                          <button name="RemoveReport" value={{_id}}>Remove this report</button>
+                          <button name="RemoveReport" class="adminButtons mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" value={{_id}}>Remove this report</button>
                       </form>
                     </td>
 
                     <td>
                       <form action="/admin" method="post">
-                          <button name="RemoveAllReports" value={{reporteduser}}>Remove all reports from this user</button>
+                          <button name="RemoveAllReports" class="adminButtons mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" value={{reporteduser}}>Remove all reports from this user</button>
                       </form>
                     </td>
                 </tr>
@@ -55,7 +56,7 @@
           </tbody>
       </table>
 
-      <table>
+      <table class="adminTables">
         <thead>
           <th>Banned Users</th>
         </thead>
@@ -66,7 +67,7 @@
 
                 <td>
                   <form action="/admin" method="post">
-                      <button name="unBanUser" value={{username}}>Unban</button>
+                      <button name="unBanUser" class="adminButtons mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" value={{username}}>Unban</button>
                   </form>
                 </td>
             </tr>
