@@ -29,6 +29,7 @@ const defaultState = {
   chat,
   chatOpen: '',
   changePassword: false,
+  reportUser: false,
 };
 
 const store = createStore(rootReducer, defaultState);

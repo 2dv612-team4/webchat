@@ -110,6 +110,19 @@ const removeSpecificMessages = (rooms) => {
   Promise.all(messagesToRemove);
 };
 
+const createNewGroupChat = 
+  co.wrap(function* (users, creator) {
+    const usersObjects = yield Promise.all(users.map(user => userHandler.findWithUsername(user)));
+    const creatorObject = yield userHandler.findWithUsername(creator);
+    const usersToAdd = [...usersObjects, creatorObject];
+
+    const chatName = createChatName(usersToAdd);
+    const groupChat = yield roomHandler.add(chatName, true);
+
+    yield Promise.all(usersToAdd.map(user => roomHandler.addUser(groupChat._id, user)));
+    return roomHandler.findRoomWithIdAndPopulateAll(groupChat._id);
+  });
+
 module.exports = {
   addMessageToRoom,
   removeAllMessagesFromChatRoom,
@@ -118,4 +131,5 @@ module.exports = {
   addUserToGroupchat,
   addFileToRoom,
   removeSpecificMessages,
+  createNewGroupChat,
 };

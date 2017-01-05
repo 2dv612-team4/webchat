@@ -33,7 +33,6 @@ const init = (store) => {
       socket.on('onload-friends', function (friends) {
         friends.forEach(({chat}) =>
           store.dispatch(actionsCreators.addChat(chat)));
-
         store.dispatch(actionsCreators.setInitialFriends(friends));
       });
 
@@ -43,7 +42,7 @@ const init = (store) => {
        */
       socket.on('remove-friend', function (obj) {
         store.dispatch(actionsCreators.removeChat(obj.chatId));
-        store.dispatch(actionsCreators.setInitialFriends(obj.friends));
+        store.dispatch(actionsCreators.InitialFriends(obj.friends));
       });
 
       /**
@@ -244,6 +243,10 @@ const init = (store) => {
         socket.emit('add-user-to-group-chat', {chatId, usersToAdd});
       });
 
+      webchatEmitter.on('create-new-group-chat', (users) => {
+        socket.emit('create-new-group-chat', users);
+      });
+
       /**
        * Add premium
        */
@@ -281,6 +284,21 @@ const init = (store) => {
 
       socket.on('update-password-response-success', function(obj){
         webchatEmitter.emit('update-password-response-success-snackbar', obj.message);
+      });
+
+      /**
+       * report user stuff
+       */
+      webchatEmitter.on('report-user-settings', (reportUser) => {
+        store.dispatch(actionsCreators.reportUserMisconduct(reportUser));
+      });
+
+      webchatEmitter.on('report-user', (reporteduser, reportedby, reason) => {
+        socket.emit('report-user', reporteduser, reportedby, reason);
+      });
+
+      socket.on('report-user-response-success', function(obj){
+        webchatEmitter.emit('report-user-response-success-snackbar', obj.message);
       });
 
       /*
