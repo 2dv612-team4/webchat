@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const co = require('co');
 const reports = require('../model/DAL/reportHandler.js');
 const user = require('../model/DAL/userHandler.js');
 const admin = 'admin';
@@ -7,17 +8,15 @@ const admin = 'admin';
 /* GET admin page. */
 router.get('/', function(req, res) {
   if(req.session.loggedIn == admin) {
-    reports.findAll().then(function(reports){
-      user.findAll().then(function(users){
-        let userArr = [];
-        users.forEach(function(user){
-          if(user.banned){
-            userArr.push(user);
-          }
-        });
-        res.render('admin', {layout: 'admin.hbs', reports: reports, bans: userArr});
-      });
-    });
+    co(function*(){
+      const foundReports = yield reports.findAll();
+      const foundUsers = yield user.findAll();
+
+      const bannedUsers = foundUsers.filter(user => user.banned);
+
+      res.render('admin', {layout: 'admin.hbs', reports: foundReports, bans: bannedUsers, message: ''});
+    })
+    .catch(e => res.render('admin', {layout: 'admin.hbs', reports: null, bans: null, message: 'Databse error, give this to the database admin: ' + e}));
   } else {
     res.redirect('/');
   }
