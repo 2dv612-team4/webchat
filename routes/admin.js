@@ -7,6 +7,7 @@ const admin = 'admin';
 
 /* GET admin page. */
 router.get('/', function(req, res) {
+
   if(req.session.loggedIn == admin) {
     co(function*(){
       const foundReports = yield reports.findAll();
@@ -20,6 +21,7 @@ router.get('/', function(req, res) {
   } else {
     res.redirect('/');
   }
+
 });
 
 /* POST admin form. */
