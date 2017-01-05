@@ -13,8 +13,9 @@
   <div class="body-wrapper">
     <h3 id="adminTitle" class="mdl-color-text--grey-800">Admin!</h3>
 
-    <a href="/chatroom" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color-text--grey-800" id="chatroomButton">Go To Chat</a>
     <a href="/logout" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color-text--grey-800" id="logoutButton">Logout</a>
+    <a href="/chatroom" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color-text--grey-800" id="chatroomButton">Go To Chat</a>
+
     <div id="maincontent">
       <div class="mdl-grid">
 
@@ -35,19 +36,19 @@
                     <td class="reportReason">{{reason}}</td>
                     <td>{{timestamp}}</td>
                     <td>
-                      <form action="/admin" method="post">
+                      <form action="/admin/banUser" method="post">
                           <button name="BanUser" class="adminButtons mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" value={{reporteduser}}>Ban</button>
                       </form>
                     </td>
 
                     <td>
-                      <form action="/admin" method="post">
+                      <form action="/admin/removeReport" method="post">
                           <button name="RemoveReport" class="adminButtons mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" value={{_id}}>Remove this report</button>
                       </form>
                     </td>
 
                     <td>
-                      <form action="/admin" method="post">
+                      <form action="/admin/removeAllReports" method="post">
                           <button name="RemoveAllReports" class="adminButtons mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" value={{reporteduser}}>Remove all reports from this user</button>
                       </form>
                     </td>
@@ -66,7 +67,7 @@
                 <td>{{username}}</td>
 
                 <td>
-                  <form action="/admin" method="post">
+                  <form action="/admin/unBanUser" method="post">
                       <button name="unBanUser" class="adminButtons mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" value={{username}}>Unban</button>
                   </form>
                 </td>

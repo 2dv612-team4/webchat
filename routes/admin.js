@@ -24,32 +24,42 @@ router.get('/', function(req, res) {
 });
 
 /* POST admin form. */
-router.post('/', function(req, res){
+router.post('/banUser', function(req, res){
   const banUser = req.body.BanUser;
-  const removeReportId = req.body.RemoveReport;
-  const removeAllReportsFromUser = req.body.RemoveAllReports;
-  const unBanUser = req.body.unBanUser;
 
-  if(banUser){
-    user.setBannedStatus(banUser, true).then(function(){
-      console.log('Successfully banned user!');
-      reports.removeAllOfUser(banUser).then(function(){
-        console.log('All reports from this user was removed!');
-      });
-    });
-  }else if(removeReportId){
-    reports.removeThisReport(removeReportId).then(function(){
-      console.log('Report was removed!');
-    });
-  }else if(removeAllReportsFromUser){
-    reports.removeAllOfUser(removeAllReportsFromUser).then(function(){
+  user.setBannedStatus(banUser, true).then(function(){
+    console.log('Successfully banned user!');
+    reports.removeAllOfUser(banUser).then(function(){
       console.log('All reports from this user was removed!');
     });
-  }else if(unBanUser){
-    user.setBannedStatus(unBanUser, false).then(function(){
-      console.log('Successfully unbanned user!');
-    });
-  }
+  });
+  res.redirect('/admin');
+});
+
+router.post('/removeReport', function(req, res){
+  const removeReportId = req.body.RemoveReport;
+
+  reports.removeThisReport(removeReportId).then(function(){
+    console.log('Report was removed!');
+  });
+  res.redirect('/admin');
+});
+
+router.post('/removeAllReports', function(req, res){
+  const removeAllReportsFromUser = req.body.RemoveAllReports;
+
+  reports.removeAllOfUser(removeAllReportsFromUser).then(function(){
+    console.log('All reports from this user was removed!');
+  });
+  res.redirect('/admin');
+});
+
+router.post('/unBanUser', function(req, res){
+  const unBanUser = req.body.unBanUser;
+
+  user.setBannedStatus(unBanUser, false).then(function(){
+    console.log('Successfully unbanned user!');
+  });
   res.redirect('/admin');
 });
 
