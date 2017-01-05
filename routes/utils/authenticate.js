@@ -2,7 +2,7 @@
 const authenticate = (req, res, next) => {
   // For development purpose only
   if(process.argv.find(a => a === 'development')){
-    req.session.loggedIn = 'Seven';
+    req.session.loggedIn = 'dev';
     return next();
   }
 
