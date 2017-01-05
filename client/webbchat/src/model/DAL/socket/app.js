@@ -42,7 +42,7 @@ const init = (store) => {
        */
       socket.on('remove-friend', function (obj) {
         store.dispatch(actionsCreators.removeChat(obj.chatId));
-        store.dispatch(actionsCreators.InitialFriends(obj.friends));
+        store.dispatch(actionsCreators.setInitialFriends(obj.friends));
       });
 
       /**
