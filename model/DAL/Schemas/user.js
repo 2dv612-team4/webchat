@@ -5,7 +5,8 @@ let userSchema = new Schema({
   username: {type: String, required: true, unique: true},
   password: {type: String, required: true},
   socketId: {type: String, default: null},
-  premiumExpirationDate: {type: Date}, 
+  premiumExpirationDate: {type: Date},
+  banned: {type: Boolean, default: false},
 
   friends: [
     {

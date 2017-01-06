@@ -14,7 +14,7 @@ router.post('/sockettoken', authenticate, function(req, res){
   const username = req.session.loggedIn;
   userHandler.findWithUsername(username)
     .then(user => {
-      
+
       const token = jwt.sign({username: user.username, id: user._id, premiumExpirationDate: user.premiumExpirationDate}, config.jwtsecret, { expiresIn: '7d' });
       res.json({token: token});
     })
@@ -22,13 +22,13 @@ router.post('/sockettoken', authenticate, function(req, res){
       console.log(e);
       res.sendStatus(500);
     });
-  
+
 });
 
 router.get('/search/:username', authenticate, function(req, res){
   const loggedInUsername = req.session.loggedIn;
   const searchUsername = req.params.username;
-  
+
   if(searchUsername === ''){
     return res.sendStatus(406);
   }
@@ -39,6 +39,7 @@ router.get('/search/:username', authenticate, function(req, res){
         users
         .filter(user => user.username !== loggedInUsername)
         .filter(user => !friends.find(friend => friend.user.toString() === user._id.toString()))
+        .filter(user => user.banned == false)
         .map(user => ({
           username: user.username,
         })));
