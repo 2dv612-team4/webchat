@@ -5,7 +5,7 @@ import connect from '../../../connect/connect'
 
 class Payment extends Component {
 
-  componentWillMount(){
+componentWillMount(){
     webchatEmitter.on('update-premium-response-fail-snackbar', (message) => {
       this.props.updateSnackbar({
         display: true,

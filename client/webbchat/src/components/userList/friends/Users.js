@@ -27,16 +27,16 @@ class Users extends Component {
     return (
       <List>
         {this.props.friends
-            .filter((friend) => 
+            .filter((friend) =>
               friend.user.username.toLowerCase().match('^'+this.props.filterQuery.toLowerCase()+'.*'))
-                .map((friend, i) => 
-                  <User 
+                .map((friend, i) =>
+                  <User
                     openChat={this.openChat.bind(this)}
                     removeFriend={this.removeFriend.bind(this)}
-                    clearChatHistory={this.clearChatHistory.bind(this)} 
+                    clearChatHistory={this.clearChatHistory.bind(this)}
                     reportUser={this.reportUser.bind(this)}
                     user={friend.user}
-                    chat={friend.chat} 
+                    chat={friend.chat}
                     key={friend.user.username}/>)}
       </List>
     )

@@ -9,6 +9,7 @@ const findWithUsername = (username) => User.findOne({ username }).exec();
 const findWithId = (_id) => User.findOne({_id}).exec();
 const getFriendRequests = (username) => User.findOne({username}).populate('friendrequests').exec();
 const findAllUsers = () => User.find({}).select('username').exec();
+const findAll = () => User.find({}).exec();
 
 const deleteUserAccount = (username) => new Promise((resolve, reject) => {
   co(function*(){
@@ -36,7 +37,7 @@ const findFriendsWith = (type) =>
     .populate({
       path: 'friends.user',
       model: 'user',
-      select: 'username _id',
+      select: 'username _id banned',
     })
     .exec(function(err, user){
       if(err){
@@ -145,6 +146,8 @@ const removeFriend = (userID, friendID, chatID) => new Promise((resolve, reject)
   }).catch(() => reject(false));
 });
 
+const setBannedStatus = (username, banned) => User.update({ username }, { banned }).exec();
+
 //updates the expiration date of premium feature.
 const updatePremiumExpirationDate = (username, premiumExpirationDate) => User.update({username}, {premiumExpirationDate}).exec();
 
@@ -165,4 +168,6 @@ module.exports = {
   changePassword,
   setSocketId,
   updatePremiumExpirationDate,
+  setBannedStatus,
+  findAll,
 };

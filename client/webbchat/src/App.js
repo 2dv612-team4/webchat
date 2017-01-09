@@ -27,7 +27,7 @@ class App extends Component {
   }
 
   createGroupChat(){
-    this.state.createGroupChat ? 
+    this.state.createGroupChat ?
       this.setState({createGroupChat: false}) :
       this.setState({createGroupChat: true});
   }
@@ -45,13 +45,13 @@ class App extends Component {
                 <NewGroupChat onCreate={this.createGroupChat.bind(this)}/>
                 <span id="searchField"><Search/></span>
                 {
-                  this.state.createGroupChat ? 
-                  (<GroupChatUser/>) : 
+                  this.state.createGroupChat ?
+                  (<GroupChatUser/>) :
                   (
                     <span><UserList/></span>
                   )
                 }
-                
+
               </Navigation>
               </Drawer>
                 <Content id="contentArea">
