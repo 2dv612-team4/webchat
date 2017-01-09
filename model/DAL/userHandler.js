@@ -11,6 +11,7 @@ const getFriendRequests = (username) => User.findOne({username}).populate('frien
 const findAllUsers = () => User.find({}).select('username').exec();
 const findAll = () => User.find({}).exec();
 
+
 const deleteUserAccount = (username) => new Promise((resolve, reject) => {
   co(function*(){
     const promises = [];
@@ -18,10 +19,10 @@ const deleteUserAccount = (username) => new Promise((resolve, reject) => {
     const userId = user[0]._id;
     const friends = user[0].friends;
     for(let friend of friends) {
-      promises.push(removeFriend(friend.user, userId, friend.chat));
+      yield promises.push(removeFriend(friend.user, userId, friend.chat));
     }
+    yield promises.push(User.find({username}).remove().exec());
     yield Promise.all(promises);
-    yield user.remove().exec();
     resolve(true);
   }).catch(() => reject(false));
 });
