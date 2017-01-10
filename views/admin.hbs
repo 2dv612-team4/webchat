@@ -28,7 +28,9 @@
               <th>Reported By</th>
               <th>Reason</th>
               <th>Time</th>
-              <th>Commands</th>
+              <th>Ban</th>
+              <th>Remove report</th>
+              <th>Remove all reports</th>
             </thead>
             <tbody>
               {{#reports}}
@@ -39,19 +41,19 @@
                     <td>{{timestamp}}</td>
                     <td>
                       <form action="/admin/banUser" method="post">
-                          <button name="BanUser" class="adminButtons mdl-button mdl-js-butto mdl-js-ripple-effect" value={{reporteduser}}>Ban</button>
+                          <button name="BanUser" class="adminButtons mdl-button mdl-js-butto mdl-js-ripple-effect mdl-color-text--red" value={{reporteduser}}>Ban</button>
                       </form>
                     </td>
 
                     <td>
                       <form action="/admin/removeReport" method="post">
-                          <button name="RemoveReport" class="adminButtons mdl-button mdl-js-button mdl-js-ripple-effect" value={{_id}}>Remove this report</button>
+                          <button name="RemoveReport" class="adminButtons mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--red" value={{_id}}>Remove report</button>
                       </form>
                     </td>
 
                     <td>
                       <form action="/admin/removeAllReports" method="post">
-                          <button name="RemoveAllReports" class="adminButtons mdl-button mdl-js-button mdl-js-ripple-effect" value={{reporteduser}}>Remove all reports from this user</button>
+                          <button name="RemoveAllReports" class="adminButtons mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--red" value={{reporteduser}}>Remove all</button>
                       </form>
                     </td>
                 </tr>
@@ -62,15 +64,17 @@
       <table class="adminTables bans mdl-data-table mdl-js-data-table mdl-shadow--2dp">
         <thead>
           <th>Banned Users</th>
+          <th>Reason</th>
+          <th>Commands</th>
         </thead>
         <tbody>
           {{#bans}}
             <tr>
                 <td>{{username}}</td>
-
+                <td class="reportReason">{{reason}}</td>
                 <td>
                   <form action="/admin/unBanUser" method="post">
-                      <button name="unBanUser" class="adminButtons mdl-button mdl-js-button mdl-js-ripple-effect" value={{username}}>Unban</button>
+                      <button name="unBanUser" class="adminButtons mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--red" value={{username}}>Unban</button>
                   </form>
                 </td>
             </tr>

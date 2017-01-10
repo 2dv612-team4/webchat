@@ -59,12 +59,15 @@ table{
   border-collapse: collapse;
   table-layout: fixed;
 }
+th,td{
+  text-align: center !important;
+}
 .reports{
   margin-left: auto;
   margin-right: auto;
 }
 .bans{
-  width: 80.8%;
+  width: 67.5%;
   margin-right: auto;
   margin-left: auto;
 }
