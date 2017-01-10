@@ -55,12 +55,17 @@ h3 {
 #adminTitle{
   text-align: center;
 }
-table{
-  border-collapse: collapse;
-  table-layout: fixed;
-}
 th,td{
   text-align: center !important;
+white-space: normal;
+word-wrap: break-word;
+}
+th{
+  font-size: 22px;
+}
+
+.reportReason{
+  max-width: 300px;
 }
 .reports{
   margin-left: auto;
@@ -80,13 +85,4 @@ th,td{
   height: 60px;
   margin-right: 5px;
   line-height: 14px;
-}
-
-th{
-  font-size: 22px;
-}
-
-.reportReason{
-  word-wrap: break-word;
-  max-width: 300px;
 }
