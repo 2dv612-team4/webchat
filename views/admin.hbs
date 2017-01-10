@@ -9,28 +9,30 @@
   <link rel='stylesheet' href='/stylesheets/style.css' />
 </head>
 
-<body class="mdl-color--blue-100">
+<body class="mdl-color--white">
   <div class="body-wrapper">
-    <h3 id="adminTitle" class="mdl-color-text--grey-800">Admin!</h3>
-
-    <a href="/logout" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color-text--grey-800" id="logoutButton">Logout</a>
-    <a href="/chatroom" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color-text--grey-800" id="chatroomButton">Go To Chat</a>
-
-    <div id="maincontent">
-      <div class="mdl-grid">
+    <header class="mdl-layout__header mdl-color--blue-100">
+      <div class="mdl-layout__header-row">
+        <span class="mdl-layout-title mdl-color-text--black">Adminpage</span>
+        <div class="mdl-layout-spacer"></div>
+        <nav class="mdl-navigation">
+          <a href="/chatroom" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color-text--grey-800" id="chatroomButton">Go To Chat</a>
+          <a href="/logout" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color-text--grey-800 mdl-color--blue-200" id="logoutButton">Logout</a>
+        </nav>
+      </div>
+    </header>
         {{message}}
-        <div>
-
-          <table class="adminTables">
+          <table class="adminTables reports mdl-data-table mdl-js-data-table mdl-shadow--2dp">
             <thead>
               <th>Reported User</th>
               <th>Reported By</th>
               <th>Reason</th>
               <th>Time</th>
+              <th>Commands</th>
             </thead>
             <tbody>
               {{#reports}}
-                <tr>
+                <tr id="reportreasons">
                     <td>{{reporteduser}}</td>
                     <td>{{reportedby}}</td>
                     <td class="reportReason">{{reason}}</td>
@@ -57,7 +59,7 @@
           </tbody>
       </table>
 
-      <table class="adminTables">
+      <table class="adminTables bans mdl-data-table mdl-js-data-table mdl-shadow--2dp">
         <thead>
           <th>Banned Users</th>
         </thead>
@@ -75,11 +77,6 @@
         {{/bans}}
       </tbody>
   </table>
-
-        </div>
-
-      </div>
-    </div>
   </div>
   </body>
 </html>

@@ -2,6 +2,7 @@
 * {
  margin: 0;
  padding: 0;
+ box-sizing: border-box;
 }
 
 .body-wrapper {
@@ -18,6 +19,13 @@
 
 #formplacement{
   margin: 0 auto;
+  padding:20px;
+  background-color: white;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+#userButton{
+  width: 35%;
 }
 /*removes scrollbar*/
 h3 {
@@ -45,15 +53,24 @@ h3 {
 }
 
 #adminTitle{
-  float: left;
+  text-align: center;
 }
-
+table{
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.reports{
+  margin-left: auto;
+  margin-right: auto;
+}
+.bans{
+  width: 80.8%;
+  margin-right: auto;
+  margin-left: auto;
+}
 .adminTables{
-  padding: 5px;
-  max-width: 75%;
-  float:left;
-  margin-right: 3%;
-  box-shadow: 5px 5px 20px #398cbd;
+  background: white;
+  margin-top: 1%;
 }
 .adminButtons{
   padding: 2px;
