@@ -6,7 +6,6 @@ const SearchBox = ({ onInput, onSubmit }) => (
       onChange={(event) => onInput(event.target.value)}
       onKeyPress={(event) => onSubmit(event)}
       label="Search for users"
-      floatingLabel
     />
 );
 

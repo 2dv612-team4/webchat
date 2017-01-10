@@ -1,4 +1,5 @@
 const userHandler = require('../model/DAL/userHandler.js');
+const reportHandler = require('../model/DAL/reportHandler.js');
 const friendHelper = require('./utils/friendHelper');
 const chatHelper = require('./utils/chatHelper');
 const bcrypt = require('bcrypt-nodejs');
@@ -47,21 +48,29 @@ module.exports = (io) => {
      */
     friendHelper.getFriendsPendingAndGroupChats(username)
       .then(({pending, friends, groupchats}) => {
+        let tempFiendsArray = [];
+        friends.forEach(function(friend){
+          if(!friend.user.banned){
+            tempFiendsArray.push(friend);
+          }
+        });
+
         groupchats.forEach(groupchat => joinSocketRoomForGroupChat(socket, groupchat));
-        friends.forEach(friend => joinSocketRoomForFriend(socket, friend));
+        tempFiendsArray.forEach(friend => joinSocketRoomForFriend(socket, friend));
         emitToSpecificUser(io, socketid, 'onload-pending', pending);
 
         /*
         * Remove messages over 30 days old on autenticate
         */
         let friendArray = [];
-        friends.forEach(function(friend){
+        tempFiendsArray.forEach(function(friend){
           friendArray.push(friend.chat);
         });
+
         chatHelper.removeSpecificMessages(groupchats);
         chatHelper.removeSpecificMessages(friendArray);
 
-        emitToSpecificUser(io, socketid, 'onload-friends', friends);
+        emitToSpecificUser(io, socketid, 'onload-friends', tempFiendsArray);
         emitToSpecificUser(io, socketid, 'onload-groupchats', groupchats);
       })
       .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'getFriendsPendingAndGroupChats'}));
@@ -165,7 +174,6 @@ module.exports = (io) => {
         let today = new Date();
         let endDate = new Date();
         endDate.setDate(today.getDate() + 30);
-        // Should mabye use an util?
         userHandler.updatePremiumExpirationDate(username, endDate)
           .then(() => {
             emitToSpecificUser(io, socketid, 'update-premium-response-success', {
@@ -184,13 +192,12 @@ module.exports = (io) => {
       .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'send-chat-message'}))
     );
 
-    socket.on('upload-file', (obj, filename) => 
+    socket.on('upload-file', (obj, filename) =>
     chatHelper.addFileToRoom(obj.chatId, username, obj.file, filename)
-      .then(() => {
-        console.log('base:',filename);
-        io.sockets.in(obj.chatId).emit('update-chat', {username, message: filename, chatId: obj.chatId}); //does not add a download link yet
+      .then((attachment) => {
+        io.sockets.in(obj.chatId).emit('update-chat', {username, message: filename, chatId: obj.chatId, attachment}); //does not add a download link yet
       }).catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'upload-file'})));
-    
+
     /**
      * [clears chat history]
      * @param  {String} chatId [id of chat to clear]
@@ -218,6 +225,21 @@ module.exports = (io) => {
             }));
         })
         .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'create-new-group-chat-from-friend-chat'})));
+
+
+    /**
+     * @param  {} users [users to add to chat]
+     */
+    socket.on('create-new-group-chat', (users) =>
+      chatHelper.createNewGroupChat(users, username)
+        .then((chat) => {
+          chat.users.forEach(user =>
+            emitToSpecificUser(io, user.socketId, 'new-groupchat', {
+              message: `You joined groupchat ${chat.name}`,
+              chat,
+            }));
+        })
+        .catch((e) => emitToSpecificUser(io, socketid, 'servererror', {server: e.message, socketId: 'create-new-group-chat'})));
 
     socket.on('add-user-to-group-chat', (obj) =>
       chatHelper.addUserToGroupchat(obj.chatId, obj.usersToAdd)
@@ -279,5 +301,27 @@ module.exports = (io) => {
       });
     });
 
+    /*
+     * If user wants to Delete account
+     */
+    socket.on('delete-account', (username) => {
+      userHandler.deleteUserAccount(username).then(() => {
+        console.log('Account ' + username + ' deleted');
+        emitToSpecificUser(io, socketid, 'delete-account-success', {
+          message: 'You deleted your account!',
+        });
+      }).catch((e) => emitToSpecificUser(io, socketid, 'servererror', e.message));
+    });
+
+    /*
+     * If user wants to report a user
+     */
+    socket.on('report-user', (reporteduser, reportedby, reason) => {
+      reportHandler.add(reporteduser, reportedby, reason).then(() => {
+        emitToSpecificUser(io, socketid, 'report-user-response-success', {
+          message: `Reported user: \"${reporteduser}\"`,
+        });
+      }).catch((e) => emitToSpecificUser(io, socketid, 'servererror', e.message));
+    });
   });
 };

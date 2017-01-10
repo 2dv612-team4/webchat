@@ -1,5 +1,6 @@
 const userHandler = require('../../model/DAL/userHandler.js');
 const roomHandler = require('../../model/DAL/roomHandler.js');
+const filesHandler = require('../../model/DAL/filesHandler.js');
 const co = require('co');
 const fs = require('fs-promise');
 const path = require('path');
@@ -80,19 +81,17 @@ const addUserToGroupchat =
 
   });
 
+/**
+ * adds the file and returns the attachment object.
+ */
 const addFileToRoom =
   co.wrap(function* (roomId, username, file, filename) {
-    let sharedfilespath = path.join(__dirname, '../../public/sharedfiles/');
-    let dir = path.join(__dirname, '../../public/sharedfiles/', uuid());
-    const exists = yield fs.exists(sharedfilespath);
-    if(!exists) {
-      yield fs.mkdir(sharedfilespath);
-    }
-    const err = yield fs.writeFile(dir, file);
-    if(err) throw err;
-    console.log('File saved!');
+    let unique = uuid();
+    let attachment = {filename: filename, uid: unique};
     const user = yield userHandler.findWithUsername(username);
-    return roomHandler.addFile(roomId, user._id, dir, filename);
+    yield filesHandler.add(file, filename, unique);
+    yield roomHandler.addFileRef(roomId, user._id, filename, attachment);
+    return attachment;
   });
 
 
@@ -111,6 +110,19 @@ const removeSpecificMessages = (rooms) => {
   Promise.all(messagesToRemove);
 };
 
+const createNewGroupChat = 
+  co.wrap(function* (users, creator) {
+    const usersObjects = yield Promise.all(users.map(user => userHandler.findWithUsername(user)));
+    const creatorObject = yield userHandler.findWithUsername(creator);
+    const usersToAdd = [...usersObjects, creatorObject];
+
+    const chatName = createChatName(usersToAdd);
+    const groupChat = yield roomHandler.add(chatName, true);
+
+    yield Promise.all(usersToAdd.map(user => roomHandler.addUser(groupChat._id, user)));
+    return roomHandler.findRoomWithIdAndPopulateAll(groupChat._id);
+  });
+
 module.exports = {
   addMessageToRoom,
   removeAllMessagesFromChatRoom,
@@ -119,4 +131,5 @@ module.exports = {
   addUserToGroupchat,
   addFileToRoom,
   removeSpecificMessages,
+  createNewGroupChat,
 };

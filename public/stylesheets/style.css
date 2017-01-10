@@ -38,3 +38,35 @@ h3 {
 #Username,#Password,#RepeatPassword{
   text-align: center;
 }
+
+#chatroomButton, #logoutButton{
+  margin-right: 5px;
+  float: right;
+}
+
+#adminTitle{
+  float: left;
+}
+
+.adminTables{
+  padding: 5px;
+  max-width: 75%;
+  float:left;
+  margin-right: 3%;
+  box-shadow: 5px 5px 20px #398cbd;
+}
+.adminButtons{
+  padding: 2px;
+  height: 60px;
+  margin-right: 5px;
+  line-height: 14px;
+}
+
+th{
+  font-size: 22px;
+}
+
+.reportReason{
+  word-wrap: break-word;
+  max-width: 300px;
+}

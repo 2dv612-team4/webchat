@@ -9,19 +9,36 @@ const findWithUsername = (username) => User.findOne({ username }).exec();
 const findWithId = (_id) => User.findOne({_id}).exec();
 const getFriendRequests = (username) => User.findOne({username}).populate('friendrequests').exec();
 const findAllUsers = () => User.find({}).select('username').exec();
+const findAll = () => User.find({}).exec();
+
+
+const deleteUserAccount = (username) => new Promise((resolve, reject) => {
+  co(function*(){
+    const promises = [];
+    const user = yield User.find({username});
+    const userId = user[0]._id;
+    const friends = user[0].friends;
+    for(let friend of friends) {
+      yield promises.push(removeFriend(friend.user, userId, friend.chat));
+    }
+    yield promises.push(User.find({username}).remove().exec());
+    yield Promise.all(promises);
+    resolve(true);
+  }).catch(() => reject(false));
+});
 
 /**
  * [gets user object with friends array containing users]
  * @param  {[Objet]} type [gets user by type]
  * @return {[Promise]}          [resolves to user object]
  */
-const findFriendsWith = (type) => 
+const findFriendsWith = (type) =>
   new Promise((resolve, reject) => {
     User.findOne(type)
     .populate({
       path: 'friends.user',
       model: 'user',
-      select: 'username _id',
+      select: 'username _id banned',
     })
     .exec(function(err, user){
       if(err){
@@ -130,11 +147,14 @@ const removeFriend = (userID, friendID, chatID) => new Promise((resolve, reject)
   }).catch(() => reject(false));
 });
 
+const setBannedStatus = (username, banned) => User.update({ username }, { banned }).exec();
+
 //updates the expiration date of premium feature.
 const updatePremiumExpirationDate = (username, premiumExpirationDate) => User.update({username}, {premiumExpirationDate}).exec();
 
 module.exports = {
   add,
+  deleteUserAccount,
   findWithUsername,
   findWithId,
   addFriendRequest,
@@ -149,4 +169,6 @@ module.exports = {
   changePassword,
   setSocketId,
   updatePremiumExpirationDate,
+  setBannedStatus,
+  findAll,
 };
